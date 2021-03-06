@@ -1,6 +1,5 @@
-import styles from './index.less';
-import { Link } from 'umi';
-import { Component } from 'react';
+import { Link, IRouteProps } from 'umi';
+import { useState, useEffect } from 'react';
 import { getPixivUser, getPixivNovelProfiles } from '@/utils/api';
 
 // 小说简介
@@ -24,44 +23,62 @@ interface IUserInfo{
   backgroundUrl?: string;
 }
 
-interface PixivNovelState{
-  userInfo: IUserInfo;
-  finish: boolean;
-  novels: INovelProfile[];
-}
+export default function PixivUser(props:IRouteProps){
+  const id = props.match.params.id;
 
-export default class PixivNovel extends Component<any,PixivNovelState>{
-  componentDidMount(){
-    const id = this.props.match.params.id;
+  const [userInfo, setUserInfo] = useState<IUserInfo>();
+  const [novels, setNovels] = useState<INovelProfile[]>();
+  const [finish, setFinish] = useState(false);
+
+  useEffect(()=>{
     getPixivUser(id).then((res:any)=>{
-      if(res?.error) return this.props.history.push('/404');
-      this.setState({
-        userInfo: res
-      });
+      if(res?.error) return props.history.push('/404');
       res.novels = res.novels.reverse();
+      setUserInfo(res);
+
       const novels = res.novels.slice(0, 30);
       getPixivNovelProfiles(novels).then((res:any)=>{
-        this.setState({
-          novels: res,
-          finish: true
-        });
+        setNovels(res.reverse());
+        setFinish(true);
       });
     })
-  }
+  },[]);
 
-  render() {
-    if(!this.state?.finish) return null;
-    const { userInfo:{ name }, novels } = this.state;
-    const novelEle = novels.reverse().map((ele:any)=>{
-      return (<div key={ele.id}>
-        <Link to={`/pixiv/novel/${ele.id}`}>{ele.title}</Link>
-      </div>);
-    });
-    return (
-      <div>
-        <div>{name}</div>
+  if(!finish) return null;
+  const { name, comment, imageUrl, backgroundUrl } = userInfo as IUserInfo;
+  const novelEle = (novels as INovelProfile[]).map((ele:INovelProfile)=>{
+    return (<div key={ele.id}>
+      <Link to={`/pixiv/novel/${ele.id}`}>{ele.title}</Link>
+    </div>);
+  });
+
+  return (
+    <div>
+      <div className="text-center pb-4 bg-yellow-100 bg-opacity-25 shadow-lg relative">
+        <div className="w-full h-28 bg-center absolute" style={{backgroundImage: `url(${backgroundUrl})`}}>
+        </div>
+        <div className="flex justify-center pt-14 rounded-full">
+          <img
+            src={imageUrl}
+            className="h-28 rounded-full z-10 border-solid border-8 border-yellow-100"
+          />
+        </div>
+        <div className="my-2 mx-10 font-bold text-4xl">
+          {name}
+        </div>
+
+        <div className="my-2 px-16 text-lg text-blue-400">
+          Pixiv id: {id}
+        </div>
+
+        <div className="whitespace-pre-line text-lg px-4">
+          {comment}
+        </div>
+      </div>
+
+      <div className="text-center mt-5">
         {novelEle}
       </div>
-    );
-  }
+    </div>
+  );
 }

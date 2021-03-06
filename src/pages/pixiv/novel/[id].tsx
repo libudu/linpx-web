@@ -12,11 +12,6 @@ interface INovelInfo {
   tags: string[];
 }
 
-interface INovelState{
-  novelInfo: INovelInfo;
-  finish: boolean;
-}
-
 export default function PixivNovel(props:any){
   const id = props.match.params.id;
   
@@ -24,7 +19,6 @@ export default function PixivNovel(props:any){
 
   useEffect(()=>{
     getPixivNovel(id).then((res:any)=>{
-      console.log(res);
       if(res?.error) return;
       setNovelInfo(res);
     })
