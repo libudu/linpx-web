@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { getPixivNovel } from '@/utils/api';
 import { IRouteProps } from 'umi';
+import { getPixivNovel } from '@/utils/api';
 
-import { UnorderedListOutlined } from '@ant-design/icons';
-
-import Navbar from '@/components/navbar';
-import Tag from '@/components/tag';
+import { ContentNavbar } from '@/components/Navbar';
+import Tag from '@/components/Tag';
 
 interface INovelInfo {
   id: string;
@@ -17,7 +15,7 @@ interface INovelInfo {
   tags: string[];
 }
 
-export default function PixivNovel({ match, history }: IRouteProps) {
+export default function PixivNovel({ match }: IRouteProps) {
   const id = match.params.id;
 
   const [novelInfo, setNovelInfo] = useState<INovelInfo>();
@@ -39,20 +37,9 @@ export default function PixivNovel({ match, history }: IRouteProps) {
     tags,
   } = novelInfo as INovelInfo;
 
-  const onClickMenu = () => {
-    console.log(123);
-  };
-  const rightEle = (
-    <div className="text-4xl" onClick={onClickMenu}>
-      <UnorderedListOutlined />
-    </div>
-  );
-
   return (
     <>
-      <Navbar leftBack={history.length > 1} rightEle={rightEle}>
-        小说详情
-      </Navbar>
+      <ContentNavbar backTo={`/pixiv/user/${userId}`}>小说详情</ContentNavbar>
 
       <div className="py-4 text-center bg-yellow-100 bg-opacity-25 shadow-lg">
         <div className="flex justify-center">

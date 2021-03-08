@@ -24,13 +24,13 @@
     "@ant-design/pro-layout": "^6.5.0",
     "@umijs/preset-react": "1.x",
     "axios": "^0.21.1",
+    "global": "^4.4.0",
     "umi": "^3.3.9"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@umijs/test": "^3.3.9",
-    "eslint": "^7.21.0",
     "lint-staged": "^10.0.7",
     "prettier": "^2.2.0",
     "react": "17.x",

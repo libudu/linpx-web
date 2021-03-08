@@ -1,8 +1,7 @@
-
 export default function IndexPage() {
   return (
     <div>
-      <h1>404 Page index</h1>
+      <h1>404</h1>
     </div>
   );
 }

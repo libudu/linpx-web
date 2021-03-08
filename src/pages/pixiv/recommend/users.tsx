@@ -1,31 +1,33 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
+import { IRouteProps, Link } from 'umi';
+
 import { getRecommendPixivAuthors } from '@/utils/api';
-import { Link } from 'umi';
+import { HomeNavbar } from '@/components/Navbar';
 
-export default class PixivNovel extends Component<any, any> {
-  componentDidMount() {
+import { IUserInfo } from '../user/[id]';
+
+export default function () {
+  const [users, setUsers] = useState<IUserInfo>();
+
+  useEffect(() => {
     getRecommendPixivAuthors().then((res: any) => {
-      this.setState({
-        users: res,
-        finish: true,
-      });
+      setUsers(res);
     });
-  }
+  }, []);
 
-  render() {
-    if (!this.state?.finish) return null;
-    const userEle = Object.entries(this.state.users).map(([name, id]) => {
-      return (
-        <div>
-          <Link to={`/pixiv/user/${id}`}>{name}</Link>
-        </div>
-      );
-    });
+  if (!users) return null;
+
+  const userEle = Object.entries(users).map(([name, id]) => {
     return (
-      <div>
-        <h1>推荐作者</h1>
-        {userEle}
+      <div key={id}>
+        <Link to={`/pixiv/user/${id}`}>{name}</Link>
       </div>
     );
-  }
+  });
+  return (
+    <div>
+      <HomeNavbar>推荐作者</HomeNavbar>
+      {userEle}
+    </div>
+  );
 }

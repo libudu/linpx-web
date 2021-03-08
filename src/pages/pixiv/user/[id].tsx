@@ -1,6 +1,7 @@
 import { Link, IRouteProps } from 'umi';
 import { useState, useEffect } from 'react';
 import { getPixivUser, getPixivNovelProfiles } from '@/utils/api';
+import { ContentNavbar } from '@/components/Navbar';
 
 // 小说简介
 interface INovelProfile {
@@ -14,7 +15,7 @@ interface INovelProfile {
 }
 
 // 用户信息
-interface IUserInfo {
+export interface IUserInfo {
   id: string;
   novels: string[];
   name: string;
@@ -56,6 +57,7 @@ export default function PixivUser(props: IRouteProps) {
 
   return (
     <div>
+      <ContentNavbar backTo="/">作者详情</ContentNavbar>
       <div className="text-center pb-4 bg-yellow-100 bg-opacity-25 shadow-lg relative">
         <div
           className="w-full h-28 bg-center absolute"
@@ -71,7 +73,7 @@ export default function PixivUser(props: IRouteProps) {
 
         <div className="my-2 px-16 text-lg text-blue-400">Pixiv id: {id}</div>
 
-        <div className="whitespace-pre-line text-lg px-4">{comment}</div>
+        <div className="whitespace-pre-line text-lg px-12">{comment}</div>
       </div>
 
       <div className="text-center mt-5">{novelEle}</div>
