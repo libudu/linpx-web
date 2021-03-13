@@ -2,6 +2,7 @@ import { Link, IRouteProps } from 'umi';
 import { useState, useEffect } from 'react';
 import { getPixivUser, getPixivNovelProfiles } from '@/utils/api';
 import { ContentNavbar } from '@/components/Navbar';
+import { history } from 'umi';
 
 // 小说简介
 interface INovelProfile {
@@ -34,18 +35,24 @@ export default function PixivUser(props: IRouteProps) {
   useEffect(() => {
     getPixivUser(id).then((res: any) => {
       if (res?.error) return props.history.push('/404');
-      res.novels = res.novels.reverse();
       setUserInfo(res);
 
-      const novels = res.novels.slice(0, 30);
+      const novels = res.novels.slice().reverse().slice(0, 30);
       getPixivNovelProfiles(novels).then((res: any) => {
-        setNovels(res.reverse());
+        setNovels(res.slice());
         setFinish(true);
       });
     });
   }, []);
 
-  if (!finish) return null;
+  if (!finish) {
+    return (
+      <ContentNavbar backTo="/" loading>
+        作者详情
+      </ContentNavbar>
+    );
+  }
+
   const { name, comment, imageUrl, backgroundUrl } = userInfo as IUserInfo;
   const novelEle = (novels as INovelProfile[]).map((ele: INovelProfile) => {
     return (
@@ -55,14 +62,17 @@ export default function PixivUser(props: IRouteProps) {
     );
   });
 
+  const from = history.location?.query?.from;
+  const backPath = from === 'recommend' ? '/pixiv/recommend/users' : '/';
+
   return (
     <div>
-      <ContentNavbar backTo="/">作者详情</ContentNavbar>
+      <ContentNavbar backTo={backPath}>作者详情</ContentNavbar>
       <div className="text-center pb-4 bg-yellow-100 bg-opacity-25 shadow-lg relative">
         <div
           className="w-full h-28 bg-center absolute"
           style={{ backgroundImage: `url(${backgroundUrl})` }}
-        ></div>
+        />
         <div className="flex justify-center pt-10 rounded-full">
           <div
             style={{ backgroundImage: `url(${imageUrl})` }}

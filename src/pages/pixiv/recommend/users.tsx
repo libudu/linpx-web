@@ -15,19 +15,15 @@ export default function () {
     });
   }, []);
 
-  if (!users) return null;
-
-  const userEle = Object.entries(users).map(([name, id]) => {
-    return (
-      <div key={id}>
-        <Link to={`/pixiv/user/${id}`}>{name}</Link>
-      </div>
-    );
-  });
   return (
     <div>
       <HomeNavbar>推荐作者</HomeNavbar>
-      {userEle}
+      {users &&
+        Object.entries(users).map(([name, id]) => (
+          <div key={id}>
+            <Link to={`/pixiv/user/${id}?from=recommend`}>{name}</Link>
+          </div>
+        ))}
     </div>
   );
 }
