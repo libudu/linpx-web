@@ -1,5 +1,7 @@
+import MenuSVG from '@/assets/icon/menu.svg';
+import HeaderLogoPNG from '@/assets/icon/logo.png';
+
 import {
-  UnorderedListOutlined,
   SmileOutlined,
   HomeOutlined,
   HeartOutlined,
@@ -31,11 +33,16 @@ export default function DrawerLayout({
   open: boolean;
 }) {
   currDrawerPath = history.location.pathname;
+  // 如果是首页，title显示的是logo
+  let header: any = title;
+  if (currDrawerPath === '/') {
+    header = <img className="h-8" src={HeaderLogoPNG} />;
+  }
   return (
     <div className="h-full flex flex-col">
       <Navbar
-        leftEle={<UnorderedListOutlined />}
-        children={title}
+        leftEle={<img className="h-6 mt-1" src={MenuSVG} />}
+        children={header}
         onClickLeft={onClickDrawer}
       />
       <Drawer
@@ -86,7 +93,7 @@ export const drawerItems: IDrawerItem[] = [
 function DrawerSidebar({ onClickDrawer }: { onClickDrawer: any }) {
   return (
     <div>
-      <div className="flex flex-col items-center py-4 text-base">
+      <div className="flex flex-col items-center mt-8 mb-2 text-base">
         <img className="w-20" src={LogoImg}></img>
         <div>橘猫的阅读器</div>
         <div>Linpx Is Not PiXiv</div>
@@ -94,7 +101,7 @@ function DrawerSidebar({ onClickDrawer }: { onClickDrawer: any }) {
       {drawerItems.map((ele) => (
         <div
           key={ele.title}
-          className="pl-4 py-1 flex items-center active:bg-gray-200"
+          className="pl-4 py-2 flex items-center active:bg-gray-200"
           onClick={() => {
             history.push(ele.link);
             onClickDrawer();

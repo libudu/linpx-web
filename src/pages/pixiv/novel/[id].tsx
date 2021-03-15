@@ -1,19 +1,9 @@
 import { useState, useEffect } from 'react';
 import { IRouteProps } from 'umi';
-import { getPixivNovel } from '@/utils/api';
+import { getPixivNovel, INovelInfo } from '@/utils/api';
 
 import { ContentNavbar } from '@/components/Navbar';
 import Tag from '@/components/Tag';
-
-interface INovelInfo {
-  id: string;
-  title: string;
-  userId: string;
-  userName: string;
-  content: string;
-  coverUrl: string;
-  tags: string[];
-}
 
 export default function PixivNovel({ match }: IRouteProps) {
   const id = match.params.id;

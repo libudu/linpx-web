@@ -1,6 +1,6 @@
 import { Link, IRouteProps } from 'umi';
 import { useState, useEffect } from 'react';
-import { getPixivUser, getPixivNovelProfiles } from '@/utils/api';
+import { getPixivUser, getPixivNovelProfiles, IUserInfo } from '@/utils/api';
 import { ContentNavbar } from '@/components/Navbar';
 import { history } from 'umi';
 import { currDrawerPath } from '@/layouts/DrawerLayout';
@@ -14,16 +14,6 @@ interface INovelProfile {
   userId: string;
   userName: string;
   desc: string;
-}
-
-// 用户信息
-export interface IUserInfo {
-  id: string;
-  novels: string[];
-  name: string;
-  imageUrl: string;
-  comment: string;
-  backgroundUrl?: string;
 }
 
 export default function PixivUser(props: IRouteProps) {
@@ -40,7 +30,7 @@ export default function PixivUser(props: IRouteProps) {
 
       const novels = res.novels.slice().reverse().slice(0, 30);
       getPixivNovelProfiles(novels).then((res: any) => {
-        setNovels(res.slice());
+        setNovels(res.slice().reverse());
         setFinish(true);
       });
     });

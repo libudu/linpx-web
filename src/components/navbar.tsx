@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined, UnorderedListOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, MenuOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import ActionSheet from '@/utils/ActionSheet';
 import Loading from './Loading';
@@ -21,21 +21,19 @@ export default function Navbar({
   loading,
 }: IHeaderProps) {
   return (
-    <div>
-      <div className="text-3xl text-center bg-linpx h-14 font-bold flex justify-between items-center flex-nowrap">
-        <span className="w-2/12" onClick={onClickLeft}>
-          {leftEle}
-        </span>
-        <span
-          className="w-8/12 overflow-x-hidden whitespace-nowrap mx-2"
-          style={{ textOverflow: 'ellipsis' }}
-        >
-          {children}
-        </span>
-        <span className="w-2/12" onClick={onClickRight}>
-          {rightEle}
-        </span>
-      </div>
+    <div className="text-3xl text-center bg-linpx h-16 font-bold flex justify-between items-center flex-nowrap">
+      <span className="flex justify-center w-2/12" onClick={onClickLeft}>
+        {leftEle}
+      </span>
+      <span
+        className="flex justify-center w-8/12 overflow-x-hidden whitespace-nowrap mx-2"
+        style={{ textOverflow: 'ellipsis' }}
+      >
+        {children}
+      </span>
+      <span className="flex justify-center w-2/12" onClick={onClickRight}>
+        {rightEle}
+      </span>
     </div>
   );
 }
@@ -58,7 +56,7 @@ export function ContentNavbar({
   return Navbar({
     leftEle: <ArrowLeftOutlined onClick={onClick} />,
     rightEle: (
-      <UnorderedListOutlined
+      <MenuOutlined
         onClick={() => {
           ActionSheet();
         }}

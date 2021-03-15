@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { IRouteProps, Link } from 'umi';
 
-import { getRecommendPixivAuthors } from '@/utils/api';
-
-import { IUserInfo } from '../user/[id]';
+import { getRecommendPixivAuthors, IUserInfo } from '@/utils/api';
 
 export default function () {
   const [users, setUsers] = useState<IUserInfo>();
