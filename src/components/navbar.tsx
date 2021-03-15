@@ -1,7 +1,6 @@
 import { ArrowLeftOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import ActionSheet from '@/utils/ActionSheet';
-import Drawer from './Drawer';
 import Loading from './Loading';
 
 interface IHeaderProps {
@@ -39,20 +38,6 @@ export default function Navbar({
       </div>
     </div>
   );
-}
-
-// 主页左边是Drawer按钮
-export function HomeNavbar({
-  children,
-  loading,
-}: {
-  children: any;
-  loading?: boolean;
-}) {
-  return Navbar({
-    leftEle: '',
-    children: children,
-  });
 }
 
 export function ContentNavbar({

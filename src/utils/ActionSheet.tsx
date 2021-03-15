@@ -29,7 +29,6 @@ export const cancelAction = {
 export const defaultActions = [copyHrefAction, cancelAction];
 
 export default function MyActionSheet(actions: IAction[] = defaultActions) {
-  console.log(actions);
   const names = actions.map((ele) => ele.name);
   ActionSheet.showActionSheetWithOptions(
     {

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { getPixivUser, getPixivNovelProfiles } from '@/utils/api';
 import { ContentNavbar } from '@/components/Navbar';
 import { history } from 'umi';
+import { currDrawerPath } from '@/layouts/DrawerLayout';
 
 // 小说简介
 interface INovelProfile {
@@ -62,12 +63,9 @@ export default function PixivUser(props: IRouteProps) {
     );
   });
 
-  const from = history.location?.query?.from;
-  const backPath = from === 'recommend' ? '/pixiv/recommend/users' : '/';
-
   return (
     <div>
-      <ContentNavbar backTo={backPath}>作者详情</ContentNavbar>
+      <ContentNavbar backTo={currDrawerPath}>作者详情</ContentNavbar>
       <div className="text-center pb-4 bg-yellow-100 bg-opacity-25 shadow-lg relative">
         <div
           className="w-full h-28 bg-center absolute"

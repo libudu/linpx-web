@@ -49,3 +49,4 @@ export const getPixivUserList = (idList: string[]) => {
 export const getRecommendPixivAuthors = async () => {
   return linpxRequest('/recommend/authors');
 };
+getRecommendPixivAuthors();
