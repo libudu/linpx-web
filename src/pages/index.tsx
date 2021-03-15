@@ -27,39 +27,67 @@ function ContentBox({ name, path, children }: IBox) {
         <div
           className="inline-block font-bold text-3xl"
           style={{ width: '60%' }}
-        >
-          {name}
-        </div>
+          children={name}
+        />
         <div
           className="inline-block text-base text-right"
           style={{ width: '40%' }}
-        >
-          <span
-            style={{ borderBottom: '1px solid black' }}
-            onClick={() => {
-              history.push(path);
-            }}
-          >
-            查看全部
-          </span>
-        </div>
+          children={
+            <span
+              style={{ borderBottom: '1px solid black' }}
+              children={'查看全部'}
+              onClick={() => {
+                history.push(path);
+              }}
+            />
+          }
+        />
       </div>
-      <div className="lp-shadow lp-bgcolor" style={{ minHeight: '8rem' }}>
+      <div
+        className="lp-shadow lp-bgcolor flex overflow-x-scroll"
+        style={{ minHeight: '6rem' }}
+      >
         {children}
       </div>
     </div>
   );
 }
 
+let lastUserInfo: IUserInfo[] = [];
+
 export default function IndexPage() {
-  const [userInfo, setUserInfo] = useState<IUserInfo[]>();
+  const [userInfo, setUserInfo] = useState<IUserInfo[]>(lastUserInfo);
   useEffect(() => {
-    getRecommendPixivAuthors().then((res) => {
+    getRecommendPixivAuthors(true).then((res) => {
+      // 只取前十个作为随机推荐作者
       getPixivUserList((res as string[]).slice(0, 10)).then((res) => {
+        lastUserInfo = res;
         setUserInfo(res);
         console.log(res);
       });
     });
+  }, []);
+
+  const recommendUsers = lastUserInfo.map((ele) => {
+    return (
+      <div
+        key={ele.id}
+        className="w-16 m-4 mb-2"
+        onClick={() => history.push(`/pixiv/user/${ele.id}`)}
+      >
+        <div
+          style={{
+            backgroundImage: `url(${ele.imageUrl})`,
+            width: '4.5rem',
+            height: '4.5rem',
+          }}
+          className="rounded-full bg-center"
+        />
+        <div className="text-sm text-center" style={{ wordWrap: 'break-word' }}>
+          {ele.name}
+        </div>
+      </div>
+    );
   });
 
   return (
@@ -68,7 +96,7 @@ export default function IndexPage() {
         <div>是的！</div>
         <div>还没做完！</div>
       </div>
-      <ContentBox {...BoxConfig[0]}>123</ContentBox>
+      <ContentBox {...BoxConfig[0]}>{recommendUsers}</ContentBox>
       <ContentBox {...BoxConfig[1]}>456</ContentBox>
       <div>转链功能</div>
     </div>

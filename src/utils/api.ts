@@ -8,9 +8,11 @@ const requestCache: any = {};
 export const linpxRequest = async (path: string) => {
   const cache = requestCache[path];
   if (cache) {
+    console.log('cache request:', path);
     return cache;
   }
   return new Promise((resolve, reject) => {
+    console.log('send request:', path);
     return axios({
       url: BASE_URL + path,
       method: 'GET',
@@ -63,10 +65,16 @@ export const getPixivUserList = (idList: string[]) => {
 };
 
 // 推荐作者列表
-export const getRecommendPixivAuthors = async (): Promise<string[]> => {
+export const getRecommendPixivAuthors = async (
+  random = false,
+): Promise<string[]> => {
   return linpxRequest('/recommend/authors').then(
     (res: { [index: string]: string }) => {
-      return Object.values(res).sort(() => Math.random() - 0.5);
+      let ids = Object.values(res);
+      if (random) {
+        ids = ids.sort(() => Math.random() - 0.5);
+      }
+      return ids;
     },
   );
 };
