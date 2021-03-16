@@ -1,5 +1,5 @@
 import { ActionSheet, Toast } from 'antd-mobile';
-import copyText from './clipboard';
+import { copyText, copyTextAndToast } from './clipboard';
 
 // 复制链接
 // 查看原页面
@@ -12,12 +12,7 @@ export interface IAction {
 export const copyHrefAction = {
   name: '复制链接',
   action: () => {
-    const r = copyText(window.location.href);
-    if (r) {
-      Toast.success('复制成功！\n快分享给朋友吧！', 1);
-    } else {
-      Toast.fail('复制失败', 1);
-    }
+    copyTextAndToast(window.location.href);
   },
 };
 

@@ -2,6 +2,8 @@ import { history } from 'umi';
 import { getRecommendPixivAuthors, getPixivUserList } from '@/utils/api';
 import { useEffect, useState } from 'react';
 import { IUserInfo } from '@/utils/api';
+import { ContentTitle, ContentBox } from './components/ContentLayout';
+import TransLink from './components/TransLink';
 
 interface IBox {
   name: string;
@@ -18,40 +20,11 @@ const BoxConfig: IBox[] = [
     name: '最新小说',
     path: '/',
   },
+  {
+    name: '生成LINPX链接',
+    path: '/',
+  },
 ];
-
-function ContentBox({ name, path, children }: IBox) {
-  return (
-    <div className="px-6 mt-6">
-      <div className="mb-3">
-        <div
-          className="inline-block font-bold text-3xl"
-          style={{ width: '60%' }}
-          children={name}
-        />
-        <div
-          className="inline-block text-base text-right"
-          style={{ width: '40%' }}
-          children={
-            <span
-              style={{ borderBottom: '1px solid black' }}
-              children={'查看全部'}
-              onClick={() => {
-                history.push(path);
-              }}
-            />
-          }
-        />
-      </div>
-      <div
-        className="lp-shadow lp-bgcolor flex overflow-x-scroll"
-        style={{ minHeight: '6rem' }}
-      >
-        {children}
-      </div>
-    </div>
-  );
-}
 
 let lastUserInfo: IUserInfo[] = [];
 
@@ -91,14 +64,19 @@ export default function IndexPage() {
   });
 
   return (
-    <div>
+    <>
       <div className="lp-bgcolor h-40 flex flex-col justify-center items-center font-bold text-3xl">
         <div>是的！</div>
         <div>还没做完！</div>
       </div>
-      <ContentBox {...BoxConfig[0]}>{recommendUsers}</ContentBox>
-      <ContentBox {...BoxConfig[1]}>456</ContentBox>
-      <div>转链功能</div>
-    </div>
+      <div className="px-6 pb-6">
+        <ContentTitle left="作者推荐" clickRightPath="/pixiv/recommend/users" />
+        <ContentBox children={recommendUsers} />
+        <ContentTitle left="最新小说" clickRightPath="/" />
+        <ContentBox children={456} />
+        <ContentTitle left="生成LINPX链接" right="" />
+        <ContentBox children={TransLink()} />
+      </div>
+    </>
   );
 }

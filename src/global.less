@@ -8,10 +8,21 @@
   );
 }
 
-// ::-webkit-scrollbar {
-//   overflow-x: hidden;
-//   width: 0;
-// }
+::-webkit-scrollbar {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  width: 0;
+  height: 0;
+}
+
+.show-scrollbar {
+  ::-webkit-scrollbar {
+    overflow-x: visible;
+    overflow-y: visible;
+    width: initial;
+    height: initial;
+  }
+}
 
 .bg-center {
   background-position: center center;
