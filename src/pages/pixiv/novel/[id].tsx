@@ -51,6 +51,10 @@ export default function PixivNovel({ match }: IRouteProps) {
           >
             {content}
           </div>
+          <div className="absolute bottom-0 w-full bg-white">
+            <div>{}</div>
+            <div></div>
+          </div>
         </>
       )}
     </>

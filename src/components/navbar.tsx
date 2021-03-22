@@ -25,7 +25,7 @@ export default function Navbar({
       className={classnames(
         'flex justify-between items-center flex-nowrap',
         'text-3xl text-center w-full bg-linpx h-16 font-bold z-20',
-        { fixed: fixed },
+        { absolute: fixed },
       )}
     >
       <span className="flex justify-center w-2/12" onClick={onClickLeft}>

@@ -95,7 +95,7 @@ export default function PixivUser(props: IRouteProps) {
   }
 
   return (
-    <div>
+    <>
       <ContentNavbar backTo={currDrawerPath}>作者详情</ContentNavbar>
       <UserCard {...userInfo} />
       <div className="text-center m-6">
@@ -105,6 +105,6 @@ export default function PixivUser(props: IRouteProps) {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 }

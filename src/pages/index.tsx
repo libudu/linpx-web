@@ -26,11 +26,51 @@ const BoxConfig: IBox[] = [
   },
 ];
 
+function UserCard({ id, imageUrl, name }: IUserInfo) {
+  const [isHeight, setIsHeight] = useState<boolean>(false);
+
+  const onImgLoad = (res: any) => {
+    const ele = res.target;
+    setIsHeight(ele.naturalHeight > ele.naturalWidth);
+  };
+
+  return (
+    <div
+      key={id}
+      className="w-24 p-2 pt-4"
+      onClick={() => history.push(`/pixiv/user/${id}`)}
+    >
+      <div
+        className="rounded-full overflow-hidden flex justify-center items-center"
+        style={{
+          width: '4.5rem',
+          height: '4.5rem',
+        }}
+      >
+        <img
+          style={isHeight ? { width: '100%' } : { height: '100%' }}
+          src={imageUrl}
+          loading="lazy"
+          onLoad={onImgLoad}
+        />
+      </div>
+      <div
+        className="text-sm mt-1 text-center u-line-2"
+        style={{ wordWrap: 'break-word' }}
+      >
+        {name}
+      </div>
+    </div>
+  );
+}
+
 let lastUserInfo: IUserInfo[] = [];
 
 export default function IndexPage() {
   document.title = 'Linpx - 首页';
+
   const [userInfo, setUserInfo] = useState<IUserInfo[]>(lastUserInfo);
+
   useEffect(() => {
     getRecommendPixivAuthors().then((res) => {
       // 只取前十个作为随机推荐作者
@@ -42,31 +82,6 @@ export default function IndexPage() {
     });
   }, []);
 
-  const recommendUsers = lastUserInfo.map((ele) => {
-    return (
-      <div
-        key={ele.id}
-        className="w-24 p-2 pt-4"
-        onClick={() => history.push(`/pixiv/user/${ele.id}`)}
-      >
-        <div
-          style={{
-            backgroundImage: `url(${ele.imageUrl})`,
-            width: '4.5rem',
-            height: '4.5rem',
-          }}
-          className="rounded-full bg-center"
-        />
-        <div
-          className="text-sm mt-1 text-center u-line-2"
-          style={{ wordWrap: 'break-word' }}
-        >
-          {ele.name}
-        </div>
-      </div>
-    );
-  });
-
   return (
     <>
       <div className="lp-bgcolor h-40 flex flex-col justify-center items-center font-bold text-3xl">
@@ -75,7 +90,11 @@ export default function IndexPage() {
       </div>
       <div className="px-6 pb-6">
         <ContentTitle left="作者推荐" clickRightPath="/pixiv/recommend/users" />
-        <ContentBox children={recommendUsers} />
+        <ContentBox
+          children={lastUserInfo.map((ele) => (
+            <UserCard {...ele} />
+          ))}
+        />
         {/* <ContentTitle left="最新小说" clickRightPath="/" />
         <ContentBox children={456} /> */}
         <ContentTitle left="生成LINPX链接" right="" />
