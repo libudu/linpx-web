@@ -1,4 +1,5 @@
 import { history } from 'umi';
+import classnames from 'classnames';
 
 // 内容标题
 export function ContentTitle({
@@ -33,10 +34,19 @@ export function ContentTitle({
   );
 }
 
-export function ContentBox({ children }: { children: any }) {
+export function ContentBox({
+  children,
+  className,
+}: {
+  children: any;
+  className?: any;
+}) {
   return (
     <div
-      className="lp-shadow lp-bgcolor flex overflow-x-scroll show-scrollbar"
+      className={classnames(
+        'lp-shadow lp-bgcolor flex overflow-x-scroll show-scrollbar',
+        className,
+      )}
       style={{ minHeight: '6rem' }}
     >
       {children}

@@ -48,9 +48,10 @@ export interface INovelProfile {
   userName: string;
   desc: string;
 }
-export const getPixivNovelProfiles = (
+export const getPixivNovelProfiles = async (
   idList: string[],
 ): Promise<INovelProfile[]> => {
+  if (idList.length === 0) return [];
   let query = '';
   for (const id of idList) {
     query += `ids[]=${id}&`;
@@ -91,4 +92,9 @@ export const getRecommendPixivAuthors = async (): Promise<string[]> => {
       return cacheRandomRecommendIds;
     },
   );
+};
+
+// 最近小说
+export const getRecentNovels = (page: number = 1): Promise<INovelProfile[]> => {
+  return linpxRequest(`/pixiv/recent/novels?page=${page}`);
 };

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { getPixivUser, getPixivNovelProfiles, IUserInfo } from '@/utils/api';
 import { ContentNavbar } from '@/components/Navbar';
 import { currDrawerPath } from '@/layouts/DrawerLayout';
+import NovelCard from '@/components/NovelCard';
 
 // 小说简介
 interface INovelProfile {
@@ -13,40 +14,6 @@ interface INovelProfile {
   userId: string;
   userName: string;
   desc: string;
-}
-
-function NovelCard({
-  id,
-  title,
-  userName,
-  desc,
-  coverUrl,
-  tags,
-}: INovelProfile) {
-  return (
-    <div
-      className="lp-shadow my-5 flex lp-bgcolor overflow-hidden w-full"
-      onClick={() => history.push(`/pixiv/novel/${id}`)}
-    >
-      <div className="lp-shadow w-20 h-28 m-3 overflow-hidden flex-shrink-0">
-        <img className="h-full" src={coverUrl} loading="lazy" />
-      </div>
-      <div className="text-left flex flex-col mt-2 mr-2 flex-shrink">
-        <div className="font-bold u-line-1">{title}</div>
-        <div className="text-xs font-bold">{userName}</div>
-        <div className="text-xs text-blue-400 u-line-1">
-          {tags.map((tag) => (
-            <span>#{tag} </span>
-          ))}
-        </div>
-        <div
-          className="text-sm u-line-3 overflow-hidden"
-          style={{ pointerEvents: 'none' }}
-          dangerouslySetInnerHTML={{ __html: desc }}
-        />
-      </div>
-    </div>
-  );
 }
 
 function UserCard({ name, id, comment, imageUrl, backgroundUrl }: IUserInfo) {
@@ -85,6 +52,7 @@ export default function PixivUser(props: IRouteProps) {
 
       const novels = res.novels.slice().reverse().slice(0, 20);
       getPixivNovelProfiles(novels).then((res) => {
+        console.log(res);
         setNovels(res.slice().reverse());
       });
     });

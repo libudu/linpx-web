@@ -1,7 +1,12 @@
 import { history } from 'umi';
-import { getRecommendPixivAuthors, getPixivUserList } from '@/utils/api';
+import {
+  getRecommendPixivAuthors,
+  getPixivUserList,
+  getRecentNovels,
+  IUserInfo,
+  INovelProfile,
+} from '@/utils/api';
 import { useEffect, useState } from 'react';
-import { IUserInfo } from '@/utils/api';
 import { ContentTitle, ContentBox } from './components/ContentLayout';
 import TransLink from './components/TransLink';
 
@@ -10,21 +15,6 @@ interface IBox {
   path: string;
   children?: any;
 }
-
-const BoxConfig: IBox[] = [
-  {
-    name: '作者推荐',
-    path: '/pixiv/recommend/users',
-  },
-  {
-    name: '最新小说',
-    path: '/',
-  },
-  {
-    name: '生成LINPX链接',
-    path: '/',
-  },
-];
 
 function UserCard({ id, imageUrl, name }: IUserInfo) {
   const [isHeight, setIsHeight] = useState<boolean>(false);
@@ -64,21 +54,48 @@ function UserCard({ id, imageUrl, name }: IUserInfo) {
   );
 }
 
+function NovelCard({ coverUrl, title, id, userName }: INovelProfile) {
+  return (
+    <div
+      className="lp-shadow m-2 text-sm flex-grow-0 flex-shrink-0 overflow-hidden"
+      style={{ width: '6.5rem', wordBreak: 'keep-all' }}
+      onClick={() => id && history.push(`/pixiv/novel/${id}`)}
+    >
+      {coverUrl ? (
+        <div className="h-24 w-full overflow-hidden flex items-center">
+          <img className="w-full" src={coverUrl} loading="lazy" />
+        </div>
+      ) : (
+        <div className="h-24 w-full bg-gray-200" />
+      )}
+      <div className="u-line-2 m-1 mb-0 text-center font-bold text-sm">
+        {title}
+      </div>
+      <div className="u-line-1 m-1 mt-0 text-center text-xs">{userName}</div>
+    </div>
+  );
+}
+
 let lastUserInfo: IUserInfo[] = [];
 
 export default function IndexPage() {
   document.title = 'Linpx - 首页';
 
   const [userInfo, setUserInfo] = useState<IUserInfo[]>(lastUserInfo);
-
   useEffect(() => {
     getRecommendPixivAuthors().then((res) => {
       // 只取前十个作为随机推荐作者
       getPixivUserList((res as string[]).slice(0, 8)).then((res) => {
         lastUserInfo = res;
         setUserInfo(res);
-        console.log(res);
       });
+    });
+  }, []);
+
+  const [novelsInfo, setNovelsInfo] = useState<INovelProfile[]>([]);
+  useEffect(() => {
+    getRecentNovels().then((res) => {
+      setNovelsInfo(res);
     });
   }, []);
 
@@ -95,8 +112,13 @@ export default function IndexPage() {
             <UserCard {...ele} />
           ))}
         />
-        {/* <ContentTitle left="最新小说" clickRightPath="/" />
-        <ContentBox children={456} /> */}
+        <ContentTitle left="最新小说" clickRightPath="/pixiv/recent/novels" />
+        <ContentBox
+          className="px-2"
+          children={novelsInfo.map((novel) => (
+            <NovelCard {...novel} />
+          ))}
+        />
         <ContentTitle left="生成LINPX链接" right="" />
         <ContentBox children={TransLink()} />
       </div>

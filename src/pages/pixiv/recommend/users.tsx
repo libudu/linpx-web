@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { history } from 'umi';
 import { Pagination } from 'antd';
 
@@ -72,6 +72,7 @@ const NovelNumber = 5;
 
 export default function () {
   document.title = 'Linpx - 推荐作者';
+  const scrollRef = useRef<HTMLDivElement>(null);
   // 当前页数
   const [page, setPage] = useState<number>(
     Number(history.location?.query?.page) || 1,
@@ -111,7 +112,7 @@ export default function () {
   }, [page]);
 
   return (
-    <div>
+    <div className="h-full overflow-scroll" ref={scrollRef}>
       <div className="m-6">
         {users.map((ele) => {
           const novelIds = ele.novels.slice().reverse().slice(0, NovelNumber);
@@ -134,6 +135,7 @@ export default function () {
           onChange={(page) => {
             setPage(page);
             history.push(history.location.pathname + `?page=${page}`);
+            scrollRef.current?.scrollTo(0, 0);
           }}
         />
       </div>
