@@ -108,7 +108,7 @@ function DrawerSidebar({ onClickDrawer }: { onClickDrawer: any }) {
           }}
         >
           <div className="mr-6 text-2xl content bg-clip-text">{ele.icon}</div>
-          <div className="text-base">{ele.title}</div>
+          <div className="text-lg">{ele.title}</div>
         </div>
       ))}
     </div>

@@ -17,6 +17,7 @@ interface INovelProfile {
 }
 
 export default function PixivUser(props: IRouteProps) {
+  document.title = 'Linpx - 作者详情';
   const id = props.match.params.id;
 
   const [userInfo, setUserInfo] = useState<IUserInfo>();

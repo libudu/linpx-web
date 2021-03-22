@@ -6,6 +6,7 @@ import { ContentNavbar } from '@/components/Navbar';
 import Tag from '@/components/Tag';
 
 export default function PixivNovel({ match }: IRouteProps) {
+  document.title = 'Linpx - 小说详情';
   const id = match.params.id;
 
   const [novelInfo, setNovelInfo] = useState<INovelInfo>();

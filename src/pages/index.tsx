@@ -29,11 +29,12 @@ const BoxConfig: IBox[] = [
 let lastUserInfo: IUserInfo[] = [];
 
 export default function IndexPage() {
+  document.title = 'Linpx - 首页';
   const [userInfo, setUserInfo] = useState<IUserInfo[]>(lastUserInfo);
   useEffect(() => {
-    getRecommendPixivAuthors(true).then((res) => {
+    getRecommendPixivAuthors().then((res) => {
       // 只取前十个作为随机推荐作者
-      getPixivUserList((res as string[]).slice(0, 10)).then((res) => {
+      getPixivUserList((res as string[]).slice(0, 8)).then((res) => {
         lastUserInfo = res;
         setUserInfo(res);
         console.log(res);
@@ -45,7 +46,7 @@ export default function IndexPage() {
     return (
       <div
         key={ele.id}
-        className="w-16 m-4 mb-2"
+        className="w-24 p-2 pt-4"
         onClick={() => history.push(`/pixiv/user/${ele.id}`)}
       >
         <div
@@ -56,7 +57,10 @@ export default function IndexPage() {
           }}
           className="rounded-full bg-center"
         />
-        <div className="text-sm text-center" style={{ wordWrap: 'break-word' }}>
+        <div
+          className="text-sm mt-1 text-center u-line-2"
+          style={{ wordWrap: 'break-word' }}
+        >
           {ele.name}
         </div>
       </div>
@@ -72,8 +76,8 @@ export default function IndexPage() {
       <div className="px-6 pb-6">
         <ContentTitle left="作者推荐" clickRightPath="/pixiv/recommend/users" />
         <ContentBox children={recommendUsers} />
-        <ContentTitle left="最新小说" clickRightPath="/" />
-        <ContentBox children={456} />
+        {/* <ContentTitle left="最新小说" clickRightPath="/" />
+        <ContentBox children={456} /> */}
         <ContentTitle left="生成LINPX链接" right="" />
         <ContentBox children={TransLink()} />
       </div>

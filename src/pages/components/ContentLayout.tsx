@@ -11,15 +11,14 @@ export function ContentTitle({
   clickRightPath?: any;
 }) {
   return (
-    <div className="mb-3 mt-6">
+    <div className="mb-3 mt-6 flex items-end">
       <div
         className="inline-block font-bold text-3xl pl-2"
-        style={{ width: '70%' }}
+        style={{ width: 'max-content' }}
         children={left}
       />
       <div
-        className="inline-block text-base text-right pr-2"
-        style={{ width: '30%' }}
+        className="inline-block text-base text-right pr-2 flex-grow"
         children={
           <span
             style={{ borderBottom: '1px solid black' }}
@@ -38,7 +37,7 @@ export function ContentBox({ children }: { children: any }) {
   return (
     <div
       className="lp-shadow lp-bgcolor flex overflow-x-scroll show-scrollbar"
-      style={{ minHeight: '8rem' }}
+      style={{ minHeight: '6rem' }}
     >
       {children}
     </div>

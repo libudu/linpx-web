@@ -38,7 +38,9 @@ export const getPixivNovel = (id: string): Promise<INovelInfo> => {
 };
 
 // 一系列小说基本信息
-export const getPixivNovelProfiles = (idList: string[]) => {
+export const getPixivNovelProfiles = (
+  idList: string[],
+): Promise<INovelInfo[]> => {
   let query = '';
   for (const id of idList) {
     query += `ids[]=${id}&`;
@@ -65,16 +67,18 @@ export const getPixivUserList = (idList: string[]) => {
 };
 
 // 推荐作者列表
-export const getRecommendPixivAuthors = async (
-  random = false,
-): Promise<string[]> => {
+let cacheRandomRecommendIds: string[] = [];
+export const getRecommendPixivAuthors = async (): Promise<string[]> => {
+  if (cacheRandomRecommendIds.length) {
+    return cacheRandomRecommendIds;
+  }
   return linpxRequest('/recommend/authors').then(
     (res: { [index: string]: string }) => {
-      let ids = Object.values(res);
-      if (random) {
-        ids = ids.sort(() => Math.random() - 0.5);
-      }
-      return ids;
+      // 第一次加载的时候取随机
+      cacheRandomRecommendIds = Object.values(res).sort(
+        () => Math.random() - 0.5,
+      );
+      return cacheRandomRecommendIds;
     },
   );
 };

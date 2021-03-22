@@ -6,4 +6,5 @@ export default defineConfig({
     exclude: [],
   },
   fastRefresh: {},
+  title: false,
 });

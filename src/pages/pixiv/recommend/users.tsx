@@ -1,21 +1,88 @@
 import { useState, useEffect } from 'react';
-import { IRouteProps, Link, history } from 'umi';
+import { IRouteProps, history } from 'umi';
 import { Pagination } from 'antd';
 
 import {
+  getPixivNovelProfiles,
   getPixivUserList,
   getRecommendPixivAuthors,
+  INovelInfo,
   IUserInfo,
 } from '@/utils/api';
 
 const pageSize = 6;
 
+function NovelCard({ coverUrl, title, id }: INovelInfo) {
+  return (
+    <div
+      className="lp-shadow mx-2 text-sm w-20 flex-grow-0 flex-shrink-0 overflow-hidden"
+      onClick={() => id && history.push(`/pixiv/novel/${id}`)}
+    >
+      {coverUrl ? (
+        <div
+          style={{ backgroundImage: `url(${coverUrl})` }}
+          className="h-20 w-full bg-center"
+        />
+      ) : (
+        <div className="h-20 w-full bg-gray-200" />
+      )}
+      <div className="u-line-2 m-1 text-center font-bold text-xs">{title}</div>
+    </div>
+  );
+}
+
+interface IUserCard {
+  userInfo: IUserInfo;
+  novelsInfo: INovelInfo[];
+}
+
+function UserCard({ userInfo, novelsInfo }: IUserCard) {
+  const { name, imageUrl, id } = userInfo;
+
+  return (
+    <div className="mx-6 my-3 p-2 lp-shadow lp-bgcolor flex overflow-x-scroll">
+      <div
+        className="mt-1 flex flex-col items-center flex-grow"
+        onClick={() => history.push(`/pixiv/user/${id}`)}
+      >
+        <div
+          className="rounded-full bg-center"
+          style={{
+            backgroundImage: `url(${imageUrl})`,
+            width: '4.7rem',
+            height: '4.7rem',
+          }}
+        />
+        <div
+          className="py-1 w-24 text-center text-base font-bold u-line-2"
+          style={{ lineHeight: '1.1rem' }}
+        >
+          {name}
+        </div>
+      </div>
+      <div className="px-1 flex">
+        {novelsInfo.slice(0, NovelNumber).map((ele) => (
+          <NovelCard {...ele} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const NovelNumber = 5;
+
 export default function () {
-  const [allUserIds, setAllUserIds] = useState<string[]>([]);
+  document.title = 'Linpx - 推荐作者';
+  // 当前页数
   const [page, setPage] = useState<number>(
     Number(history.location?.query?.page) || 1,
   );
+  // 推荐作者的id
+  const [allUserIds, setAllUserIds] = useState<string[]>([]);
+  // 推荐作者的信息
   const [users, setUsers] = useState<IUserInfo[]>([]);
+  // 本页小说信息
+  const [novels, setNovels] = useState<{ [id: string]: INovelInfo }>({});
 
   useEffect(() => {
     getRecommendPixivAuthors().then((res) => {
@@ -25,27 +92,50 @@ export default function () {
       const truePage = page < 1 ? 1 : page > maxPage ? maxPage : page;
       setPage(truePage);
       // 当前显示的id
-      console.log('set page');
       const showIds = res.slice((truePage - 1) * pageSize, truePage * pageSize);
-      getPixivUserList(showIds).then((res) => {
-        setUsers(res);
+      getPixivUserList(showIds).then((usersInfo) => {
+        // 加载用户基本信息
+        setUsers(usersInfo);
+        // 加载当页用户最近小说
+        const novels = usersInfo
+          .map((user) => user.novels.slice().reverse().slice(0, NovelNumber))
+          .flat();
+        getPixivNovelProfiles(novels).then((novelsInfo) => {
+          const tempNovels: { [id: string]: INovelInfo } = {};
+          novelsInfo.forEach((novels) => {
+            tempNovels[novels.id] = novels;
+          });
+          setNovels(tempNovels);
+        });
       });
     });
   }, [page]);
 
   return (
     <div>
-      {users.map((ele) => (
-        <div key={ele.id}>
-          <Link to={`/pixiv/user/${ele.id}`}>{ele.name}</Link>
-        </div>
-      ))}
-      <div className="flex justify-center">
+      <div className="my-6">
+        {users.map((ele) => {
+          const novelIds = ele.novels.slice().reverse().slice(0, NovelNumber);
+          const novelsInfo: INovelInfo[] = [];
+          for (let i = 0; i < NovelNumber; i++) {
+            novelsInfo.push(novels[novelIds[i]]);
+          }
+          return (
+            <div key={ele.id}>
+              <UserCard userInfo={ele} novelsInfo={novelsInfo} />
+            </div>
+          );
+        })}
+      </div>
+      <div className="flex justify-center my-6">
         <Pagination
           pageSize={pageSize}
           current={page}
           total={allUserIds.length}
-          onChange={(page) => setPage(page)}
+          onChange={(page) => {
+            setPage(page);
+            history.push(history.location.pathname + `?page=${page}`);
+          }}
         />
       </div>
     </div>
