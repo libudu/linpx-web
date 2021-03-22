@@ -32,15 +32,25 @@ export interface INovelInfo {
   content: string;
   coverUrl: string;
   tags: string[];
+  desc: string;
 }
 export const getPixivNovel = (id: string): Promise<INovelInfo> => {
   return linpxRequest(`/pixiv/novel/${id}`);
 };
 
 // 一系列小说基本信息
+export interface INovelProfile {
+  id: string;
+  title: string;
+  coverUrl: string;
+  tags: string[];
+  userId: string;
+  userName: string;
+  desc: string;
+}
 export const getPixivNovelProfiles = (
   idList: string[],
-): Promise<INovelInfo[]> => {
+): Promise<INovelProfile[]> => {
   let query = '';
   for (const id of idList) {
     query += `ids[]=${id}&`;

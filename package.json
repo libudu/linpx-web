@@ -23,11 +23,14 @@
     "@ant-design/icons": "^4.5.0",
     "@ant-design/pro-layout": "^6.5.0",
     "@umijs/preset-react": "1.x",
+    "antd": "^4.14.0",
     "axios": "^0.21.1",
+    "classnames": "^2.2.6",
     "global": "^4.4.0",
     "umi": "^3.3.9"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.11",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@umijs/test": "^3.3.9",

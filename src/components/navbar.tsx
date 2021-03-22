@@ -1,7 +1,7 @@
 import { ArrowLeftOutlined, MenuOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import ActionSheet from '@/utils/ActionSheet';
-import Loading from './Loading';
+import classnames from 'classnames';
 
 interface IHeaderProps {
   children?: any;
@@ -9,7 +9,7 @@ interface IHeaderProps {
   onClickLeft?: any;
   rightEle?: any;
   onClickRight?: any;
-  loading?: boolean;
+  fixed?: boolean;
 }
 
 export default function Navbar({
@@ -18,10 +18,16 @@ export default function Navbar({
   onClickLeft,
   rightEle,
   onClickRight,
-  loading,
+  fixed = false,
 }: IHeaderProps) {
   return (
-    <div className="text-3xl text-center bg-linpx h-16 font-bold flex justify-between items-center flex-nowrap">
+    <div
+      className={classnames(
+        'flex justify-between items-center flex-nowrap',
+        'text-3xl text-center w-full bg-linpx h-16 font-bold z-20',
+        { fixed: fixed },
+      )}
+    >
       <span className="flex justify-center w-2/12" onClick={onClickLeft}>
         {leftEle}
       </span>
@@ -41,11 +47,9 @@ export default function Navbar({
 export function ContentNavbar({
   children,
   backTo,
-  loading,
 }: {
   children: any;
   backTo?: string;
-  loading?: boolean;
 }) {
   // 如果有backTo那就回到backTo，没有就返回上一个网页
   const onClick = backTo
@@ -63,6 +67,6 @@ export function ContentNavbar({
       />
     ),
     children,
-    loading,
+    fixed: true,
   });
 }

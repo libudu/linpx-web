@@ -14,7 +14,7 @@ import { history } from 'umi';
 import LogoImg from '@/assets/logo/app_logo.png';
 
 // 获取Drawer项目
-export function getDrawerItem(url: string = history.location.pathname) {
+export function getDrawerItem() {
   return drawerItems.find((ele) => ele.link === location.pathname);
 }
 

@@ -1,28 +1,27 @@
 import { useState, useEffect } from 'react';
-import { IRouteProps, history } from 'umi';
+import { history } from 'umi';
 import { Pagination } from 'antd';
 
 import {
   getPixivNovelProfiles,
   getPixivUserList,
   getRecommendPixivAuthors,
-  INovelInfo,
+  INovelProfile,
   IUserInfo,
 } from '@/utils/api';
 
 const pageSize = 6;
 
-function NovelCard({ coverUrl, title, id }: INovelInfo) {
+function NovelCard({ coverUrl, title, id }: INovelProfile) {
   return (
     <div
       className="lp-shadow mx-2 text-sm w-20 flex-grow-0 flex-shrink-0 overflow-hidden"
       onClick={() => id && history.push(`/pixiv/novel/${id}`)}
     >
       {coverUrl ? (
-        <div
-          style={{ backgroundImage: `url(${coverUrl})` }}
-          className="h-20 w-full bg-center"
-        />
+        <div className="h-20 w-full overflow-hidden flex items-center">
+          <img className="w-full" src={coverUrl} loading="lazy" />
+        </div>
       ) : (
         <div className="h-20 w-full bg-gray-200" />
       )}
@@ -33,14 +32,14 @@ function NovelCard({ coverUrl, title, id }: INovelInfo) {
 
 interface IUserCard {
   userInfo: IUserInfo;
-  novelsInfo: INovelInfo[];
+  novelsInfo: INovelProfile[];
 }
 
 function UserCard({ userInfo, novelsInfo }: IUserCard) {
   const { name, imageUrl, id } = userInfo;
 
   return (
-    <div className="mx-6 my-3 p-2 lp-shadow lp-bgcolor flex overflow-x-scroll">
+    <div className="my-3 p-2 lp-shadow lp-bgcolor flex overflow-x-scroll">
       <div
         className="mt-1 flex flex-col items-center flex-grow"
         onClick={() => history.push(`/pixiv/user/${id}`)}
@@ -82,7 +81,7 @@ export default function () {
   // 推荐作者的信息
   const [users, setUsers] = useState<IUserInfo[]>([]);
   // 本页小说信息
-  const [novels, setNovels] = useState<{ [id: string]: INovelInfo }>({});
+  const [novels, setNovels] = useState<{ [id: string]: INovelProfile }>({});
 
   useEffect(() => {
     getRecommendPixivAuthors().then((res) => {
@@ -101,7 +100,7 @@ export default function () {
           .map((user) => user.novels.slice().reverse().slice(0, NovelNumber))
           .flat();
         getPixivNovelProfiles(novels).then((novelsInfo) => {
-          const tempNovels: { [id: string]: INovelInfo } = {};
+          const tempNovels: { [id: string]: INovelProfile } = {};
           novelsInfo.forEach((novels) => {
             tempNovels[novels.id] = novels;
           });
@@ -113,10 +112,10 @@ export default function () {
 
   return (
     <div>
-      <div className="my-6">
+      <div className="m-6">
         {users.map((ele) => {
           const novelIds = ele.novels.slice().reverse().slice(0, NovelNumber);
-          const novelsInfo: INovelInfo[] = [];
+          const novelsInfo: INovelProfile[] = [];
           for (let i = 0; i < NovelNumber; i++) {
             novelsInfo.push(novels[novelIds[i]]);
           }
