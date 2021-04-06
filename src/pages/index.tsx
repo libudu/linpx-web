@@ -9,6 +9,7 @@ import {
 import { useEffect, useState } from 'react';
 import { ContentTitle, ContentBox } from './components/ContentLayout';
 import TransLink from './components/TransLink';
+import { Modal } from 'antd-mobile';
 
 interface IBox {
   name: string;
@@ -77,9 +78,12 @@ function NovelCard({ coverUrl, title, id, userName }: INovelProfile) {
 }
 
 let lastUserInfo: IUserInfo[] = [];
+const initRDF =
+  String(history.location.query?.from).toLocaleLowerCase() === 'rdf';
 
 export default function IndexPage() {
   document.title = 'Linpx - 首页';
+  const [showRDF, setShowRDF] = useState(initRDF);
 
   const [userInfo, setUserInfo] = useState<IUserInfo[]>(lastUserInfo);
   useEffect(() => {
@@ -105,18 +109,32 @@ export default function IndexPage() {
         <div>是的！</div>
         <div>还没做完！</div>
       </div>
+      <Modal
+        visible={showRDF}
+        transparent
+        maskClosable={false}
+        title="红龙基金新人礼"
+        footer={[{ text: '确认', onPress: () => setShowRDF(false) }]}
+      >
+        <div className="text-base">
+          <div>礼品兑换码</div>
+          <div>I8HLK-DQWR3-QJ404</div>
+          <div>BQD0H-JBBCM-FALVH</div>
+          <div>G69FV-WIIP7-EX9JQ</div>
+        </div>
+      </Modal>
       <div className="px-6 pb-6">
         <ContentTitle left="作者推荐" clickRightPath="/pixiv/recommend/users" />
         <ContentBox
           children={lastUserInfo.map((ele) => (
-            <UserCard {...ele} />
+            <UserCard key={ele.id} {...ele} />
           ))}
         />
         <ContentTitle left="最新小说" clickRightPath="/pixiv/recent/novels" />
         <ContentBox
           className="px-2"
           children={novelsInfo.map((novel) => (
-            <NovelCard {...novel} />
+            <NovelCard key={novel.id} {...novel} />
           ))}
         />
         <ContentTitle left="生成LINPX链接" right="" />
