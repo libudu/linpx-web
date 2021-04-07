@@ -89,7 +89,7 @@ export default function () {
       setAllUserIds(res);
       // 当前页码数小于1或大于最大时，需要修正
       const maxPage = Math.ceil(res.length / pageSize);
-      const truePage = page < 1 ? 1 : page > maxPage ? maxPage : page;
+      const truePage = Math.min(Math.max(page, 1), maxPage);
       setPage(truePage);
       // 当前显示的id
       const showIds = res.slice((truePage - 1) * pageSize, truePage * pageSize);

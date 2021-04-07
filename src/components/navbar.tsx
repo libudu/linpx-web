@@ -47,9 +47,11 @@ export default function Navbar({
 export function ContentNavbar({
   children,
   backTo,
+  fixed = true,
 }: {
   children: any;
   backTo?: string;
+  fixed?: boolean;
 }) {
   // 如果有backTo那就回到backTo，没有就返回上一个网页
   const onClick = backTo
@@ -67,6 +69,6 @@ export function ContentNavbar({
       />
     ),
     children,
-    fixed: true,
+    fixed,
   });
 }
