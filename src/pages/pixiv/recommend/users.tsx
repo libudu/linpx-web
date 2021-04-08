@@ -88,7 +88,8 @@ export default function () {
     getRecommendPixivAuthors().then((res) => {
       setAllUserIds(res);
       // 当前页码数小于1或大于最大时，需要修正
-      const maxPage = Math.ceil(res.length / pageSize);
+      const total = res.length;
+      const maxPage = Math.ceil(total / pageSize);
       const truePage = Math.min(Math.max(page, 1), maxPage);
       setPage(truePage);
       // 当前显示的id
