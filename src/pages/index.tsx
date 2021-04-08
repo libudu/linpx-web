@@ -9,14 +9,10 @@ import {
 import { useEffect, useState } from 'react';
 import { ContentTitle, ContentBox } from './components/ContentLayout';
 import TransLink from './components/TransLink';
-import { Modal } from 'antd-mobile';
+import RDFModal from './components/RDFModal';
+import { Carousel } from 'antd';
 
-interface IBox {
-  name: string;
-  path: string;
-  children?: any;
-}
-
+// 首页用户卡片
 function UserCard({ id, imageUrl, name }: IUserInfo) {
   const [isHeight, setIsHeight] = useState<boolean>(false);
 
@@ -55,10 +51,11 @@ function UserCard({ id, imageUrl, name }: IUserInfo) {
   );
 }
 
+// 首页小说卡片
 function NovelCard({ coverUrl, title, id, userName }: INovelProfile) {
   return (
     <div
-      className="lp-shadow m-2 text-sm flex-grow-0 flex-shrink-0 overflow-hidden"
+      className="lp-shadow h-full text-sm flex-grow-0 flex-shrink-0 overflow-hidden flex flex-col"
       style={{ width: '6.5rem', wordBreak: 'keep-all' }}
       onClick={() => id && history.push(`/pixiv/novel/${id}`)}
     >
@@ -69,21 +66,62 @@ function NovelCard({ coverUrl, title, id, userName }: INovelProfile) {
       ) : (
         <div className="h-24 w-full bg-gray-200" />
       )}
-      <div className="u-line-2 m-1 mb-0 text-center font-bold text-sm">
-        {title}
+      <div className="flex flex-col justify-center flex-grow">
+        <div className="u-line-2 m-1 mb-0 text-center font-bold text-sm">
+          {title}
+        </div>
+        <div className="u-line-1 m-1 mt-0 text-center text-xs">{userName}</div>
       </div>
-      <div className="u-line-1 m-1 mt-0 text-center text-xs">{userName}</div>
     </div>
   );
 }
 
+// 首页轮播图
+function Banner() {
+  const Box = ({ children }: { children: any }) => (
+    <div className="lp-bgcolor h-40 flex flex-col justify-center items-center font-bold text-2xl text-center">
+      {children}
+    </div>
+  );
+  return (
+    <Carousel autoplay dots={false}>
+      <Box>
+        <div>
+          <div>是的！</div>
+          <div>还没做完！</div>
+        </div>
+      </Box>
+      <Box>
+        <div
+          onClick={() => {
+            window.open(
+              'mqqwpa://card/show_pslcard?src_type=internal&version=1&uin=576268549&card_type=group&source=qrcode',
+            );
+          }}
+        >
+          <div>群号576268549</div>
+          <div>点击加群！</div>
+        </div>
+      </Box>
+      <Box>
+        <div
+          onClick={() => {
+            window.open('https://weibo.com/linpicio');
+          }}
+        >
+          <div>关注我的微博</div>
+          <div>@林彼丢带橘猫</div>
+          <div>点击跳转！</div>
+        </div>
+      </Box>
+    </Carousel>
+  );
+}
+
 let lastUserInfo: IUserInfo[] = [];
-const initRDF =
-  String(history.location.query?.from).toLocaleLowerCase() === 'rdf';
 
 export default function IndexPage() {
   document.title = 'Linpx - 首页';
-  const [showRDF, setShowRDF] = useState(initRDF);
 
   const [userInfo, setUserInfo] = useState<IUserInfo[]>(lastUserInfo);
   useEffect(() => {
@@ -105,24 +143,8 @@ export default function IndexPage() {
 
   return (
     <>
-      <div className="lp-bgcolor h-40 flex flex-col justify-center items-center font-bold text-3xl">
-        <div>是的！</div>
-        <div>还没做完！</div>
-      </div>
-      <Modal
-        visible={showRDF}
-        transparent
-        maskClosable={false}
-        title="红龙基金新人礼"
-        footer={[{ text: '确认', onPress: () => setShowRDF(false) }]}
-      >
-        <div className="text-base">
-          <div>礼品兑换码</div>
-          <div>I8HLK-DQWR3-QJ404</div>
-          <div>BQD0H-JBBCM-FALVH</div>
-          <div>G69FV-WIIP7-EX9JQ</div>
-        </div>
-      </Modal>
+      <Banner />
+      <RDFModal />
       <div className="px-6 pb-6">
         <ContentTitle left="作者推荐" clickRightPath="/pixiv/recommend/users" />
         <ContentBox
@@ -131,12 +153,15 @@ export default function IndexPage() {
           ))}
         />
         <ContentTitle left="最新小说" clickRightPath="/pixiv/recent/novels" />
-        <ContentBox
-          className="px-2"
-          children={novelsInfo.map((novel) => (
-            <NovelCard key={novel.id} {...novel} />
-          ))}
-        />
+        <ContentBox>
+          <div className="px-2 flex">
+            {novelsInfo.map((novel) => (
+              <div className="p-2">
+                <NovelCard key={novel.id} {...novel} />
+              </div>
+            ))}
+          </div>
+        </ContentBox>
         <ContentTitle left="生成LINPX链接" right="" />
         <ContentBox children={TransLink()} />
       </div>

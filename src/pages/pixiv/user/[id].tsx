@@ -4,7 +4,7 @@ import { Pagination } from 'antd';
 import { getPixivUser, getPixivNovelProfiles, IUserInfo } from '@/utils/api';
 import { ContentNavbar } from '@/components/Navbar';
 import { currDrawerPath } from '@/layouts/DrawerLayout';
-import NovelCard from '@/components/NovelCard';
+import NovelCard from '@/pages/components/NovelCard';
 
 // 小说简介
 interface INovelProfile {
