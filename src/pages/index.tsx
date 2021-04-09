@@ -93,16 +93,8 @@ function Banner() {
         </div>
       </Box>
       <Box>
-        <div
-          onClick={() => {
-            window.open(
-              'mqqwpa://card/show_pslcard?src_type=internal&version=1&uin=576268549&card_type=group&source=qrcode',
-            );
-          }}
-        >
-          <div>群号576268549</div>
-          <div>点击加群！</div>
-        </div>
+        <div>群号:576268549</div>
+        <div>欢迎反馈问题或提建议！</div>
       </Box>
       <Box>
         <div
@@ -113,6 +105,26 @@ function Banner() {
           <div>关注我的微博</div>
           <div>@林彼丢带橘猫</div>
           <div>点击跳转！</div>
+        </div>
+      </Box>
+      <Box>
+        <div
+          onClick={() => {
+            window.open('https://afdian.net/@LINPX');
+          }}
+        >
+          <div>爱发电赞助！</div>
+          <div>点击跳转！</div>
+        </div>
+      </Box>
+      <Box>
+        <div
+          onClick={() => {
+            window.open('https://afdian.net/@LINPX');
+          }}
+        >
+          <div>开源github地址！</div>
+          <div>来点个star⭐吧！</div>
         </div>
       </Box>
     </Carousel>
