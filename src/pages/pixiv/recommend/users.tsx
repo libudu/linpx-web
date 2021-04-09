@@ -25,7 +25,9 @@ function NovelCard({ coverUrl, title, id }: INovelProfile) {
       ) : (
         <div className="h-20 w-full bg-gray-200" />
       )}
-      <div className="u-line-2 m-1 text-center font-bold text-xs">{title}</div>
+      <div className="u-line-2 m-1 text-center font-bold text-xs whitespace-pre-line">
+        {title || '\n\n'}
+      </div>
     </div>
   );
 }
@@ -59,7 +61,7 @@ function UserCard({ userInfo, novelsInfo }: IUserCard) {
           {name}
         </div>
       </div>
-      <div className="px-1 flex">
+      <div className="pr-1 flex">
         {novelsInfo.slice(0, NovelNumber).map((ele) => (
           <NovelCard {...ele} />
         ))}
@@ -112,9 +114,11 @@ export default function () {
     });
   }, [page]);
 
+  if (users.length === 0) return null;
+
   return (
     <div className="h-full overflow-scroll" ref={scrollRef}>
-      <div className="m-6">
+      <div className="m-4">
         {users.map((ele) => {
           const novelIds = ele.novels.slice().reverse().slice(0, NovelNumber);
           const novelsInfo: INovelProfile[] = [];

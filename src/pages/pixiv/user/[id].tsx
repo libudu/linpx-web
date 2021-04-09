@@ -19,7 +19,7 @@ interface INovelProfile {
 
 function UserCard({ name, id, comment, imageUrl, backgroundUrl }: IUserInfo) {
   return (
-    <div className="text-center pt-10 pb-4 bg-yellow-100 bg-opacity-25 shadow-lg relative">
+    <div className="text-center pb-4 bg-yellow-100 bg-opacity-25 shadow-lg relative">
       <div
         className="w-full h-28 bg-center absolute"
         style={{ backgroundImage: `url(${backgroundUrl})` }}

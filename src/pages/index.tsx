@@ -23,12 +23,11 @@ function UserCard({ id, imageUrl, name }: IUserInfo) {
 
   return (
     <div
-      key={id}
       className="w-24 p-2 pt-4"
       onClick={() => history.push(`/pixiv/user/${id}`)}
     >
       <div
-        className="rounded-full overflow-hidden flex justify-center items-center"
+        className="rounded-full overflow-hidden flex justify-center items-center bg-gray-200"
         style={{
           width: '4.5rem',
           height: '4.5rem',
@@ -42,7 +41,7 @@ function UserCard({ id, imageUrl, name }: IUserInfo) {
         />
       </div>
       <div
-        className="text-sm mt-1 text-center u-line-2"
+        className="text-sm mt-1 text-center u-line-2 whitespace-pre-line"
         style={{ wordWrap: 'break-word' }}
       >
         {name}
@@ -67,10 +66,12 @@ function NovelCard({ coverUrl, title, id, userName }: INovelProfile) {
         <div className="h-24 w-full bg-gray-200" />
       )}
       <div className="flex flex-col justify-center flex-grow">
-        <div className="u-line-2 m-1 mb-0 text-center font-bold text-sm">
+        <div className="u-line-2 m-1 mb-0 text-center font-bold text-sm whitespace-pre-line">
           {title}
         </div>
-        <div className="u-line-1 m-1 mt-0 text-center text-xs">{userName}</div>
+        <div className="u-line-1 m-1 mt-0 text-center text-xs whitespace-pre-line">
+          {userName}
+        </div>
       </div>
     </div>
   );
@@ -118,7 +119,10 @@ function Banner() {
   );
 }
 
-let lastUserInfo: IUserInfo[] = [];
+let lastUserInfo: IUserInfo[] = Array(8).fill({
+  imageUrl: '',
+  name: '\n\n',
+});
 
 export default function IndexPage() {
   document.title = 'Linpx - 首页';
@@ -134,7 +138,13 @@ export default function IndexPage() {
     });
   }, []);
 
-  const [novelsInfo, setNovelsInfo] = useState<INovelProfile[]>([]);
+  const emptyNovel = {
+    title: '\n',
+    userName: '\n',
+  };
+  const [novelsInfo, setNovelsInfo] = useState<INovelProfile[]>(
+    Array(8).fill(emptyNovel),
+  );
   useEffect(() => {
     getRecentNovels().then((res) => {
       setNovelsInfo(res);
@@ -147,19 +157,21 @@ export default function IndexPage() {
       <RDFModal />
       <div className="px-6 pb-6">
         <ContentTitle left="作者推荐" clickRightPath="/pixiv/recommend/users" />
-        <ContentBox
-          children={lastUserInfo.map((ele) => (
+        <ContentBox>
+          {lastUserInfo.map((ele) => (
             <UserCard key={ele.id} {...ele} />
           ))}
-        />
+        </ContentBox>
         <ContentTitle left="最新小说" clickRightPath="/pixiv/recent/novels" />
         <ContentBox>
           <div className="px-2 flex">
-            {novelsInfo.map((novel) => (
-              <div className="p-2">
-                <NovelCard key={novel.id} {...novel} />
-              </div>
-            ))}
+            {novelsInfo.map((novel) => {
+              return (
+                <div className="p-2">
+                  <NovelCard key={novel.id} {...novel} />
+                </div>
+              );
+            })}
           </div>
         </ContentBox>
         <ContentTitle left="生成LINPX链接" right="" />
