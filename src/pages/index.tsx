@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from 'react';
 import { ContentTitle, ContentBox } from './components/ContentLayout';
 import TransLink from './components/TransLink';
-import RDFModal from './components/RDFModal';
+import { InfoModal, showInfoModal } from './components/Modal';
 import { Carousel } from 'antd';
 
 // 首页用户卡片
@@ -139,6 +139,26 @@ let lastUserInfo: IUserInfo[] = Array(8).fill({
 export default function IndexPage() {
   document.title = 'Linpx - 首页';
 
+  // 红龙基金
+  useEffect(() => {
+    const initRDF =
+      String(history.location.query?.from).toLocaleLowerCase() === 'rdf';
+    if (initRDF) {
+      showInfoModal({
+        title: '红龙基金新人礼',
+        children: (
+          <div className="text-base">
+            <div>礼品兑换码</div>
+            <div>I8HLK-DQWR3-QJ404</div>
+            <div>BQD0H-JBBCM-FALVH</div>
+            <div>G69FV-WIIP7-EX9JQ</div>
+          </div>
+        ),
+      });
+    }
+  }, []);
+
+  // 加载首页作者
   const [userInfo, setUserInfo] = useState<IUserInfo[]>(lastUserInfo);
   useEffect(() => {
     getRecommendPixivAuthors().then((res) => {
@@ -150,6 +170,7 @@ export default function IndexPage() {
     });
   }, []);
 
+  // 加载首页小说
   const emptyNovel = {
     title: '\n',
     userName: '\n',
@@ -166,27 +187,80 @@ export default function IndexPage() {
   return (
     <>
       <Banner />
-      <RDFModal />
+      <InfoModal />
       <div className="px-6 pb-6">
-        <ContentTitle left="作者推荐" clickRightPath="/pixiv/recommend/users" />
+        <ContentTitle
+          left="作者推荐"
+          clickRightPath="/pixiv/recommend/users"
+          onClickInfo={() => {
+            showInfoModal({
+              title: '作者推荐',
+              children: (
+                <div className="text-base">
+                  <div>推荐一些不错的作者</div>
+                  <div>主要是兽文作者</div>
+                  <div>每次刷新时随机排序</div>
+                  <div>欢迎举荐或自荐作者</div>
+                  <div>加群反馈：576268549</div>
+                </div>
+              ),
+            });
+          }}
+        />
         <ContentBox>
-          {lastUserInfo.map((ele) => (
-            <UserCard key={ele.id} {...ele} />
+          {lastUserInfo.map((ele, index) => (
+            <UserCard key={ele.id || index} {...ele} />
           ))}
         </ContentBox>
-        <ContentTitle left="最新小说" clickRightPath="/pixiv/recent/novels" />
+        <ContentTitle
+          left="最新小说"
+          clickRightPath="/pixiv/recent/novels"
+          onClickInfo={() => {
+            showInfoModal({
+              title: '最新小说',
+              children: (
+                <div className="text-base">
+                  <div>推荐作者按时间线排序的小说</div>
+                  <div>可以翻到很久很久前的小说</div>
+                </div>
+              ),
+            });
+          }}
+        />
         <ContentBox>
           <div className="px-2 flex">
-            {novelsInfo.map((novel) => {
+            {novelsInfo.map((novel, index) => {
               return (
-                <div className="p-2">
-                  <NovelCard key={novel.id} {...novel} />
+                <div className="p-2" key={novel.id || index}>
+                  <NovelCard {...novel} />
                 </div>
               );
             })}
           </div>
         </ContentBox>
-        <ContentTitle left="生成LINPX链接" right="" />
+        <ContentTitle
+          left="生成LINPX链接"
+          right=""
+          onClickInfo={() => {
+            showInfoModal({
+              title: '生成LINPX链接',
+              children: (
+                <div className="text-base break-all">
+                  <div>将pixiv链接转为linpx</div>
+                  <div>从而不需要翻墙、登录，点开即阅</div>
+                  <br />
+                  <div>当前支持作者和小说两种格式链接</div>
+                  <div className="text-left">
+                    <div>作者举例：https://www.pixiv.net/users/32809296</div>
+                    <div>
+                      小说举例：https://www.pixiv.net/novel/show.php?id=14198407
+                    </div>
+                  </div>
+                </div>
+              ),
+            });
+          }}
+        />
         <ContentBox children={TransLink()} />
       </div>
     </>
