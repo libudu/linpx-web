@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { IRouteProps, history } from 'umi';
 import { getPixivNovel, INovelInfo } from '@/utils/api';
 import { ArrowLeftOutlined, MenuOutlined } from '@ant-design/icons';
 import { Popover } from 'antd-mobile';
+import { throttle } from 'lodash';
 
 import Navbar, { ContentNavbar } from '@/components/Navbar';
 import Tag from '@/components/Tag';
@@ -76,6 +77,7 @@ function NovelMenu({ id }: { id: string }) {
     return (
       <Tag>
         <div
+          className="mx-3"
           style={{ fontFamily }}
           onClick={() => {
             novelStyle.fontFamily = fontFamily;
@@ -110,7 +112,7 @@ function NovelMenu({ id }: { id: string }) {
       <Line />
       <Item>
         <div>字体</div>
-        <div className="flex flex-col mr-6 text-base">
+        <div className="flex flex-col mr-4 text-base">
           <FontFamilyPicker fontFamily="auto" name="系统默认" />
           <FontFamilyPicker fontFamily="Noto Sans SC" name="思源黑体" />
           <FontFamilyPicker fontFamily="Noto Serif SC" name="思源宋体" />
@@ -138,22 +140,45 @@ function NovelMenu({ id }: { id: string }) {
   );
 }
 
+let lastScrollTop = 0;
+
 export default function PixivNovel({ match }: IRouteProps) {
   document.title = 'Linpx - 小说详情';
   const id = match.params.id;
 
   const [novelInfo, setNovelInfo] = useState<INovelInfo>();
 
+  // 样式设置函数
   updateNovelStyle = () => {
     setNovelInfo(Object.assign({}, novelInfo));
   };
 
+  // 加载小说信息
   useEffect(() => {
     getPixivNovel(id).then((res: any) => {
       if (res?.error) return;
       setNovelInfo(res);
     });
   }, []);
+
+  // navbar是否收起
+  const [showNavbar, setShowNavbar] = useState(true);
+
+  // 监听滚动
+  const scrollHandler = throttle((e: any) => {
+    const scrollTop: number = e.target.scrollTop;
+    const shake = 20;
+    const change = scrollTop - lastScrollTop;
+    // 下滑
+    if (change > shake) {
+      setShowNavbar(false);
+    }
+    // 上滑
+    if (change < -shake) {
+      setShowNavbar(true);
+    }
+    lastScrollTop = scrollTop;
+  }, 100);
 
   if (!novelInfo) {
     return <ContentNavbar>小说详情</ContentNavbar>;
@@ -162,25 +187,31 @@ export default function PixivNovel({ match }: IRouteProps) {
   const { title, content, userName, userId, coverUrl, tags, desc } = novelInfo;
 
   return (
-    <>
-      <Navbar
-        leftEle={
-          <ArrowLeftOutlined
-            onClick={() => history.push(`/pixiv/user/${userId}`)}
+    <div className="h-screen w-full overflow-y-scroll" onScroll={scrollHandler}>
+      <div className="absolute w-full z-20">
+        <div
+          className="relative w-full"
+          style={{ transition: 'all 0.3s', top: showNavbar ? '0px' : '-64px' }}
+        >
+          <Navbar
+            leftEle={
+              <ArrowLeftOutlined
+                onClick={() => history.push(`/pixiv/user/${userId}`)}
+              />
+            }
+            rightEle={
+              <Popover
+                overlay={<NovelMenu id={id} />}
+                // @ts-ignore
+                overlayStyle={{ width: 'max-content' }}
+              >
+                <MenuOutlined />
+              </Popover>
+            }
+            children="小说详情"
           />
-        }
-        rightEle={
-          // @ts-ignore
-          <Popover
-            overlay={<NovelMenu id={id} />}
-            overlayStyle={{ width: 'max-content' }}
-          >
-            <MenuOutlined />
-          </Popover>
-        }
-        children="小说详情"
-        fixed
-      />
+        </div>
+      </div>
       {novelInfo && (
         <>
           <div className="py-4 pt-20 text-center bg-yellow-100 bg-opacity-25 shadow-lg relative z-10">
@@ -219,6 +250,6 @@ export default function PixivNovel({ match }: IRouteProps) {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }

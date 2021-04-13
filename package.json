@@ -27,6 +27,7 @@
     "axios": "^0.21.1",
     "classnames": "^2.2.6",
     "global": "^4.4.0",
+    "lodash": "^4.17.21",
     "umi": "^3.3.9"
   },
   "devDependencies": {
