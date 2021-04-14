@@ -1,6 +1,3 @@
-import MenuSVG from '@/assets/icon/menu.svg';
-import HeaderLogoPNG from '@/assets/icon/logo.png';
-
 import {
   SmileOutlined,
   HomeOutlined,
@@ -11,7 +8,10 @@ import Navbar from '@/components/Navbar';
 import { Drawer } from 'antd-mobile';
 import { history } from 'umi';
 
-import LogoImg from '@/assets/logo/app_logo.png';
+import BlackLogoPng from '@/assets/logo/black_logo.png';
+import WordLogoPng from '@/assets/logo/word_logo.png';
+import MenuSVG from '@/assets/icon/menu.svg';
+import HeaderLogoPNG from '@/assets/icon/logo.png';
 
 // 获取Drawer项目
 export function getDrawerItem() {
@@ -79,7 +79,7 @@ export const drawerItems: IDrawerItem[] = [
   },
   {
     icon: <ShareAltOutlined />,
-    title: '关于Linpx',
+    title: '关于LINPX',
     link: '/about',
   },
   {
@@ -93,22 +93,22 @@ export const drawerItems: IDrawerItem[] = [
 function DrawerSidebar({ onClickDrawer }: { onClickDrawer: any }) {
   return (
     <div>
-      <div className="flex flex-col items-center mt-8 mb-2 text-base">
-        <img className="w-20" src={LogoImg}></img>
-        <div>橘猫的阅读器</div>
-        <div>Linpx Is Not PiXiv</div>
+      <div className="flex flex-col items-center mt-16 mb-6 text-base">
+        <img className="w-20" src={BlackLogoPng}></img>
+        <img className="w-28 mr-2 mb-1 mt-2" src={WordLogoPng}></img>
+        <div className="text-xl">LINPX IS NOT PIXIV</div>
       </div>
       {drawerItems.map((ele) => (
         <div
           key={ele.title}
-          className="pl-4 py-2 flex items-center active:bg-gray-200"
+          className="pl-10 py-3 flex items-center active:bg-gray-200"
           onClick={() => {
             history.push(ele.link);
             onClickDrawer();
           }}
         >
-          <div className="mr-6 text-2xl content bg-clip-text">{ele.icon}</div>
-          <div className="text-lg">{ele.title}</div>
+          <div className="mr-4 text-4xl content bg-clip-text">{ele.icon}</div>
+          <div className="text-2xl">{ele.title}</div>
         </div>
       ))}
     </div>
