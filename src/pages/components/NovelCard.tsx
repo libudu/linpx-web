@@ -16,7 +16,7 @@ export default function NovelCard({
       className="lp-shadow my-5 flex lp-bgcolor overflow-hidden w-full"
       onClick={() => history.push(`/pixiv/novel/${id}`)}
     >
-      <div className="lp-shadow w-20 h-28 m-3 overflow-hidden flex-shrink-0">
+      <div className="lp-shadow w-20 h-28 m-3 overflow-hidden flex-shrink-0 flex items-center justify-center">
         <img className="h-full" src={coverUrl} loading="lazy" />
       </div>
       <div className="text-left flex flex-col mt-2 mr-2 flex-shrink">

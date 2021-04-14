@@ -96,7 +96,7 @@ export default function PixivUser(props: IRouteProps) {
             </div>
           ))}
         </div>
-        <div className="flex justify-center my-6">
+        <div className="flex justify-center mb-6">
           <Pagination
             pageSize={pageSize}
             current={page}

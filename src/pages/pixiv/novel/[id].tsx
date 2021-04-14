@@ -163,19 +163,20 @@ export default function PixivNovel({ match }: IRouteProps) {
 
   // navbar是否收起
   const [showNavbar, setShowNavbar] = useState(true);
+  const [showPopover, setShowPopover] = useState(false);
 
   // 监听滚动
   const scrollHandler = throttle((e: any) => {
     const scrollTop: number = e.target.scrollTop;
     const shake = 20;
     const change = scrollTop - lastScrollTop;
-    // 下滑
-    if (change > shake) {
-      setShowNavbar(false);
-    }
     // 上滑
-    if (change < -shake) {
+    if (change < -shake || scrollTop < 60) {
       setShowNavbar(true);
+      // 下滑
+    } else if (change > shake) {
+      setShowNavbar(false);
+      setShowPopover(false);
     }
     lastScrollTop = scrollTop;
   }, 100);
@@ -191,7 +192,7 @@ export default function PixivNovel({ match }: IRouteProps) {
       <div className="absolute w-full z-20">
         <div
           className="relative w-full"
-          style={{ transition: 'all 0.3s', top: showNavbar ? '0px' : '-64px' }}
+          style={{ transition: 'all 0.2s', top: showNavbar ? '0px' : '-64px' }}
         >
           <Navbar
             leftEle={
@@ -201,6 +202,7 @@ export default function PixivNovel({ match }: IRouteProps) {
             }
             rightEle={
               <Popover
+                visible={showPopover}
                 overlay={<NovelMenu id={id} />}
                 // @ts-ignore
                 overlayStyle={{ width: 'max-content' }}
