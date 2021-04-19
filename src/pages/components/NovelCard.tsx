@@ -10,6 +10,8 @@ export default function NovelCard({
   desc,
   coverUrl,
   tags,
+  length,
+  createDate,
 }: INovelProfile) {
   return (
     <div
@@ -21,7 +23,15 @@ export default function NovelCard({
       </div>
       <div className="text-left flex flex-col mt-2 mr-2 flex-shrink">
         <div className="font-bold u-line-1">{title}</div>
-        <div className="text-xs font-bold">{userName}</div>
+        <div className="text-xs font-bold">
+          {userName}
+          <span className="inline-block ml-2 font-normal text-gray-400">
+            {length}字
+          </span>
+          <span className="inline-block ml-2 font-normal text-gray-400">
+            {new Date(createDate).toLocaleDateString()}
+          </span>
+        </div>
         <div className="text-xs text-blue-400 u-line-1">
           {tags.map((tag) => (
             <span>#{tag} </span>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const BASE_URL = 'https://api.linpx.linpicio.com';
+export const BASE_URL = 'http://45.76.105.135:81';
 //const BASE_URL = 'http://localhost:8000'
 
 const requestCache: any = {};
@@ -33,6 +33,7 @@ export interface INovelInfo {
   coverUrl: string;
   tags: string[];
   desc: string;
+  createDate: string;
 }
 export const getPixivNovel = (id: string): Promise<INovelInfo> => {
   return linpxRequest(`/pixiv/novel/${id}`);
@@ -47,7 +48,10 @@ export interface INovelProfile {
   userId: string;
   userName: string;
   desc: string;
+  length: number;
+  createDate: string;
 }
+
 export const getPixivNovelProfiles = async (
   idList: string[],
 ): Promise<INovelProfile[]> => {

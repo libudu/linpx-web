@@ -6,6 +6,8 @@ import { getRecentNovels, INovelProfile } from '@/utils/api';
 import { history } from 'umi';
 import { Pagination } from 'antd';
 
+// 每页十个，由后端接口限定
+const pageSize = 10;
 const TotalPage = 74;
 
 export default function () {
@@ -41,9 +43,9 @@ export default function () {
         </div>
         <div className="flex justify-center my-6">
           <Pagination
-            pageSize={10}
+            pageSize={pageSize}
             current={page}
-            total={10 * TotalPage}
+            total={pageSize * TotalPage}
             showSizeChanger={false}
             onChange={(page) => {
               setPage(page);

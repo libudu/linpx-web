@@ -185,7 +185,16 @@ export default function PixivNovel({ match }: IRouteProps) {
     return <ContentNavbar>小说详情</ContentNavbar>;
   }
 
-  const { title, content, userName, userId, coverUrl, tags, desc } = novelInfo;
+  const {
+    title,
+    content,
+    userName,
+    userId,
+    coverUrl,
+    tags,
+    desc,
+    createDate,
+  } = novelInfo;
 
   return (
     <div className="h-screen w-full overflow-y-scroll" onScroll={scrollHandler}>
@@ -221,7 +230,13 @@ export default function PixivNovel({ match }: IRouteProps) {
               <img src={coverUrl} className="h-64 rounded-lg" />
             </div>
             <div className="mt-2 mx-8 font-bold text-3xl">{title}</div>
-            <div className="mb-1 px-16 text-2xl text-gray-500">{userName}</div>
+            <div className="px-16 text-2xl text-gray-500">{userName}</div>
+            <div className="mb-1 text-base text-gray-500">
+              <span>{content.length}字</span>
+              <span className="ml-4">
+                {new Date(createDate).toLocaleString()}
+              </span>
+            </div>
             <div className="text-gray-500 text-base px-8">
               {tags.map((ele) => (
                 <Tag key={ele} children={ele} />

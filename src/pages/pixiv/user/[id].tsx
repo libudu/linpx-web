@@ -1,21 +1,15 @@
 import { IRouteProps, history } from 'umi';
 import { useState, useEffect, useRef } from 'react';
 import { Pagination } from 'antd';
-import { getPixivUser, getPixivNovelProfiles, IUserInfo } from '@/utils/api';
+import {
+  getPixivUser,
+  getPixivNovelProfiles,
+  IUserInfo,
+  INovelProfile,
+} from '@/utils/api';
 import { ContentNavbar } from '@/components/Navbar';
 import { currDrawerPath } from '@/layouts/DrawerLayout';
 import NovelCard from '@/pages/components/NovelCard';
-
-// 小说简介
-interface INovelProfile {
-  id: string;
-  title: string;
-  coverUrl: string;
-  tags: string[];
-  userId: string;
-  userName: string;
-  desc: string;
-}
 
 function UserCard({ name, id, comment, imageUrl, backgroundUrl }: IUserInfo) {
   return (
@@ -105,9 +99,7 @@ export default function PixivUser(props: IRouteProps) {
             onChange={(page) => {
               setPage(page);
               history.push(history.location.pathname + `?page=${page}`);
-              console.log(
-                novelsRef.current?.scrollIntoView({ behavior: 'smooth' }),
-              );
+              novelsRef.current?.scrollIntoView({ behavior: 'smooth' });
             }}
           />
         </div>

@@ -101,14 +101,14 @@ function DrawerSidebar({ onClickDrawer }: { onClickDrawer: any }) {
       {drawerItems.map((ele) => (
         <div
           key={ele.title}
-          className="pl-10 py-3 flex items-center active:bg-gray-200"
+          className="pl-12 py-3 flex items-center active:bg-gray-200"
           onClick={() => {
             history.push(ele.link);
             onClickDrawer();
           }}
         >
-          <div className="mr-4 text-4xl content bg-clip-text">{ele.icon}</div>
-          <div className="text-2xl">{ele.title}</div>
+          <div className="mr-6 text-3xl content bg-clip-text">{ele.icon}</div>
+          <div className="text-xl">{ele.title}</div>
         </div>
       ))}
     </div>
