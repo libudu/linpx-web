@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const BASE_URL = 'http://45.76.105.135:81';
+export const BASE_URL = 'https://api.linpx.linpicio.com';
 //const BASE_URL = 'http://localhost:8000'
 
 const requestCache: any = {};
