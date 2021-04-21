@@ -21,9 +21,11 @@ export default function Layout({ children, location }: IRouteComponentProps) {
     // 最外层框架，灰色
     // 内层居中的手机，白色
     // 内层滚动层
-    <div className="h-screen bg-gray-100 text-xl flex">
+    <div className="h-screen w-screen bg-gray-100 text-xl flex">
       <div className="h-screen w-full max-w-md mx-auto bg-white relative">
-        <div className="h-screen w-full overflow-y-scroll">{children}</div>
+        <div className="h-screen w-full overflow-y-scroll overflow-x-hidden">
+          {children}
+        </div>
       </div>
     </div>
   );

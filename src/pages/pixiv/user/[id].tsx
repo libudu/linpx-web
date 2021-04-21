@@ -1,6 +1,7 @@
 import { IRouteProps, history } from 'umi';
 import { useState, useEffect, useRef } from 'react';
 import { Pagination } from 'antd';
+import classnames from 'classnames';
 import {
   getPixivUser,
   getPixivNovelProfiles,
@@ -11,7 +12,75 @@ import { ContentNavbar } from '@/components/Navbar';
 import { currDrawerPath } from '@/layouts/DrawerLayout';
 import NovelCard from '@/pages/components/NovelCard';
 
-function UserCard({ name, id, comment, imageUrl, backgroundUrl }: IUserInfo) {
+const tagColors = [
+  'bg-gray-400',
+  'bg-red-400',
+  'bg-red-500',
+  'bg-yellow-400',
+  'bg-green-400',
+  'bg-green-500',
+  'bg-blue-400',
+  'bg-purple-400',
+  'bg-pink-400',
+  'bg-indigo-400',
+];
+
+function randomColor() {
+  return tagColors[Math.floor(Math.random() * tagColors.length)];
+}
+
+function TagList({ tags }: { tags: IUserInfo['tags'] }) {
+  return (
+    <>
+      {Object.entries(tags).map(([tagName, time], index) => {
+        let minWidth = '50%';
+        let fontSize = '20px';
+        if (index < 7) {
+          if (index > 1) {
+            minWidth = '33%';
+            fontSize = '18px';
+          }
+          return (
+            <div className="px-2 py-1" style={{ minWidth }} key={tagName}>
+              <div
+                className={classnames(
+                  'py-0.5 rounded-2xl text-white px-1',
+                  randomColor(),
+                )}
+              >
+                <div style={{ fontSize, lineHeight: '24px' }}>{tagName}</div>
+                <div style={{ fontSize: '14px', lineHeight: '16px' }}>
+                  {time}
+                </div>
+              </div>
+            </div>
+          );
+        }
+        return null;
+      })}
+      {Object.entries(tags).length > 7 && (
+        <div className="px-2 py-1" style={{ minWidth: '33%' }}>
+          <div
+            className={classnames(
+              'py-0.5 rounded-2xl font-bold text-white bg-linpx',
+            )}
+          >
+            <div style={{ fontSize: '18px', lineHeight: '40px' }}>查看全部</div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function UserPart({
+  name,
+  id,
+  comment,
+  imageUrl,
+  backgroundUrl,
+  tags,
+}: IUserInfo) {
   return (
     <div className="text-center pb-4 bg-yellow-100 bg-opacity-25 shadow-lg relative">
       <div
@@ -29,7 +98,46 @@ function UserCard({ name, id, comment, imageUrl, backgroundUrl }: IUserInfo) {
       <div className="my-2 px-16 text-lg text-blue-400">Pixiv id: {id}</div>
 
       <div className="whitespace-pre-line text-lg px-12">{comment}</div>
+
+      <div className="flex flex-wrap mx-8 my-2">
+        <TagList tags={tags} />
+      </div>
     </div>
+  );
+}
+
+interface INovelPart {
+  total: number;
+  novels: INovelProfile[];
+  page: number;
+  setPage: any;
+}
+
+function NovelPart({ total, novels, page, setPage }: INovelPart) {
+  const novelsRef = useRef<HTMLDivElement>(null);
+  return (
+    <>
+      <div className="text-center px-6 py-2 w-full" ref={novelsRef}>
+        {novels.map((ele: INovelProfile) => (
+          <div key={ele.id}>
+            <NovelCard {...ele} />
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-center mb-6">
+        <Pagination
+          pageSize={pageSize}
+          current={page}
+          total={total}
+          showSizeChanger={false}
+          onChange={(page) => {
+            setPage(page);
+            history.push(history.location.pathname + `?page=${page}`);
+            novelsRef.current?.scrollIntoView({ behavior: 'smooth' });
+          }}
+        />
+      </div>
+    </>
   );
 }
 
@@ -42,8 +150,6 @@ export default function PixivUser(props: IRouteProps) {
   const [page, setPage] = useState<number>(
     Number(history.location?.query?.page) || 1,
   );
-
-  const novelsRef = useRef<HTMLDivElement>(null);
 
   const [userInfo, setUserInfo] = useState<IUserInfo>();
   const [novels, setNovels] = useState<INovelProfile[]>();
@@ -75,34 +181,20 @@ export default function PixivUser(props: IRouteProps) {
   }
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col w-full">
       <div className="flex-shrink-0">
         <ContentNavbar backTo={currDrawerPath} fixed={false}>
           作者详情
         </ContentNavbar>
       </div>
-      <div className="overflow-scroll w-full">
-        <UserCard {...userInfo} />
-        <div className="text-center px-6 py-2" ref={novelsRef}>
-          {novels.map((ele: INovelProfile) => (
-            <div key={ele.id}>
-              <NovelCard {...ele} />
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-center mb-6">
-          <Pagination
-            pageSize={pageSize}
-            current={page}
-            total={userInfo.novels.length}
-            showSizeChanger={false}
-            onChange={(page) => {
-              setPage(page);
-              history.push(history.location.pathname + `?page=${page}`);
-              novelsRef.current?.scrollIntoView({ behavior: 'smooth' });
-            }}
-          />
-        </div>
+      <div className="overflow-y-scroll w-full overflow-x-hidden">
+        <UserPart {...userInfo} />
+        <NovelPart
+          total={userInfo.novels.length}
+          novels={novels}
+          page={page}
+          setPage={setPage}
+        />
       </div>
     </div>
   );

@@ -71,6 +71,7 @@ export interface IUserInfo {
   imageUrl: string;
   comment: string;
   backgroundUrl?: string;
+  tags: { [tagName: string]: number };
 }
 export const getPixivUser = (id: string): Promise<IUserInfo> => {
   return linpxRequest(`/pixiv/user/${id}`);
@@ -100,5 +101,20 @@ export const getRecommendPixivAuthors = async (): Promise<string[]> => {
 
 // 最近小说
 export const getRecentNovels = (page: number = 1): Promise<INovelProfile[]> => {
-  return linpxRequest(`/pixiv/recent/novels?page=${page}`);
+  return linpxRequest(`/pixiv/novels/recent?page=${page}`);
+};
+
+// 用户tag的全部小说
+export const getUserTagNovels = (userId: string, tagName: string) => {
+  return linpxRequest(`/pixiv/user/${userId}/tag/${tagName}`);
+};
+
+// 搜索用户
+export const searchUser = (userName: string) => {
+  return linpxRequest(`/pixiv/search/user/${userName}`);
+};
+
+// 搜索小说
+export const searchNovel = (novelName: string) => {
+  return linpxRequest(`/pixiv/search/novel/${novelName}`);
 };
