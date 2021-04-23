@@ -1,7 +1,6 @@
 import { IRouteProps, history } from 'umi';
 import { useState, useEffect, useRef } from 'react';
 import { Pagination } from 'antd';
-import classnames from 'classnames';
 import {
   getPixivUser,
   getPixivNovelProfiles,
@@ -9,69 +8,9 @@ import {
   INovelProfile,
 } from '@/utils/api';
 import { ContentNavbar } from '@/components/Navbar';
+import { TagBoxList, TagBoxListModal } from '@/components/TagBox';
 import { currDrawerPath } from '@/layouts/DrawerLayout';
 import NovelCard from '@/pages/components/NovelCard';
-
-const tagColors = [
-  'bg-gray-400',
-  'bg-red-400',
-  'bg-red-500',
-  'bg-yellow-400',
-  'bg-green-400',
-  'bg-green-500',
-  'bg-blue-400',
-  'bg-purple-400',
-  'bg-pink-400',
-  'bg-indigo-400',
-];
-
-function randomColor() {
-  return tagColors[Math.floor(Math.random() * tagColors.length)];
-}
-
-function TagList({ tags }: { tags: IUserInfo['tags'] }) {
-  return (
-    <>
-      {Object.entries(tags).map(([tagName, time], index) => {
-        let minWidth = '50%';
-        let fontSize = '20px';
-        if (index < 7) {
-          if (index > 1) {
-            minWidth = '33%';
-            fontSize = '18px';
-          }
-          return (
-            <div className="px-2 py-1" style={{ minWidth }} key={tagName}>
-              <div
-                className={classnames(
-                  'py-0.5 rounded-2xl text-white px-1',
-                  randomColor(),
-                )}
-              >
-                <div style={{ fontSize, lineHeight: '24px' }}>{tagName}</div>
-                <div style={{ fontSize: '14px', lineHeight: '16px' }}>
-                  {time}
-                </div>
-              </div>
-            </div>
-          );
-        }
-        return null;
-      })}
-      {Object.entries(tags).length > 7 && (
-        <div className="px-2 py-1" style={{ minWidth: '33%' }}>
-          <div
-            className={classnames(
-              'py-0.5 rounded-2xl font-bold text-white bg-linpx',
-            )}
-          >
-            <div style={{ fontSize: '18px', lineHeight: '40px' }}>查看全部</div>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
 
 function UserPart({
   name,
@@ -81,8 +20,15 @@ function UserPart({
   backgroundUrl,
   tags,
 }: IUserInfo) {
+  console.log('user part');
+  const [showModal, setShowModal] = useState(false);
   return (
     <div className="text-center pb-4 bg-yellow-100 bg-opacity-25 shadow-lg relative">
+      <TagBoxListModal
+        tags={tags}
+        show={showModal}
+        onClose={() => setShowModal(false)}
+      />
       <div
         className="w-full h-28 bg-center absolute"
         style={{ backgroundImage: `url(${backgroundUrl})` }}
@@ -99,8 +45,16 @@ function UserPart({
 
       <div className="whitespace-pre-line text-lg px-12">{comment}</div>
 
-      <div className="flex flex-wrap mx-8 my-2">
-        <TagList tags={tags} />
+      <div className="mx-8 mr-6 my-2">
+        <TagBoxList
+          tags={tags}
+          showTotalButton
+          showCount={7}
+          clickShowTotal={() => setShowModal(true)}
+          onClickTag={(tagName) => {
+            console.log(tagName);
+          }}
+        />
       </div>
     </div>
   );
@@ -119,9 +73,7 @@ function NovelPart({ total, novels, page, setPage }: INovelPart) {
     <>
       <div className="text-center px-6 py-2 w-full" ref={novelsRef}>
         {novels.map((ele: INovelProfile) => (
-          <div key={ele.id}>
-            <NovelCard {...ele} />
-          </div>
+          <NovelCard key={ele.id} {...ele} />
         ))}
       </div>
       <div className="flex justify-center mb-6">

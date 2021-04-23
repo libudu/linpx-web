@@ -34,7 +34,7 @@ export default function NovelCard({
         </div>
         <div className="text-xs text-blue-400 u-line-1">
           {tags.map((tag) => (
-            <span>#{tag} </span>
+            <span key={tag}>#{tag} </span>
           ))}
         </div>
         <div
