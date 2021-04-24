@@ -1,6 +1,7 @@
 import { IRouteComponentProps } from 'umi';
 import DrawerLayout, { drawerItems, getDrawerItem } from './DrawerLayout';
 import { useState } from 'react';
+import { getAppWidth } from '@/utils/util';
 
 export default function Layout({ children, location }: IRouteComponentProps) {
   const drawerItem = getDrawerItem();
@@ -22,7 +23,10 @@ export default function Layout({ children, location }: IRouteComponentProps) {
     // 内层居中的手机，白色
     // 内层滚动层
     <div className="h-screen w-screen bg-gray-100 text-xl flex">
-      <div className="h-screen w-full max-w-md mx-auto bg-white relative">
+      <div
+        className="h-screen mx-auto bg-white relative"
+        style={{ width: getAppWidth() }}
+      >
         <div className="h-screen w-full overflow-y-scroll overflow-x-hidden">
           {children}
         </div>

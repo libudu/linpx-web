@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import classnames from 'classnames';
 import { IUserInfo } from '@/utils/api';
+import { getAppWidth } from '@/utils/util';
 import { Modal } from 'antd-mobile';
 
 interface ITagBox {
   tagName: string;
   time: number;
   size: 'lg' | 'md' | 'sm';
+  className?: any;
   onClickTag?: (tagName: string) => any;
 }
 
@@ -43,6 +45,26 @@ const tagConfig = {
   },
 };
 
+export function TagBox({ tagName, time, size, onClickTag }: ITagBox) {
+  const { width, tagFontSize } = tagConfig[size];
+  const [color] = useState(randomColor());
+
+  return (
+    <div
+      className="px-2 py-1"
+      style={{ minWidth: width }}
+      onClick={() => onClickTag && onClickTag(tagName)}
+    >
+      <div className={classnames('py-0.5 rounded-2xl text-white px-1', color)}>
+        <div style={{ fontSize: tagFontSize, lineHeight: '24px' }}>
+          {tagName}
+        </div>
+        <div style={{ fontSize: '14px', lineHeight: '16px' }}>{time}</div>
+      </div>
+    </div>
+  );
+}
+
 interface ITagBoxListModal {
   tags: IUserInfo['tags'];
   show: boolean;
@@ -56,15 +78,15 @@ export function TagBoxListModal({
   onClose,
   onClickTag,
 }: ITagBoxListModal) {
-  const width = Math.min(448, document.documentElement.clientWidth);
+  const width = getAppWidth();
   return (
     <Modal
       maskClosable
       transparent
       visible={show}
       onClose={onClose}
-      className="tagbox-modal"
-      style={{ width, height: '70vh' }}
+      className="tagbox-modal overflow-y-scroll"
+      style={{ width, maxHeight: '70vh' }}
     >
       <TagBoxList tags={tags} onClickTag={onClickTag} />
     </Modal>
@@ -119,26 +141,6 @@ export function TagBoxList({
           </div>
         </div>
       )}
-    </div>
-  );
-}
-
-export function TagBox({ tagName, time, size, onClickTag }: ITagBox) {
-  const { width, tagFontSize } = tagConfig[size];
-  const [color] = useState(randomColor());
-
-  return (
-    <div
-      className="px-2 py-1"
-      style={{ minWidth: width }}
-      onClick={() => onClickTag && onClickTag(tagName)}
-    >
-      <div className={classnames('py-0.5 rounded-2xl text-white px-1', color)}>
-        <div style={{ fontSize: tagFontSize, lineHeight: '24px' }}>
-          {tagName}
-        </div>
-        <div style={{ fontSize: '14px', lineHeight: '16px' }}>{time}</div>
-      </div>
     </div>
   );
 }

@@ -1,16 +1,10 @@
 import { IRouteProps, history } from 'umi';
-import { useState, useEffect, useRef } from 'react';
-import { Pagination } from 'antd';
-import {
-  getPixivUser,
-  getPixivNovelProfiles,
-  IUserInfo,
-  INovelProfile,
-} from '@/utils/api';
+import { useState, useEffect } from 'react';
+import { getPixivUser, IUserInfo, INovelProfile } from '@/utils/api';
 import { ContentNavbar } from '@/components/Navbar';
 import { TagBoxList, TagBoxListModal } from '@/components/TagBox';
 import { currDrawerPath } from '@/layouts/DrawerLayout';
-import NovelCard from '@/pages/components/NovelCard';
+import NovelCardList from '@/pages/components/NovelCardList';
 
 function UserPart({
   name,
@@ -20,7 +14,6 @@ function UserPart({
   backgroundUrl,
   tags,
 }: IUserInfo) {
-  console.log('user part');
   const [showModal, setShowModal] = useState(false);
   return (
     <div className="text-center pb-4 bg-yellow-100 bg-opacity-25 shadow-lg relative">
@@ -28,6 +21,9 @@ function UserPart({
         tags={tags}
         show={showModal}
         onClose={() => setShowModal(false)}
+        onClickTag={(tagName) => {
+          history.push(`/pixiv/user/${id}/tag/${tagName}`);
+        }}
       />
       <div
         className="w-full h-28 bg-center absolute"
@@ -52,7 +48,7 @@ function UserPart({
           showCount={7}
           clickShowTotal={() => setShowModal(true)}
           onClickTag={(tagName) => {
-            console.log(tagName);
+            history.push(`/pixiv/user/${id}/tag/${tagName}`);
           }}
         />
       </div>
@@ -67,32 +63,6 @@ interface INovelPart {
   setPage: any;
 }
 
-function NovelPart({ total, novels, page, setPage }: INovelPart) {
-  const novelsRef = useRef<HTMLDivElement>(null);
-  return (
-    <>
-      <div className="text-center px-6 py-2 w-full" ref={novelsRef}>
-        {novels.map((ele: INovelProfile) => (
-          <NovelCard key={ele.id} {...ele} />
-        ))}
-      </div>
-      <div className="flex justify-center mb-6">
-        <Pagination
-          pageSize={pageSize}
-          current={page}
-          total={total}
-          showSizeChanger={false}
-          onChange={(page) => {
-            setPage(page);
-            history.push(history.location.pathname + `?page=${page}`);
-            novelsRef.current?.scrollIntoView({ behavior: 'smooth' });
-          }}
-        />
-      </div>
-    </>
-  );
-}
-
 const pageSize = 20;
 
 export default function PixivUser(props: IRouteProps) {
@@ -104,31 +74,16 @@ export default function PixivUser(props: IRouteProps) {
   );
 
   const [userInfo, setUserInfo] = useState<IUserInfo>();
-  const [novels, setNovels] = useState<INovelProfile[]>();
 
   useEffect(() => {
     getPixivUser(id).then((res) => {
       // @ts-ignore
       if (res?.error) return props.history.push('/404');
       setUserInfo(res);
-
-      // 当前页码数小于1或大于最大时，需要修正
-      const total = res.novels.length;
-      const maxPage = Math.ceil(total / pageSize);
-      const truePage = Math.min(Math.max(page, 1), maxPage);
-
-      const novels = res.novels.slice(
-        (truePage - 1) * pageSize,
-        truePage * pageSize,
-      );
-      getPixivNovelProfiles(novels).then((res) => {
-        console.log(res);
-        setNovels(res.slice().reverse());
-      });
     });
   }, [page]);
 
-  if (!userInfo || !novels) {
+  if (!userInfo) {
     return <ContentNavbar backTo="/">作者详情</ContentNavbar>;
   }
 
@@ -141,12 +96,9 @@ export default function PixivUser(props: IRouteProps) {
       </div>
       <div className="overflow-y-scroll w-full overflow-x-hidden">
         <UserPart {...userInfo} />
-        <NovelPart
-          total={userInfo.novels.length}
-          novels={novels}
-          page={page}
-          setPage={setPage}
-        />
+        <div className="mx-6">
+          <NovelCardList novelIdList={userInfo.novels} />
+        </div>
       </div>
     </div>
   );
