@@ -21,7 +21,7 @@ export default function NovelCard({
       <div className="lp-shadow w-20 h-28 m-3 overflow-hidden flex-shrink-0 flex items-center justify-center">
         <img className="h-full" src={coverUrl} loading="lazy" />
       </div>
-      <div className="text-left flex flex-col mt-2 mr-2 flex-shrink">
+      <div className="text-left flex flex-col mt-2 mr-2 flex-shrink overflow-x-auto">
         <div className="font-bold u-line-1">{title}</div>
         <div className="text-xs font-bold">
           {userName}

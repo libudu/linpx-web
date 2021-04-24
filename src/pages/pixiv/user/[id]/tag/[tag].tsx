@@ -36,8 +36,10 @@ export default function UserTag(props: IRouteProps) {
     });
   }, []);
 
+  const title = `${userInfo?.name}-${tagName}`;
+
   if (!userInfo || !novels) {
-    return <ContentNavbar backTo="/">作者标签</ContentNavbar>;
+    return <ContentNavbar backTo="/">{title}</ContentNavbar>;
   }
 
   const { backgroundUrl, imageUrl, name } = userInfo;
@@ -47,7 +49,7 @@ export default function UserTag(props: IRouteProps) {
       <div className="text-center pb-4 bg-yellow-100 bg-opacity-25 shadow-lg relative">
         <div className="flex-shrink-0">
           <ContentNavbar backTo={`/pixiv/user/${id}`} fixed={false}>
-            作者标签
+            {title}
           </ContentNavbar>
         </div>
         <div

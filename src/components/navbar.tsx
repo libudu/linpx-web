@@ -31,10 +31,7 @@ export default function Navbar({
       <span className="flex justify-center w-2/12" onClick={onClickLeft}>
         {leftEle}
       </span>
-      <span
-        className="flex justify-center w-8/12 overflow-x-hidden whitespace-nowrap mx-2"
-        style={{ textOverflow: 'ellipsis' }}
-      >
+      <span className="flex justify-center w-8/12 mx-2 u-line-1">
         {children}
       </span>
       <span className="flex justify-center w-2/12" onClick={onClickRight}>
