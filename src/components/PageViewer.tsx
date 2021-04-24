@@ -35,19 +35,24 @@ export default function PageViewer({
   return (
     <>
       <div ref={novelsRef}>{content}</div>
-      <div className="flex justify-center mb-6">
-        <Pagination
-          pageSize={pageSize}
-          current={page}
-          total={total}
-          showSizeChanger={false}
-          onChange={(page) => {
-            setPage(page);
-            history.push(history.location.pathname + `?page=${page}`);
-            novelsRef.current?.scrollIntoView({ behavior: 'smooth' });
-          }}
-        />
-      </div>
+      {
+        // 仅当内容已加载出来，才显示分页器
+        content && (
+          <div className="flex justify-center mb-6">
+            <Pagination
+              pageSize={pageSize}
+              current={page}
+              total={total}
+              showSizeChanger={false}
+              onChange={(page) => {
+                setPage(page);
+                history.push(history.location.pathname + `?page=${page}`);
+                novelsRef.current?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            />
+          </div>
+        )
+      }
     </>
   );
 }

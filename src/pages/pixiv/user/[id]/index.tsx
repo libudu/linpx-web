@@ -56,15 +56,6 @@ function UserPart({
   );
 }
 
-interface INovelPart {
-  total: number;
-  novels: INovelProfile[];
-  page: number;
-  setPage: any;
-}
-
-const pageSize = 20;
-
 export default function PixivUser(props: IRouteProps) {
   document.title = 'Linpx - 作者详情';
   const id = props.match.params.id;
@@ -76,10 +67,10 @@ export default function PixivUser(props: IRouteProps) {
   const [userInfo, setUserInfo] = useState<IUserInfo>();
 
   useEffect(() => {
-    getPixivUser(id).then((res) => {
+    getPixivUser(id).then((userInfo) => {
       // @ts-ignore
-      if (res?.error) return props.history.push('/404');
-      setUserInfo(res);
+      if (userInfo?.error) return props.history.push('/404');
+      setUserInfo(userInfo);
     });
   }, [page]);
 
@@ -97,7 +88,7 @@ export default function PixivUser(props: IRouteProps) {
       <div className="overflow-y-scroll w-full overflow-x-hidden">
         <UserPart {...userInfo} />
         <div className="mx-6">
-          <NovelCardList novelIdList={userInfo.novels} />
+          <NovelCardList novelIdList={userInfo.novels.slice().reverse()} />
         </div>
       </div>
     </div>

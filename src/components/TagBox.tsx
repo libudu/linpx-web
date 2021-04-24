@@ -6,7 +6,7 @@ import { Modal } from 'antd-mobile';
 
 interface ITagBox {
   tagName: string;
-  time: number;
+  time?: number;
   size: 'lg' | 'md' | 'sm';
   className?: any;
   onClickTag?: (tagName: string) => any;
@@ -14,7 +14,6 @@ interface ITagBox {
 
 // TagBox随机颜色
 const tagColors = [
-  'bg-gray-400',
   'bg-red-400',
   'bg-red-500',
   'bg-yellow-400',
@@ -45,21 +44,31 @@ const tagConfig = {
   },
 };
 
-export function TagBox({ tagName, time, size, onClickTag }: ITagBox) {
+export function TagBox({
+  tagName,
+  time,
+  size,
+  onClickTag,
+  className,
+}: ITagBox) {
   const { width, tagFontSize } = tagConfig[size];
   const [color] = useState(randomColor());
 
   return (
     <div
-      className="px-2 py-1"
+      className={classnames('px-2 py-1', className)}
       style={{ minWidth: width }}
       onClick={() => onClickTag && onClickTag(tagName)}
     >
       <div className={classnames('py-0.5 rounded-2xl text-white px-1', color)}>
-        <div style={{ fontSize: tagFontSize, lineHeight: '24px' }}>
+        <div
+          style={{ fontSize: tagFontSize, lineHeight: '24px', height: '24px' }}
+        >
           {tagName}
         </div>
-        <div style={{ fontSize: '14px', lineHeight: '16px' }}>{time}</div>
+        <div style={{ fontSize: '14px', lineHeight: '16px', height: '16px' }}>
+          {time}
+        </div>
       </div>
     </div>
   );
@@ -133,11 +142,18 @@ export function TagBoxList({
           onClick={clickShowTotal}
         >
           <div
-            className={classnames(
-              'py-0.5 rounded-2xl font-bold text-white bg-linpx',
-            )}
+            className="py-0.5 rounded-2xl bg-gray-400 text-white flex justify-center items-center"
+            style={{ height: '44px' }}
           >
-            <div style={{ fontSize: '18px', lineHeight: '40px' }}>查看全部</div>
+            <div
+              style={{
+                fontSize: '18px',
+                lineHeight: '24px',
+                borderBottom: '1px solid white',
+              }}
+            >
+              查看全部
+            </div>
           </div>
         </div>
       )}
