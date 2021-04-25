@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { history } from 'umi';
-import { Pagination } from 'antd';
+import PageViewer from '@/components/PageViewer';
 
 import {
   getPixivNovelProfiles,
@@ -15,7 +15,7 @@ const pageSize = 6;
 function NovelCard({ coverUrl, title, id }: INovelProfile) {
   return (
     <div
-      className="lp-shadow mx-2 text-sm w-20 flex-grow-0 flex-shrink-0 overflow-hidden"
+      className="lp-shadow mx-2 text-sm w-20 flex-grow-0 flex-shrink-0 overflow-hidden flex flex-col"
       onClick={() => id && history.push(`/pixiv/novel/${id}`)}
     >
       {coverUrl ? (
@@ -25,7 +25,7 @@ function NovelCard({ coverUrl, title, id }: INovelProfile) {
       ) : (
         <div className="h-20 w-full bg-gray-200" />
       )}
-      <div className="u-line-2 m-1 text-center font-bold text-xs whitespace-pre-line">
+      <div className="u-line-2 m-1 text-center font-bold text-xs whitespace-pre-line flex-grow">
         {title || '\n\n'}
       </div>
     </div>
@@ -34,11 +34,16 @@ function NovelCard({ coverUrl, title, id }: INovelProfile) {
 
 interface IUserCard {
   userInfo: IUserInfo;
-  novelsInfo: INovelProfile[];
+  novelInfoList: INovelProfile[];
 }
 
-function UserCard({ userInfo, novelsInfo }: IUserCard) {
+function UserCard({ userInfo, novelInfoList }: IUserCard) {
   const { name, imageUrl, id } = userInfo;
+  if (novelInfoList.length < NovelNumber) {
+    novelInfoList = novelInfoList.concat(
+      Array(NovelNumber - novelInfoList.length).fill({}),
+    );
+  }
 
   return (
     <div className="my-3 p-2 lp-shadow lp-bgcolor flex overflow-x-scroll">
@@ -62,8 +67,8 @@ function UserCard({ userInfo, novelsInfo }: IUserCard) {
         </div>
       </div>
       <div className="pr-1 flex">
-        {novelsInfo.slice(0, NovelNumber).map((ele) => (
-          <NovelCard {...ele} />
+        {novelInfoList.slice(0, NovelNumber).map((ele, index) => (
+          <NovelCard key={ele?.id || index} {...ele} />
         ))}
       </div>
     </div>
@@ -74,76 +79,51 @@ const NovelNumber = 5;
 
 export default function () {
   document.title = 'Linpx - 推荐作者';
-  const scrollRef = useRef<HTMLDivElement>(null);
-  // 当前页数
-  const [page, setPage] = useState<number>(
-    Number(history.location?.query?.page) || 1,
-  );
   // 推荐作者的id
-  const [allUserIds, setAllUserIds] = useState<string[]>([]);
-  // 推荐作者的信息
-  const [users, setUsers] = useState<IUserInfo[]>([]);
-  // 本页小说信息
-  const [novels, setNovels] = useState<{ [id: string]: INovelProfile }>({});
+  const [allUserIds, setAllUserIds] = useState<string[]>();
 
   useEffect(() => {
     getRecommendPixivAuthors().then((res) => {
       setAllUserIds(res);
-      // 当前页码数小于1或大于最大时，需要修正
-      const total = res.length;
-      const maxPage = Math.ceil(total / pageSize);
-      const truePage = Math.min(Math.max(page, 1), maxPage);
-      setPage(truePage);
-      // 当前显示的id
-      const showIds = res.slice((truePage - 1) * pageSize, truePage * pageSize);
-      getPixivUserList(showIds).then((usersInfo) => {
-        // 加载用户基本信息
-        setUsers(usersInfo);
-        // 加载当页用户最近小说
-        const novels = usersInfo
-          .map((user) => user.novels.slice().reverse().slice(0, NovelNumber))
-          .flat();
-        getPixivNovelProfiles(novels).then((novelsInfo) => {
-          const tempNovels: { [id: string]: INovelProfile } = {};
-          novelsInfo.forEach((novels) => {
-            tempNovels[novels.id] = novels;
-          });
-          setNovels(tempNovels);
-        });
-      });
     });
-  }, [page]);
+  }, []);
 
-  if (users.length === 0) return null;
+  if (!allUserIds) return <div></div>;
 
   return (
-    <div className="h-full overflow-scroll" ref={scrollRef}>
-      <div className="m-4">
-        {users.map((ele) => {
-          const novelIds = ele.novels.slice().reverse().slice(0, NovelNumber);
-          const novelsInfo: INovelProfile[] = [];
-          for (let i = 0; i < NovelNumber; i++) {
-            novelsInfo.push(novels[novelIds[i]]);
-          }
-          return (
-            <div key={ele.id}>
-              <UserCard userInfo={ele} novelsInfo={novelsInfo} />
-            </div>
-          );
-        })}
-      </div>
-      <div className="flex justify-center my-6">
-        <Pagination
-          pageSize={pageSize}
-          current={page}
-          total={allUserIds.length}
-          onChange={(page) => {
-            setPage(page);
-            history.push(history.location.pathname + `?page=${page}`);
-            scrollRef.current?.scrollTo(0, 0);
-          }}
-        />
-      </div>
-    </div>
+    <PageViewer
+      pageSize={pageSize}
+      total={allUserIds.length}
+      renderContent={async (page) => {
+        // 当前显示的id
+        const showIds = allUserIds.slice(
+          (page - 1) * pageSize,
+          page * pageSize,
+        );
+        const userList = await getPixivUserList(showIds);
+        // 加载当页用户最近小说
+        const allNovelIds = userList
+          .map((user) => user.novels.slice(0, NovelNumber))
+          .flat();
+        const allNovelSet: { [novelId: string]: INovelProfile } = {};
+        // 一次请求所有小说，然后放入集合，再索引
+        (await getPixivNovelProfiles(allNovelIds)).forEach((novelProfile) => {
+          allNovelSet[novelProfile.id] = novelProfile;
+        });
+        return (
+          <div className="px-4 py-2">
+            {userList.map((user) => (
+              <UserCard
+                key={user.id}
+                userInfo={user}
+                novelInfoList={user.novels.map(
+                  (novelId) => allNovelSet[novelId],
+                )}
+              />
+            ))}
+          </div>
+        );
+      }}
+    />
   );
 }

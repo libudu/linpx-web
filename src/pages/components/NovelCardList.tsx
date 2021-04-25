@@ -18,11 +18,9 @@ export default function NovelCardList({ novelIdList }: INovelCardList) {
           page * pageSize,
         );
         const novelProfileList = await getPixivNovelProfiles(showNovelIds);
-        console.log(novelProfileList);
-        return novelProfileList
-          .slice()
-          .reverse()
-          .map((novel) => <NovelCard {...novel} key={novel.id} />);
+        return novelProfileList.map((novel) => (
+          <NovelCard {...novel} key={novel.id} />
+        ));
       }}
     />
   );

@@ -1,3 +1,4 @@
+import NovelCardList from '@/pages/components/NovelCardList';
 import axios from 'axios';
 
 export const BASE_URL = 'https://api.linpx.linpicio.com';
@@ -52,15 +53,29 @@ export interface INovelProfile {
   createDate: string;
 }
 
+const novelProfileCache: { [novelId: string]: INovelProfile } = {};
+
 export const getPixivNovelProfiles = async (
   idList: string[],
 ): Promise<INovelProfile[]> => {
   if (idList.length === 0) return [];
   let query = '';
   for (const id of idList) {
-    query += `ids[]=${id}&`;
+    // 缓冲中没有则构造请求
+    if (!novelProfileCache[id]) query += `ids[]=${id}&`;
   }
-  return linpxRequest(`/pixiv/novels?${query}`);
+  // 发起请求
+  if (query) {
+    const leftNovelProfileList: INovelProfile[] = await linpxRequest(
+      `/pixiv/novels?${query}`,
+    );
+    // 缓存请求结果
+    leftNovelProfileList.forEach(
+      (novelProfile) => (novelProfileCache[novelProfile.id] = novelProfile),
+    );
+  }
+  // 拼接结果
+  return idList.map((id) => novelProfileCache[id]);
 };
 
 // 用户信息
@@ -100,8 +115,17 @@ export const getRecommendPixivAuthors = async (): Promise<string[]> => {
 };
 
 // 最近小说
-export const getRecentNovels = (page: number = 1): Promise<INovelProfile[]> => {
-  return linpxRequest(`/pixiv/novels/recent?page=${page}`);
+export const getRecentNovels = async (
+  page: number = 1,
+): Promise<INovelProfile[]> => {
+  const recentNovelProfileList: INovelProfile[] = await linpxRequest(
+    `/pixiv/novels/recent?page=${page}`,
+  );
+  // 记录到缓存
+  recentNovelProfileList.forEach(
+    (novelProfile) => (novelProfileCache[novelProfile.id] = novelProfile),
+  );
+  return recentNovelProfileList;
 };
 
 // 用户tag的全部小说
