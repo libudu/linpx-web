@@ -1,6 +1,6 @@
 import { IRouteProps, history } from 'umi';
 import { useState, useEffect } from 'react';
-import { getPixivUser, IUserInfo, INovelProfile } from '@/utils/api';
+import { getPixivUser, IUserInfo } from '@/utils/api';
 import { ContentNavbar } from '@/components/Navbar';
 import { TagBoxList, TagBoxListModal } from '@/components/TagBox';
 import { currDrawerPath } from '@/layouts/DrawerLayout';

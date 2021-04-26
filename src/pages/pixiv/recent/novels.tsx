@@ -1,9 +1,7 @@
 import { ContentNavbar } from '@/components/Navbar';
 import { currDrawerPath } from '@/layouts/DrawerLayout';
 import NovelCard from '@/pages/components/NovelCard';
-import { useEffect, useRef, useState } from 'react';
-import { getRecentNovels, INovelProfile } from '@/utils/api';
-import { history } from 'umi';
+import { getRecentNovels } from '@/utils/api';
 import PageViewer from '@/components/PageViewer';
 
 // 每页十个，由后端接口限定

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { history } from 'umi';
 import PageViewer from '@/components/PageViewer';
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IRouteProps, history } from 'umi';
+import { IRouteProps } from 'umi';
 import { ContentNavbar } from '@/components/Navbar';
 import {
   getPixivUser,
@@ -13,12 +13,8 @@ import NovelCard from '@/pages/components/NovelCard';
 const pageSize = 20;
 
 export default function UserTag(props: IRouteProps) {
-  document.title = 'L inpx - 作者标签';
+  document.title = 'Linpx - 作者标签';
   const { tag: tagName, id } = props.match.params;
-
-  const [page, setPage] = useState<number>(
-    Number(history.location?.query?.page) || 1,
-  );
 
   // 一次加载完所有该tag小说
   const [userInfo, setUserInfo] = useState<IUserInfo>();

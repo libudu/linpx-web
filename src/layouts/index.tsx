@@ -1,9 +1,9 @@
 import { IRouteComponentProps } from 'umi';
-import DrawerLayout, { drawerItems, getDrawerItem } from './DrawerLayout';
+import DrawerLayout, { getDrawerItem } from './DrawerLayout';
 import { useState } from 'react';
 import { getAppWidth } from '@/utils/util';
 
-export default function Layout({ children, location }: IRouteComponentProps) {
+export default function Layout({ children }: IRouteComponentProps) {
   const drawerItem = getDrawerItem();
   const [openDrawer, setOpenDrawer] = useState(false);
   if (drawerItem) {
