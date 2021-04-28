@@ -131,7 +131,9 @@ function NovelMenu({ id }: { id: string }) {
       <Line />
       <Item>
         <div
-          onClick={() => copyTextAndToast(`https://www.pixiv.net/users/${id}`)}
+          onClick={() =>
+            copyTextAndToast(`https://linpx.linpicio.com/pixiv/novel/${id}`)
+          }
         >
           复制LINPX链接
         </div>

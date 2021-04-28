@@ -34,7 +34,7 @@ export default function UserTag(props: IRouteProps) {
 
   const title = `${userInfo?.name}-${tagName}`;
 
-  if (!userInfo || !novels) {
+  if (!userInfo) {
     return <ContentNavbar backTo="/">{title}</ContentNavbar>;
   }
 
@@ -62,21 +62,23 @@ export default function UserTag(props: IRouteProps) {
         <div className="text-4xl font-bold">{`#${tagName}`}</div>
       </div>
 
-      <div className="mx-6">
-        <PageViewer
-          total={novels.length}
-          pageSize={pageSize}
-          renderContent={async (page) => {
-            const showNovels = novels.slice(
-              (page - 1) * pageSize,
-              page * pageSize,
-            );
-            return showNovels.map((novel) => (
-              <NovelCard {...novel} key={novel.id} />
-            ));
-          }}
-        />
-      </div>
+      {novels && (
+        <div className="mx-6">
+          <PageViewer
+            total={novels.length}
+            pageSize={pageSize}
+            renderContent={async (page) => {
+              const showNovels = novels.slice(
+                (page - 1) * pageSize,
+                page * pageSize,
+              );
+              return showNovels.map((novel) => (
+                <NovelCard {...novel} key={novel.id} />
+              ));
+            }}
+          />
+        </div>
+      )}
     </>
   );
 }

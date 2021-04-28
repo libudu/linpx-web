@@ -6,6 +6,8 @@ export const BASE_URL = 'https://api.linpx.linpicio.com';
 
 const requestCache: any = {};
 
+import favUserTagData from './../data/favUser.json';
+
 export const linpxRequest = async (path: string) => {
   const cache = requestCache[path];
   if (cache) {
@@ -132,6 +134,18 @@ export const getRecentNovels = async (
 export const getUserTagNovels = (userId: string, tagName: string) => {
   return linpxRequest(`/pixiv/user/${userId}/tag/${tagName}`);
 };
+
+interface IFavUserTagInfo {
+  time: string;
+  localTime: string;
+  user: string[];
+  data: {
+    tagName: string;
+    time: number;
+    novels: string[];
+  }[];
+}
+export const getFavUserTagInfo = (): IFavUserTagInfo => favUserTagData;
 
 // 搜索用户
 export const searchUser = (userName: string) => {
