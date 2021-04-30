@@ -11,7 +11,7 @@ export function ContentTitle({
 }: {
   left: any;
   right?: any;
-  onClickInfo: any;
+  onClickInfo?: any;
   clickRightPath?: any;
 }) {
   return (
@@ -21,10 +21,12 @@ export function ContentTitle({
         style={{ width: 'max-content' }}
       >
         {left}
-        <InfoCircleOutlined
-          onClick={onClickInfo}
-          className="text-xl inline-block  ml-2"
-        />
+        {onClickInfo && (
+          <InfoCircleOutlined
+            onClick={onClickInfo}
+            className="text-xl inline-block  ml-2"
+          />
+        )}
       </div>
       <div
         className="inline-block text-base text-right pr-2 flex-grow"

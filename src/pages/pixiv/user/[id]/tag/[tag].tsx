@@ -8,7 +8,7 @@ import {
   INovelProfile,
 } from '@/utils/api';
 import PageViewer from '@/components/PageViewer';
-import NovelCard from '@/pages/components/NovelCard';
+import NovelCard from '@/components/NovelCard';
 
 const pageSize = 20;
 

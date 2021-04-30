@@ -1,6 +1,6 @@
 import { ContentNavbar } from '@/components/Navbar';
 import { currDrawerPath } from '@/layouts/DrawerLayout';
-import NovelCard from '@/pages/components/NovelCard';
+import NovelCard from '@/components/NovelCard';
 import { getRecentNovels } from '@/utils/api';
 import PageViewer from '@/components/PageViewer';
 

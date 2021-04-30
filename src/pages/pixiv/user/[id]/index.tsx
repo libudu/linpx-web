@@ -4,7 +4,7 @@ import { getPixivUser, IUserInfo } from '@/utils/api';
 import { ContentNavbar } from '@/components/Navbar';
 import { TagBoxList, TagBoxListModal } from '@/components/TagBox';
 import { currDrawerPath } from '@/layouts/DrawerLayout';
-import NovelCardList from '@/pages/components/NovelCardList';
+import NovelCardList from '@/components/NovelCardList';
 
 function UserPart({
   name,

@@ -10,126 +10,10 @@ import { useEffect, useState } from 'react';
 import { ContentTitle, ContentBox } from './components/ContentLayout';
 import TransLink from './components/TransLink';
 import { InfoModal, showInfoModal } from './components/Modal';
-import { Carousel } from 'antd';
-
-// 首页用户卡片
-function UserCard({ id, imageUrl, name }: IUserInfo) {
-  const [isHeight, setIsHeight] = useState<boolean>(false);
-
-  const onImgLoad = (res: any) => {
-    const ele = res.target;
-    setIsHeight(ele.naturalHeight > ele.naturalWidth);
-  };
-
-  return (
-    <div
-      className="w-24 p-2 pt-4"
-      onClick={() => history.push(`/pixiv/user/${id}`)}
-    >
-      <div
-        className="rounded-full overflow-hidden flex justify-center items-center bg-gray-200"
-        style={{
-          width: '4.5rem',
-          height: '4.5rem',
-        }}
-      >
-        <img
-          style={isHeight ? { width: '100%' } : { height: '100%' }}
-          src={imageUrl}
-          loading="lazy"
-          onLoad={onImgLoad}
-        />
-      </div>
-      <div
-        className="text-sm mt-1 text-center u-line-2 whitespace-pre-line"
-        style={{ wordWrap: 'break-word' }}
-      >
-        {name}
-      </div>
-    </div>
-  );
-}
-
-// 首页小说卡片
-function NovelCard({ coverUrl, title, id, userName }: INovelProfile) {
-  return (
-    <div
-      className="lp-shadow h-full text-sm flex-grow-0 flex-shrink-0 overflow-hidden flex flex-col"
-      style={{ width: '6.5rem', wordBreak: 'keep-all' }}
-      onClick={() => id && history.push(`/pixiv/novel/${id}`)}
-    >
-      {coverUrl ? (
-        <div className="h-24 w-full overflow-hidden flex items-center">
-          <img className="w-full" src={coverUrl} loading="lazy" />
-        </div>
-      ) : (
-        <div className="h-24 w-full bg-gray-200" />
-      )}
-      <div className="flex flex-col justify-center flex-grow">
-        <div className="u-line-2 m-1 mb-0 text-center font-bold text-sm whitespace-pre-line">
-          {title}
-        </div>
-        <div className="u-line-1 m-1 mt-0 text-center text-xs whitespace-pre-line">
-          {userName}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// 首页轮播图
-function Banner() {
-  const Box = ({ children }: { children: any }) => (
-    <div className="lp-bgcolor h-40 flex flex-col justify-center items-center font-bold text-2xl text-center">
-      {children}
-    </div>
-  );
-  return (
-    <Carousel autoplay dots={false}>
-      <Box>
-        <div>
-          <div>是的！</div>
-          <div>还没做完！</div>
-        </div>
-      </Box>
-      <Box>
-        <div>群号:576268549</div>
-        <div>欢迎反馈问题或提建议！</div>
-      </Box>
-      <Box>
-        <div
-          onClick={() => {
-            window.open('https://weibo.com/linpicio');
-          }}
-        >
-          <div>关注我的微博</div>
-          <div>@林彼丢带橘猫</div>
-          <div>点击跳转！</div>
-        </div>
-      </Box>
-      <Box>
-        <div
-          onClick={() => {
-            window.open('https://afdian.net/@LINPX');
-          }}
-        >
-          <div>爱发电赞助！</div>
-          <div>点击跳转！</div>
-        </div>
-      </Box>
-      <Box>
-        <div
-          onClick={() => {
-            window.open('https://afdian.net/@LINPX');
-          }}
-        >
-          <div>开源github地址！</div>
-          <div>来点个star⭐吧！</div>
-        </div>
-      </Box>
-    </Carousel>
-  );
-}
+import { TagBox } from '@/components/TagBox';
+import UserPreview from './components/UserPreview';
+import NovelPreview from './components/NovelPreview';
+import HomeBanner from './components/HomeBanner';
 
 let lastUserInfo: IUserInfo[] = Array(8).fill({
   imageUrl: '',
@@ -186,7 +70,7 @@ export default function IndexPage() {
 
   return (
     <>
-      <Banner />
+      <HomeBanner />
       <InfoModal />
       <div className="px-6 pb-6">
         <ContentTitle
@@ -209,9 +93,11 @@ export default function IndexPage() {
         />
         <ContentBox>
           {lastUserInfo.map((ele, index) => (
-            <UserCard key={ele.id || index} {...ele} />
+            <UserPreview key={ele.id || index} {...ele} />
           ))}
         </ContentBox>
+        <ContentTitle left="全站tag" clickRightPath="/pixiv/recommend/users" />
+        {/* <TagBox  /> */}
         <ContentTitle
           left="最新小说"
           clickRightPath="/pixiv/recent/novels"
@@ -232,7 +118,7 @@ export default function IndexPage() {
             {novelsInfo.map((novel, index) => {
               return (
                 <div className="p-2" key={novel.id || index}>
-                  <NovelCard {...novel} />
+                  <NovelPreview {...novel} />
                 </div>
               );
             })}
