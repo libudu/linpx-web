@@ -102,13 +102,20 @@ export default function () {
         );
         const userList = await getPixivUserList(showIds);
         // 加载当页用户最近小说
+        const userNovelsSet: { [userId: string]: INovelProfile[] } = {};
         const allNovelIds = userList
-          .map((user) => user.novels.slice(0, NovelNumber))
+          .map((user) => {
+            userNovelsSet[user.id] = [];
+            // 取最后几本书，取完后再倒序
+            return user.novels.slice(-NovelNumber).reverse();
+          })
           .flat();
+
         const allNovelSet: { [novelId: string]: INovelProfile } = {};
         // 一次请求所有小说，然后放入集合，再索引
+
         (await getPixivNovelProfiles(allNovelIds)).forEach((novelProfile) => {
-          allNovelSet[novelProfile.id] = novelProfile;
+          userNovelsSet[novelProfile.userId].push(novelProfile);
         });
         return (
           <div className="px-4 py-2">
@@ -116,9 +123,7 @@ export default function () {
               <UserCard
                 key={user.id}
                 userInfo={user}
-                novelInfoList={user.novels.map(
-                  (novelId) => allNovelSet[novelId],
-                )}
+                novelInfoList={userNovelsSet[user.id]}
               />
             ))}
           </div>
