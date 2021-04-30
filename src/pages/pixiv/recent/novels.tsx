@@ -1,5 +1,3 @@
-import { ContentNavbar } from '@/components/Navbar';
-import { currDrawerPath } from '@/layouts/DrawerLayout';
 import NovelCard from '@/components/NovelCard';
 import { getRecentNovels } from '@/utils/api';
 import PageViewer from '@/components/PageViewer';
@@ -13,14 +11,13 @@ export default function () {
 
   return (
     <>
-      <ContentNavbar backTo={currDrawerPath}>最近小说</ContentNavbar>
       <PageViewer
         total={pageSize * TotalPage}
         pageSize={pageSize}
         renderContent={async (page) => {
           const novelProfileList = await getRecentNovels(page);
           return (
-            <div className="px-4 pt-16">
+            <div className="px-4">
               {novelProfileList.map((novelProfile) => (
                 <NovelCard {...novelProfile} key={novelProfile.id} />
               ))}

@@ -5,6 +5,7 @@ import { ContentNavbar } from '@/components/Navbar';
 import { TagBoxList, TagBoxListModal } from '@/components/TagBox';
 import { currDrawerPath } from '@/layouts/DrawerLayout';
 import NovelCardList from '@/components/NovelCardList';
+import PageLayout from '@/components/PageLayout';
 
 function UserPart({
   name,
@@ -15,10 +16,15 @@ function UserPart({
   tags,
 }: IUserInfo) {
   const [showModal, setShowModal] = useState(false);
+  const tagListData = Object.entries(tags).map(([tagName, time]) => ({
+    tagName,
+    time,
+  }));
+
   return (
     <div className="text-center pb-4 bg-yellow-100 bg-opacity-25 shadow-lg relative">
       <TagBoxListModal
-        tags={tags}
+        tagList={tagListData}
         show={showModal}
         onClose={() => setShowModal(false)}
         onClickTag={(tagName) => {
@@ -43,9 +49,8 @@ function UserPart({
 
       <div className="mx-8 mr-6 my-2">
         <TagBoxList
-          tags={tags}
+          tagList={tagListData.slice(0, 7)}
           showTotalButton
-          showCount={7}
           clickShowTotal={() => setShowModal(true)}
           onClickTag={(tagName) => {
             history.push(`/pixiv/user/${id}/tag/${tagName}`);
@@ -58,11 +63,8 @@ function UserPart({
 
 export default function PixivUser(props: IRouteProps) {
   document.title = 'Linpx - 作者详情';
-  const id = props.match.params.id;
 
-  const [page, setPage] = useState<number>(
-    Number(history.location?.query?.page) || 1,
-  );
+  const id = props.match.params.id;
 
   const [userInfo, setUserInfo] = useState<IUserInfo>();
 
@@ -72,25 +74,17 @@ export default function PixivUser(props: IRouteProps) {
       if (userInfo?.error) return props.history.push('/404');
       setUserInfo(userInfo);
     });
-  }, [page]);
+  }, []);
 
   if (!userInfo) {
     return <ContentNavbar backTo="/">作者详情</ContentNavbar>;
   }
-
   return (
-    <div className="h-screen flex flex-col w-full">
-      <div className="flex-shrink-0">
-        <ContentNavbar backTo={currDrawerPath} fixed={false}>
-          作者详情
-        </ContentNavbar>
+    <PageLayout title="作者详情">
+      <UserPart {...userInfo} />
+      <div className="mx-6">
+        <NovelCardList novelIdList={userInfo.novels.slice().reverse()} />
       </div>
-      <div className="overflow-y-scroll w-full overflow-x-hidden">
-        <UserPart {...userInfo} />
-        <div className="mx-6">
-          <NovelCardList novelIdList={userInfo.novels.slice().reverse()} />
-        </div>
-      </div>
-    </div>
+    </PageLayout>
   );
 }

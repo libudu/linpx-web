@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import classnames from 'classnames';
-import { IUserInfo } from '@/utils/api';
 import { getAppWidth } from '@/utils/util';
 import { Modal } from 'antd-mobile';
 
@@ -75,14 +74,14 @@ export function TagBox({
 }
 
 interface ITagBoxListModal {
-  tags: IUserInfo['tags'];
+  tagList: { tagName: string; time: number }[];
   show: boolean;
   onClose: any;
   onClickTag?: (tagName: string) => any;
 }
 
 export function TagBoxListModal({
-  tags,
+  tagList,
   show,
   onClose,
   onClickTag,
@@ -97,30 +96,27 @@ export function TagBoxListModal({
       className="tagbox-modal overflow-y-scroll"
       style={{ width, maxHeight: '70vh' }}
     >
-      <TagBoxList tags={tags} onClickTag={onClickTag} />
+      <TagBoxList tagList={tagList} onClickTag={onClickTag} />
     </Modal>
   );
 }
 
 interface ITagBoxList {
-  tags: IUserInfo['tags'];
+  tagList: { tagName: string; time: number }[];
   showTotalButton?: boolean;
   clickShowTotal?: any;
-  showCount?: number;
   onClickTag?: (tagName: string) => any;
 }
 
 export function TagBoxList({
-  tags,
+  tagList,
   showTotalButton,
   clickShowTotal,
-  showCount,
   onClickTag,
 }: ITagBoxList) {
   return (
-    <div className="flex flex-wrap">
-      {Object.entries(tags).map(([tagName, time], index) => {
-        if (showCount && index >= showCount) return null;
+    <div className="flex flex-wrap text-center">
+      {tagList.map(({ tagName, time }, index) => {
         let size: ITagBox['size'];
         if (index < 2) size = 'lg';
         else if (index < 8) size = 'md';

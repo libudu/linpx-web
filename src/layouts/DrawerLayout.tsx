@@ -78,6 +78,16 @@ export const drawerItems: IDrawerItem[] = [
     link: '/pixiv/recommend/users',
   },
   {
+    icon: <SmileOutlined />,
+    title: '最近小说',
+    link: '/pixiv/recent/novels',
+  },
+  {
+    icon: <SmileOutlined />,
+    title: '全站tag',
+    link: '/pixiv/tags',
+  },
+  {
     icon: <ShareAltOutlined />,
     title: '关于LINPX',
     link: '/about',
@@ -101,7 +111,7 @@ function DrawerSidebar({ onClickDrawer }: { onClickDrawer: any }) {
       {drawerItems.map((ele) => (
         <div
           key={ele.title}
-          className="pl-12 py-3 flex items-center active:bg-gray-200"
+          className="pl-12 py-2 flex items-center active:bg-gray-200"
           onClick={() => {
             history.push(ele.link);
             onClickDrawer();

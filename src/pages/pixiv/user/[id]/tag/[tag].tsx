@@ -9,6 +9,7 @@ import {
 } from '@/utils/api';
 import PageViewer from '@/components/PageViewer';
 import NovelCard from '@/components/NovelCard';
+import PageLayout from '@/components/PageLayout';
 
 const pageSize = 20;
 
@@ -41,13 +42,8 @@ export default function UserTag(props: IRouteProps) {
   const { backgroundUrl, imageUrl, name } = userInfo;
 
   return (
-    <>
+    <PageLayout title={title} backToPath={`/pixiv/user/${id}`}>
       <div className="text-center pb-4 bg-yellow-100 bg-opacity-25 shadow-lg relative">
-        <div className="flex-shrink-0">
-          <ContentNavbar backTo={`/pixiv/user/${id}`} fixed={false}>
-            {title}
-          </ContentNavbar>
-        </div>
         <div
           className="w-full h-28 bg-center absolute"
           style={{ backgroundImage: `url(${backgroundUrl})` }}
@@ -79,6 +75,6 @@ export default function UserTag(props: IRouteProps) {
           />
         </div>
       )}
-    </>
+    </PageLayout>
   );
 }

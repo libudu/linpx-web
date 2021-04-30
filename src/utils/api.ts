@@ -1,4 +1,3 @@
-import NovelCardList from '@/pages/components/NovelCardList';
 import axios from 'axios';
 
 export const BASE_URL = 'https://api.linpx.linpicio.com';
@@ -80,6 +79,10 @@ export const getPixivNovelProfiles = async (
   return idList.map((id) => novelProfileCache[id]);
 };
 
+export interface ITagSet {
+  [tagName: string]: number;
+}
+
 // 用户信息
 export interface IUserInfo {
   id: string;
@@ -88,7 +91,7 @@ export interface IUserInfo {
   imageUrl: string;
   comment: string;
   backgroundUrl?: string;
-  tags: { [tagName: string]: number };
+  tags: ITagSet;
 }
 export const getPixivUser = (id: string): Promise<IUserInfo> => {
   return linpxRequest(`/pixiv/user/${id}`);

@@ -5,12 +5,13 @@ import {
   getRecentNovels,
   IUserInfo,
   INovelProfile,
+  getFavUserTagInfo,
 } from '@/utils/api';
 import { useEffect, useState } from 'react';
 import { ContentTitle, ContentBox } from './components/ContentLayout';
 import TransLink from './components/TransLink';
 import { InfoModal, showInfoModal } from './components/Modal';
-import { TagBox } from '@/components/TagBox';
+import { TagBoxList } from '@/components/TagBox';
 import UserPreview from './components/UserPreview';
 import NovelPreview from './components/NovelPreview';
 import HomeBanner from './components/HomeBanner';
@@ -22,6 +23,9 @@ let lastUserInfo: IUserInfo[] = Array(8).fill({
 
 export default function IndexPage() {
   document.title = 'Linpx - 首页';
+
+  const favUserData = getFavUserTagInfo();
+  const tagListData = favUserData.data.slice(0, 8);
 
   // 红龙基金
   useEffect(() => {
@@ -68,6 +72,8 @@ export default function IndexPage() {
     });
   }, []);
 
+  console.log('render home');
+
   return (
     <>
       <HomeBanner />
@@ -96,8 +102,7 @@ export default function IndexPage() {
             <UserPreview key={ele.id || index} {...ele} />
           ))}
         </ContentBox>
-        <ContentTitle left="全站tag" clickRightPath="/pixiv/recommend/users" />
-        {/* <TagBox  /> */}
+
         <ContentTitle
           left="最新小说"
           clickRightPath="/pixiv/recent/novels"
@@ -124,6 +129,13 @@ export default function IndexPage() {
             })}
           </div>
         </ContentBox>
+
+        <ContentTitle left="全站tag" clickRightPath="/pixiv/tags" />
+        <TagBoxList
+          tagList={tagListData}
+          onClickTag={(tagName) => history.push(`/pixiv/tag/${tagName}`)}
+        />
+
         <ContentTitle
           left="生成LINPX链接"
           right=""
