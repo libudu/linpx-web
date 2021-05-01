@@ -72,8 +72,6 @@ export default function IndexPage() {
     });
   }, []);
 
-  console.log('render home');
-
   return (
     <>
       <HomeBanner />

@@ -4,20 +4,8 @@ import { useState } from 'react';
 import { getAppWidth } from '@/utils/util';
 
 export default function Layout({ children }: IRouteComponentProps) {
-  const drawerItem = getDrawerItem();
-  const [openDrawer, setOpenDrawer] = useState(false);
-  if (drawerItem) {
-    children = (
-      <DrawerLayout
-        title={drawerItem.title}
-        open={openDrawer}
-        onClickDrawer={() => {
-          setOpenDrawer(!openDrawer);
-        }}
-        children={children}
-      />
-    );
-  }
+  const isDrawerPage = Boolean(getDrawerItem());
+
   return (
     // 最外层框架，灰色
     // 内层居中的手机，白色
@@ -28,7 +16,7 @@ export default function Layout({ children }: IRouteComponentProps) {
         style={{ width: getAppWidth() }}
       >
         <div className="h-screen w-full overflow-y-scroll overflow-x-hidden">
-          {children}
+          {isDrawerPage ? <DrawerLayout children={children} /> : { children }}
         </div>
       </div>
     </div>

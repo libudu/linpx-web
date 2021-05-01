@@ -10,21 +10,19 @@ export default function () {
   document.title = 'Linpx - 最近小说';
 
   return (
-    <>
-      <PageViewer
-        total={pageSize * TotalPage}
-        pageSize={pageSize}
-        renderContent={async (page) => {
-          const novelProfileList = await getRecentNovels(page);
-          return (
-            <div className="px-4">
-              {novelProfileList.map((novelProfile) => (
-                <NovelCard {...novelProfile} key={novelProfile.id} />
-              ))}
-            </div>
-          );
-        }}
-      />
-    </>
+    <PageViewer
+      total={pageSize * TotalPage}
+      pageSize={pageSize}
+      renderContent={async (page) => {
+        const novelProfileList = await getRecentNovels(page);
+        return (
+          <div className="px-4">
+            {novelProfileList.map((novelProfile) => (
+              <NovelCard {...novelProfile} key={novelProfile.id} />
+            ))}
+          </div>
+        );
+      }}
+    />
   );
 }

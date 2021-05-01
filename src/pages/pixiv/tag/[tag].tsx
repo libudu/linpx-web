@@ -19,7 +19,7 @@ export default function PixivTag(props: IRouteProps) {
   if (!matchTagData) {
     return <ContentNavbar backTo="/">{title}</ContentNavbar>;
   }
-  const tagNovels = matchTagData.novels;
+  const tagNovels = matchTagData.novels.sort((x, y) => Number(y) - Number(x));
 
   return (
     <PageLayout title={title}>

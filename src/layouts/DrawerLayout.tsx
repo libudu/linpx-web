@@ -12,6 +12,7 @@ import BlackLogoPng from '@/assets/logo/black_logo.png';
 import WordLogoPng from '@/assets/logo/word_logo.png';
 import MenuSVG from '@/assets/icon/menu.svg';
 import HeaderLogoPNG from '@/assets/icon/logo.png';
+import { useState } from 'react';
 
 // 获取Drawer项目
 export function getDrawerItem() {
@@ -20,57 +21,12 @@ export function getDrawerItem() {
 
 export let currDrawerPath = '/';
 
-// 抽屉的整体页面布局
-export default function DrawerLayout({
-  title,
-  onClickDrawer,
-  children,
-  open,
-}: {
-  title: string;
-  onClickDrawer: any;
-  children: any;
-  open: boolean;
-}) {
-  currDrawerPath = history.location.pathname;
-  // 如果是首页，title显示的是logo
-  let header: any = title;
-  if (currDrawerPath === '/') {
-    header = <img className="h-8" src={HeaderLogoPNG} />;
-  }
-  return (
-    <div className="h-full flex flex-col">
-      <Navbar
-        leftEle={<img className="h-6 mt-1" src={MenuSVG} />}
-        children={header}
-        onClickLeft={onClickDrawer}
-      />
-      <Drawer
-        className="flex-grow"
-        style={{ position: 'relative' }}
-        sidebarStyle={{ backgroundColor: 'white', width: '70%' }}
-        overlayStyle={{ visibility: 'visible', zIndex: 1 }}
-        contentStyle={{ zIndex: open ? 0 : 2 }}
-        open={open}
-        sidebar={DrawerSidebar({ onClickDrawer })}
-        onOpenChange={onClickDrawer}
-        children={children}
-      />
-    </div>
-  );
-}
-
-interface IDrawerItem {
-  icon: any;
-  title: string;
-  link: string;
-}
-
 export const drawerItems: IDrawerItem[] = [
   {
     icon: <HomeOutlined />,
     title: '首页',
     link: '/',
+    header: <img className="h-8" src={HeaderLogoPNG} />,
   },
   {
     icon: <SmileOutlined />,
@@ -99,8 +55,48 @@ export const drawerItems: IDrawerItem[] = [
   },
 ];
 
+// 抽屉的整体页面布局
+export default function DrawerLayout({ children }: { children: any }) {
+  const [open, setOpen] = useState(false);
+
+  const drawerItem = getDrawerItem();
+  if (!drawerItem) {
+    history.push('/404');
+    return <div />;
+  }
+  const { title, header } = drawerItem;
+  return (
+    <div className="h-full flex flex-col">
+      <Navbar
+        leftEle={<img className="h-6 mt-1" src={MenuSVG} />}
+        children={header || title}
+        onClickLeft={() => setOpen(true)}
+      />
+      <Drawer
+        className="flex-grow"
+        style={{ position: 'relative' }}
+        sidebarStyle={{ backgroundColor: 'white', width: '70%' }}
+        overlayStyle={{ visibility: 'visible', zIndex: 1 }}
+        contentStyle={{ zIndex: open ? 0 : 2 }}
+        open={open}
+        sidebar={<DrawerSidebar onDrawerClose={() => setOpen(false)} />}
+        onOpenChange={setOpen}
+      >
+        <div>{children}</div>
+      </Drawer>
+    </div>
+  );
+}
+
+interface IDrawerItem {
+  icon: any;
+  title: string;
+  header?: any;
+  link: string;
+}
+
 // 抽屉的sidebar
-function DrawerSidebar({ onClickDrawer }: { onClickDrawer: any }) {
+function DrawerSidebar({ onDrawerClose }: { onDrawerClose: any }) {
   return (
     <div>
       <div className="flex flex-col items-center mt-16 mb-6 text-base">
@@ -114,7 +110,7 @@ function DrawerSidebar({ onClickDrawer }: { onClickDrawer: any }) {
           className="pl-12 py-2 flex items-center active:bg-gray-200"
           onClick={() => {
             history.push(ele.link);
-            onClickDrawer();
+            onDrawerClose();
           }}
         >
           <div className="mr-6 text-3xl content bg-clip-text">{ele.icon}</div>
