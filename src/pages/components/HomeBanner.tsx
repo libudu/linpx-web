@@ -43,7 +43,7 @@ export default function HomeBanner() {
       <Box>
         <div
           onClick={() => {
-            window.open('https://afdian.net/@LINPX');
+            window.open('https://github.com/libudu/linpx-web');
           }}
         >
           <div>开源github地址！</div>

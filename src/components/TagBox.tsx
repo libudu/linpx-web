@@ -30,15 +30,15 @@ function randomColor() {
 
 const tagConfig = {
   lg: {
-    width: '48%',
+    minWidth: '50%',
     tagFontSize: '20px',
   },
   md: {
-    width: '32%',
+    minWidth: '33%',
     tagFontSize: '18px',
   },
   sm: {
-    width: '19%',
+    minWidth: '20%',
     tagFontSize: '14px',
   },
 };
@@ -50,13 +50,13 @@ export function TagBox({
   onClickTag,
   className,
 }: ITagBox) {
-  const { width, tagFontSize } = tagConfig[size];
+  const { minWidth, tagFontSize } = tagConfig[size];
   const [color] = useState(randomColor());
 
   return (
     <div
-      className={classnames('px-2 py-1', className)}
-      style={{ minWidth: width }}
+      className={classnames('px-2 py-1 flex-grow', className)}
+      style={{ minWidth }}
       onClick={() => onClickTag && onClickTag(tagName)}
     >
       <div className={classnames('py-0.5 rounded-2xl text-white px-1', color)}>
@@ -115,7 +115,7 @@ export function TagBoxList({
   onClickTag,
 }: ITagBoxList) {
   return (
-    <div className="flex flex-wrap text-center" style={{ width: '103%' }}>
+    <div className="flex flex-wrap text-center justify-between">
       {tagList.map(({ tagName, time }, index) => {
         let size: ITagBox['size'];
         if (index < 2) size = 'lg';
@@ -134,7 +134,7 @@ export function TagBoxList({
       {showTotalButton && (
         <div
           className="px-2 py-1"
-          style={{ minWidth: '32%' }}
+          style={{ minWidth: '33%' }}
           onClick={clickShowTotal}
         >
           <div
