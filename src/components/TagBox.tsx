@@ -115,7 +115,7 @@ export function TagBoxList({
   onClickTag,
 }: ITagBoxList) {
   return (
-    <div className="flex flex-wrap text-center">
+    <div className="flex flex-wrap text-center" style={{ width: '103%' }}>
       {tagList.map(({ tagName, time }, index) => {
         let size: ITagBox['size'];
         if (index < 2) size = 'lg';

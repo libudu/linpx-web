@@ -5,9 +5,11 @@ import { history } from 'umi';
 export default function PixivAllTags() {
   const tagListData = getFavUserTagInfo().data;
   return (
-    <TagBoxList
-      tagList={tagListData}
-      onClickTag={(tagName) => history.push(`/pixiv/tag/${tagName}`)}
-    />
+    <div className="m-2">
+      <TagBoxList
+        tagList={tagListData}
+        onClickTag={(tagName) => history.push(`/pixiv/tag/${tagName}`)}
+      />
+    </div>
   );
 }
