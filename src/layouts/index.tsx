@@ -16,7 +16,7 @@ export default function Layout({ children }: IRouteComponentProps) {
         style={{ width: getAppWidth() }}
       >
         <div className="h-screen w-full overflow-y-scroll overflow-x-hidden">
-          {isDrawerPage ? <DrawerLayout children={children} /> : { children }}
+          {isDrawerPage ? <DrawerLayout children={children} /> : children}
         </div>
       </div>
     </div>

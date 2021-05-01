@@ -64,7 +64,7 @@ export default function DrawerLayout({ children }: { children: any }) {
     history.push('/404');
     return <div />;
   }
-  const { title, header } = drawerItem;
+  const { title, header, link } = drawerItem;
   return (
     <div className="h-full flex flex-col">
       <Navbar
@@ -73,6 +73,7 @@ export default function DrawerLayout({ children }: { children: any }) {
         onClickLeft={() => setOpen(true)}
       />
       <Drawer
+        key={link}
         className="flex-grow"
         style={{ position: 'relative' }}
         sidebarStyle={{ backgroundColor: 'white', width: '70%' }}
