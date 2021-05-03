@@ -15,6 +15,7 @@ import { TagBoxList } from '@/components/TagBox';
 import UserPreview from './components/UserPreview';
 import NovelPreview from './components/NovelPreview';
 import HomeBanner from './components/HomeBanner';
+import SearchBar from '../components/SearchBar';
 
 let lastUserInfo: IUserInfo[] = Array(8).fill({
   imageUrl: '',
@@ -77,6 +78,9 @@ export default function IndexPage() {
       <HomeBanner />
       <InfoModal />
       <div className="px-6 pb-6">
+        <SearchBar
+          onSearch={(word) => history.push(`/pixiv/search?word=${word}`)}
+        />
         <ContentTitle
           left="作者推荐"
           clickRightPath="/pixiv/recommend/users"
@@ -152,7 +156,9 @@ export default function IndexPage() {
             </div>
           }
         />
-        <ContentBox children={TransLink()} />
+        <ContentBox>
+          <TransLink />
+        </ContentBox>
       </div>
     </>
   );

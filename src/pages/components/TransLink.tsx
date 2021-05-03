@@ -16,7 +16,7 @@ const linkTypeInfo = [
   },
 ];
 
-function transLink(link: string): string {
+export function transformLink(link: string): string {
   if (!link) return '';
   for (let linkType of linkTypeInfo) {
     const matchResult = link.match(linkType.regex);
@@ -46,7 +46,7 @@ export default function TransLink() {
           className="w-full"
           clear
           placeholder="粘贴 Pixiv 链接"
-          onChange={(text) => setCopyText(transLink(text))}
+          onChange={(text) => setCopyText(transformLink(text))}
         />
       </Box>
 

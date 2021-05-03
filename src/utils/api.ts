@@ -70,9 +70,10 @@ export const getPixivNovelProfiles = async (
     const leftNovelProfileList: INovelProfile[] = await linpxRequest(
       `/pixiv/novels?${query}`,
     );
-    // 缓存请求结果
+    // 缓存请求结果，过滤无效结果
     leftNovelProfileList.forEach(
-      (novelProfile) => (novelProfileCache[novelProfile.id] = novelProfile),
+      (novelProfile) =>
+        novelProfile && (novelProfileCache[novelProfile.id] = novelProfile),
     );
   }
   // 拼接结果
