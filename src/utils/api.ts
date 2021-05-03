@@ -152,10 +152,12 @@ export const getFavUserTagInfo = (): IFavUserTagInfo => favUserTagData;
 
 // 搜索用户
 export const searchUser = (userName: string) => {
+  userName = encodeURIComponent(userName);
   return linpxRequest(`/pixiv/search/user/${userName}`);
 };
 
 // 搜索小说
 export const searchNovel = (novelName: string) => {
+  novelName = encodeURIComponent(novelName);
   return linpxRequest(`/pixiv/search/novel/${novelName}`);
 };

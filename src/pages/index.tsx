@@ -80,20 +80,15 @@ export default function IndexPage() {
         <ContentTitle
           left="作者推荐"
           clickRightPath="/pixiv/recommend/users"
-          onClickInfo={() => {
-            showInfoModal({
-              title: '作者推荐',
-              children: (
-                <div className="text-base">
-                  <div>推荐一些不错的作者</div>
-                  <div>主要是兽文作者</div>
-                  <div>每次刷新时随机排序</div>
-                  <div>欢迎举荐或自荐作者</div>
-                  <div>加群反馈：576268549</div>
-                </div>
-              ),
-            });
-          }}
+          clickInfo={
+            <div className="text-base">
+              <div>推荐一些不错的作者</div>
+              <div>主要是兽文作者</div>
+              <div>每次刷新时随机排序</div>
+              <div>欢迎举荐或自荐作者</div>
+              <div>加群反馈：576268549</div>
+            </div>
+          }
         />
         <ContentBox>
           {lastUserInfo.map((ele, index) => (
@@ -104,17 +99,12 @@ export default function IndexPage() {
         <ContentTitle
           left="最新小说"
           clickRightPath="/pixiv/recent/novels"
-          onClickInfo={() => {
-            showInfoModal({
-              title: '最新小说',
-              children: (
-                <div className="text-base">
-                  <div>推荐作者按时间线排序的小说</div>
-                  <div>可以翻到很久很久前的小说</div>
-                </div>
-              ),
-            });
-          }}
+          clickInfo={
+            <div className="text-base">
+              <div>推荐作者按时间线排序的小说</div>
+              <div>可以翻到很久很久前的小说</div>
+            </div>
+          }
         />
         <ContentBox>
           <div className="px-2 flex">
@@ -128,7 +118,17 @@ export default function IndexPage() {
           </div>
         </ContentBox>
 
-        <ContentTitle left="全站tag" clickRightPath="/pixiv/tags" />
+        <ContentTitle
+          left="全站tag"
+          clickRightPath="/pixiv/tags"
+          clickInfo={
+            <div className="text-base">
+              <div>所有推荐作者的tag统计</div>
+              <div>可以按tag快速检索想看的小说</div>
+              <div>手动更新，存在一定延迟</div>
+            </div>
+          }
+        />
         <TagBoxList
           tagList={tagListData}
           onClickTag={(tagName) => history.push(`/pixiv/tag/${tagName}`)}
@@ -137,25 +137,20 @@ export default function IndexPage() {
         <ContentTitle
           left="生成LINPX链接"
           right=""
-          onClickInfo={() => {
-            showInfoModal({
-              title: '生成LINPX链接',
-              children: (
-                <div className="text-base break-all">
-                  <div>将pixiv链接转为linpx</div>
-                  <div>从而不需要翻墙、登录，点开即阅</div>
-                  <br />
-                  <div>当前支持作者和小说两种格式链接</div>
-                  <div className="text-left">
-                    <div>作者举例：https://www.pixiv.net/users/32809296</div>
-                    <div>
-                      小说举例：https://www.pixiv.net/novel/show.php?id=14198407
-                    </div>
-                  </div>
+          clickInfo={
+            <div className="text-base break-all">
+              <div>将pixiv链接转为linpx</div>
+              <div>从而不需要翻墙、登录，点开即阅</div>
+              <br />
+              <div>当前支持作者和小说两种格式链接</div>
+              <div className="text-left">
+                <div>作者举例：https://www.pixiv.net/users/32809296</div>
+                <div>
+                  小说举例：https://www.pixiv.net/novel/show.php?id=14198407
                 </div>
-              ),
-            });
-          }}
+              </div>
+            </div>
+          }
         />
         <ContentBox children={TransLink()} />
       </div>

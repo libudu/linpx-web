@@ -1,17 +1,18 @@
 import { history } from 'umi';
 import classnames from 'classnames';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import { showInfoModal } from './Modal';
 
 // 内容标题
 export function ContentTitle({
   left,
   right = '查看全部',
-  onClickInfo,
+  clickInfo,
   clickRightPath,
 }: {
   left: any;
   right?: any;
-  onClickInfo?: any;
+  clickInfo?: any;
   clickRightPath?: any;
 }) {
   return (
@@ -21,9 +22,14 @@ export function ContentTitle({
         style={{ width: 'max-content' }}
       >
         {left}
-        {onClickInfo && (
+        {clickInfo && (
           <InfoCircleOutlined
-            onClick={onClickInfo}
+            onClick={() =>
+              showInfoModal({
+                title: left,
+                children: clickInfo,
+              })
+            }
             className="text-xl inline-block  ml-2"
           />
         )}
