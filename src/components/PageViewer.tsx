@@ -36,8 +36,8 @@ export default function PageViewer({
     <>
       <div ref={novelsRef}>{content}</div>
       {
-        // 仅当内容已加载出来，才显示分页器
-        content && (
+        // 仅当内容已加载出来，且存在至少一个项目，才显示分页器
+        content && total > 0 && (
           <div className="flex justify-center mb-6">
             <Pagination
               pageSize={pageSize}

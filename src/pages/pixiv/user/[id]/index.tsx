@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { getPixivUser, IUserInfo } from '@/utils/api';
 import { ContentNavbar } from '@/components/Navbar';
 import { TagBoxList, TagBoxListModal } from '@/components/TagBox';
-import { currDrawerPath } from '@/layouts/DrawerLayout';
 import NovelCardList from '@/components/NovelCardList';
 import PageLayout from '@/components/PageLayout';
 
@@ -50,7 +49,7 @@ function UserPart({
       <div className="mx-8 mr-6 my-2">
         <TagBoxList
           tagList={tagListData.slice(0, 7)}
-          showTotalButton
+          showTotalButton={tagListData.length > 7}
           clickShowTotal={() => setShowModal(true)}
           onClickTag={(tagName) => {
             history.push(`/pixiv/user/${id}/tag/${tagName}`);
