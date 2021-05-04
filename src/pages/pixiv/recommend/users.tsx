@@ -16,5 +16,9 @@ export default function () {
 
   if (!allUserIds) return <div></div>;
 
-  return <UserCardList userIdList={allUserIds} />;
+  return (
+    <div className="px-4 py-2">
+      <UserCardList userIdList={allUserIds} />
+    </div>
+  );
 }
