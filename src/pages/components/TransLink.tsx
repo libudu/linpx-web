@@ -6,12 +6,12 @@ import gtag from '@/utils/gtag';
 const linkTypeInfo = [
   {
     type: 'novel',
-    regex: /https:\/\/www.pixiv.net\/novel\/show.php\?id=(\d*)/,
+    regex: /https?:\/\/www.pixiv.net\/novel\/show.php\?id=(\d*)/,
     result: 'https://linpx.linpicio.com/pixiv/novel/{data}',
   },
   {
     type: 'user',
-    regex: /https:\/\/www.pixiv.net\/users\/(\d*)/,
+    regex: /https?:\/\/www.pixiv.net\/users\/(\d*)/,
     result: 'https://linpx.linpicio.com/pixiv/user/{data}',
   },
 ];

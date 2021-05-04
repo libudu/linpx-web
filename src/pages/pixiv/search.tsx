@@ -13,14 +13,20 @@ import UserCard from '@/components/UserCard';
 
 const isId = (word: string) => String(Number(word)) !== 'NaN';
 
-const isLinpxLink = (word: string) => {
-  // 支持linpicio和furrynovel两个域名
-  const reg = /http(s?):\/\/(linpx.linpicio.com|furrynovel.xyz)/;
-  // 避免循环定向，如果定位到自己则不重定向
-  if (reg.test(word) && !word.includes('/pixiv/search')) {
-    return true;
+const extractLinpxLink = (word: string) => {
+  try {
+    const urlObj = new URL(word);
+    if (
+      urlObj.host === 'linpx.linpicio.com' ||
+      urlObj.host === 'furrynovel.xyz'
+    ) {
+      return urlObj.pathname;
+    } else {
+      return null;
+    }
+  } catch {
+    return null;
   }
-  return false;
 };
 
 export default function Search() {
@@ -35,14 +41,18 @@ export default function Search() {
     setNovel(undefined);
     if (!word) return;
     // 如果是linpx链接，直接跳转
-    if (isLinpxLink(word)) {
-      window.open(word, '_self');
+    const linpxPath = extractLinpxLink(word);
+    if (linpxPath) {
+      history.replace('/pixiv/search');
+      history.push(linpxPath);
       return;
     }
     // 如果是pixiv链接，转为linpx链接，然后跳转
     const link = transformLink(word);
     if (link) {
-      window.open(link, '_self');
+      const { pathname } = new URL(link);
+      history.replace('/pixiv/search');
+      history.push(pathname);
       return;
     }
     // 是否是id，是的话搜索小说id和作者id
@@ -68,6 +78,7 @@ export default function Search() {
   return (
     <div className="mx-4">
       <SearchBar initWord={word} onSearch={(newWord) => setWord(newWord)} />
+      <div>搜索页面还没做完，当前仅支持链接搜索和id搜索</div>
       <div>当前搜索：{word}</div>
       {novel && <NovelCard {...novel} />}
       {user && userNovels && (
