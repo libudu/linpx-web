@@ -120,6 +120,12 @@ export const getRecommendPixivAuthors = async (): Promise<string[]> => {
   );
 };
 
+export const getFavUserInfo = async (): Promise<{
+  [index: string]: string;
+}> => {
+  return await linpxRequest('/recommend/authors');
+};
+
 // 最近小说
 export const getRecentNovels = async (
   page: number = 1,
@@ -151,14 +157,30 @@ interface IFavUserTagInfo {
 }
 export const getFavUserTagInfo = (): IFavUserTagInfo => favUserTagData;
 
+export interface ISearchUser {
+  users: {
+    id: string;
+    name: string;
+    imageUrl: string;
+    comment: string;
+    novels: INovelProfile[];
+  }[];
+  total: number;
+}
+
 // 搜索用户
-export const searchUser = (userName: string) => {
+export const searchUser = (userName: string): Promise<ISearchUser> => {
   userName = encodeURIComponent(userName);
   return linpxRequest(`/pixiv/search/user/${userName}`);
 };
 
+export interface ISearchNovel {
+  novels: INovelProfile[];
+  total: number;
+}
+
 // 搜索小说
-export const searchNovel = (novelName: string) => {
+export const searchNovel = (novelName: string): Promise<ISearchNovel> => {
   novelName = encodeURIComponent(novelName);
   return linpxRequest(`/pixiv/search/novel/${novelName}`);
 };
