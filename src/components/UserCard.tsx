@@ -1,9 +1,13 @@
 import { history } from 'umi';
 
-import { INovelProfile, IUserInfo } from '@/utils/api';
+import { INovelProfile } from '@/utils/api';
 
 interface IUserCard {
-  userInfo: IUserInfo;
+  userInfo: {
+    name: string;
+    imageUrl: string;
+    id: string;
+  };
   novelInfoList: INovelProfile[];
 }
 
