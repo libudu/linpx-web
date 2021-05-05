@@ -17,35 +17,28 @@ export function ContentTitle({
 }) {
   return (
     <div className="mb-3 mt-6 flex items-end">
-      <div
-        className="inline-block font-bold text-3xl pl-2"
-        style={{ width: 'max-content' }}
-      >
+      <div className="font-bold text-3xl pl-2">
         {left}
         {clickInfo && (
           <InfoCircleOutlined
+            className="text-xl inline-block ml-2"
             onClick={() =>
               showInfoModal({
                 title: left,
                 children: clickInfo,
               })
             }
-            className="text-xl inline-block  ml-2"
           />
         )}
       </div>
-      <div
-        className="inline-block text-base text-right pr-2 flex-grow"
-        children={
-          <span
-            style={{ borderBottom: '1px solid black' }}
-            children={right}
-            onClick={() => {
-              history.push(clickRightPath);
-            }}
-          />
-        }
-      />
+      <div className="text-base text-right pr-2 flex-grow">
+        <span
+          style={{ borderBottom: '1px solid black' }}
+          onClick={() => history.push(clickRightPath)}
+        >
+          {right}
+        </span>
+      </div>
     </div>
   );
 }

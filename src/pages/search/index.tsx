@@ -37,15 +37,42 @@ const extractLinpxLink = (word: string) => {
   }
 };
 
+function SearchTitle({
+  children,
+  clickMorePath,
+}: {
+  children: any;
+  clickMorePath?: string;
+}) {
+  return (
+    <div className="mb-3 mt-6 flex items-end">
+      <div className="text-2xl font-bold">{children}</div>
+      {clickMorePath && (
+        <div className="text-base text-right pr-2 flex-grow">
+          <span
+            style={{ borderBottom: '1px solid black' }}
+            onClick={() => {
+              history.push(clickMorePath);
+            }}
+          >
+            查看全部
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface ISearchBase {
   word: string;
   title: string;
+  clickMorePath?: string;
   renderEle: (word: string) => Promise<JSX.Element | null>;
 }
 
 // 抽象公共逻辑
 // 搜索页各个搜索项都包括标题、渲染元素、新渲染清空、空结果不渲染等逻辑
-function SearchBase({ word, renderEle, title }: ISearchBase) {
+function SearchBase({ word, renderEle, title, clickMorePath }: ISearchBase) {
   const [ele, setEle] = useState<JSX.Element>();
 
   useEffect(() => {
@@ -57,14 +84,10 @@ function SearchBase({ word, renderEle, title }: ISearchBase) {
 
   return (
     <>
-      <SearchTitle>{title}</SearchTitle>
+      <SearchTitle clickMorePath={clickMorePath}>{title}</SearchTitle>
       {ele}
     </>
   );
-}
-
-function SearchTitle({ children }: { children: any }) {
-  return <div className="text-2xl font-bold">{children}</div>;
 }
 
 // 搜索小说id
@@ -99,6 +122,11 @@ function FavUserTagNovels({ word }: ISearch) {
     <SearchBase
       word={word}
       title={`站内小说 共${total}篇`}
+      clickMorePath={
+        total && total > MaxPreviewNovel
+          ? `/search/linpx?word=${word}&type=novel`
+          : ''
+      }
       renderEle={async (word) => {
         // 搜索匹配的标签
         const favUser = getFavUserTagInfo();
@@ -147,6 +175,11 @@ function PixivUser({ word }: ISearch) {
     <SearchBase
       word={word}
       title={`全部用户 共${total}位`}
+      clickMorePath={
+        total && total > MaxPreviewUser
+          ? `/search/pixiv?word=${word}&type=user`
+          : ''
+      }
       renderEle={(word) =>
         searchUser(word).then(({ total, users }) => {
           if (total === 0) return null;
@@ -170,7 +203,7 @@ function PixivUser({ word }: ISearch) {
 
 // 搜索pixiv小说
 function PixivNovel({ word }: ISearch) {
-  const MaxPreviewUser = 3;
+  const MaxPreview = 3;
 
   const [total, setTotal] = useState<ISearchNovel['total']>();
 
@@ -178,13 +211,18 @@ function PixivNovel({ word }: ISearch) {
     <SearchBase
       word={word}
       title={`全部小说 共${total}篇`}
+      clickMorePath={
+        total && total > MaxPreview
+          ? `/search/pixiv?word=${word}&type=novel`
+          : ''
+      }
       renderEle={(word) =>
         searchNovel(word).then(({ total, novels }) => {
           if (total === 0) return null;
           setTotal(total);
           return (
             <>
-              {novels.slice(0, MaxPreviewUser).map((novel) => (
+              {novels.slice(0, MaxPreview).map((novel) => (
                 <NovelCard key={novel.id} {...novel} />
               ))}
             </>
