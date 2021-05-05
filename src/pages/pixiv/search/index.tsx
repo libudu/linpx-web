@@ -4,10 +4,6 @@ import { useEffect, useState } from 'react';
 import { transformLink } from '../../components/TransLink';
 import {
   getFavUserTagInfo,
-  getPixivNovelProfiles,
-  getPixivUser,
-  INovelProfile,
-  IUserInfo,
   searchNovel,
   ISearchNovel,
   searchUser,
@@ -17,6 +13,7 @@ import {
 import NovelCard from '@/components/NovelCard';
 import UserCard from '@/components/UserCard';
 import { renderUserCards } from '@/components/UserCardList';
+import { renderNovelCards } from '@/components/NovelCardList';
 
 interface ISearch {
   word: string;
@@ -40,56 +37,55 @@ const extractLinpxLink = (word: string) => {
   }
 };
 
+interface ISearchBase {
+  word: string;
+  title: string;
+  renderEle: (word: string) => Promise<JSX.Element | null>;
+}
+
+// 抽象公共逻辑
+// 搜索页各个搜索项都包括标题、渲染元素、新渲染清空、空结果不渲染等逻辑
+function SearchBase({ word, renderEle, title }: ISearchBase) {
+  const [ele, setEle] = useState<JSX.Element>();
+
+  useEffect(() => {
+    setEle(undefined);
+    renderEle(word).then((res) => res && setEle(res));
+  }, [word]);
+
+  if (!ele) return <></>;
+
+  return (
+    <>
+      <SearchTitle>{title}</SearchTitle>
+      {ele}
+    </>
+  );
+}
+
 function SearchTitle({ children }: { children: any }) {
   return <div className="text-2xl font-bold">{children}</div>;
 }
 
 // 搜索小说id
 function SearchNovelById({ word }: ISearch) {
-  const [novel, setNovel] = useState<INovelProfile>();
-
-  useEffect(() => {
-    setNovel(undefined);
-    getPixivNovelProfiles([word]).then((res) => {
-      if (res[0]) setNovel(res[0]);
-    });
-  }, [word]);
-
-  if (!novel) return <></>;
-
   return (
-    <>
-      <SearchTitle>该id小说：</SearchTitle>
-      <NovelCard {...novel} />
-    </>
+    <SearchBase
+      word={word}
+      title="该id小说："
+      renderEle={(word) => renderNovelCards([word])}
+    />
   );
 }
 
 // 搜索作者id
 function SearchUserById({ word }: ISearch) {
-  const [user, setUser] = useState<IUserInfo>();
-  const [userNovels, setUserNovels] = useState<INovelProfile[]>();
-
-  useEffect(() => {
-    setUser(undefined);
-    getPixivUser(word).then((res) => {
-      // @ts-ignore
-      if (res?.error) return;
-      setUser(res);
-      const novels = res.novels;
-      getPixivNovelProfiles(novels).then((res) => {
-        setUserNovels(res);
-      });
-    });
-  }, [word]);
-
-  if (!user || !userNovels) return <></>;
-
   return (
-    <>
-      <SearchTitle>该id作者：</SearchTitle>
-      <UserCard userInfo={user} novelInfoList={userNovels} />
-    </>
+    <SearchBase
+      word={word}
+      title="该id作者："
+      renderEle={(word) => renderUserCards([word])}
+    />
   );
 }
 
@@ -98,30 +94,24 @@ function FavUserTagNovels({ word }: ISearch) {
   const MaxPreviewNovel = 3;
 
   const [total, setTotal] = useState<number>();
-  const [novels, setNovels] = useState<INovelProfile[]>();
-
-  useEffect(() => {
-    setNovels(undefined);
-    const favUser = getFavUserTagInfo();
-    const matchTag = favUser.data.find((tag) => tag.tagName === word);
-    if (matchTag) {
-      setTotal(matchTag.novels.length);
-      const novelIds = matchTag.novels.slice(0, MaxPreviewNovel);
-      getPixivNovelProfiles(novelIds).then((res) => {
-        setNovels(res);
-      });
-    }
-  }, [word]);
-
-  if (!novels) return <></>;
 
   return (
-    <>
-      <SearchTitle>站内小说 共{total}篇</SearchTitle>
-      {novels.map((novel) => (
-        <NovelCard key={novel.id} {...novel} />
-      ))}
-    </>
+    <SearchBase
+      word={word}
+      title={`站内小说 共${total}篇`}
+      renderEle={async (word) => {
+        // 搜索匹配的标签
+        const favUser = getFavUserTagInfo();
+        const matchTag = favUser.data.find((tag) => tag.tagName === word);
+        if (matchTag) {
+          // 提取标签中小说渲染
+          setTotal(matchTag.novels.length);
+          const novelIds = matchTag.novels.slice(0, MaxPreviewNovel);
+          return renderNovelCards(novelIds);
+        }
+        return null;
+      }}
+    />
   );
 }
 
@@ -129,28 +119,23 @@ function FavUserTagNovels({ word }: ISearch) {
 function FavUsers({ word }: ISearch) {
   const MaxPreviewUser = 3;
 
-  const [total, setTotal] = useState<ISearchUser['total']>();
-  const [userELe, setUserEle] = useState<any>();
-
-  useEffect(() => {
-    setUserEle(undefined);
-    getFavUserInfo().then(async (res) => {
-      const idList = Object.entries(res)
-        .filter(([userName, _]) => userName.includes(word))
-        .map(([_, userId]) => userId);
-      if (idList.length === 0) return;
-      setTotal(idList.length);
-      setUserEle(await renderUserCards(idList.slice(0, MaxPreviewUser)));
-    });
-  }, [word]);
-
-  if (!userELe) return <></>;
+  const [total, setTotal] = useState<number>();
 
   return (
-    <>
-      <SearchTitle>推荐作者 共{total}位</SearchTitle>
-      {userELe}
-    </>
+    <SearchBase
+      word={word}
+      title={`推荐作者 共${total}位`}
+      renderEle={(word) =>
+        getFavUserInfo().then(async (res) => {
+          const idList = Object.entries(res)
+            .filter(([userName, _]) => userName.includes(word))
+            .map(([_, userId]) => userId);
+          if (idList.length === 0) return null;
+          setTotal(idList.length);
+          return renderUserCards(idList.slice(0, MaxPreviewUser));
+        })
+      }
+    />
   );
 }
 
@@ -159,26 +144,29 @@ function PixivUser({ word }: ISearch) {
   const MaxPreviewUser = 3;
 
   const [total, setTotal] = useState<ISearchUser['total']>();
-  const [users, setUsers] = useState<ISearchUser['users']>();
-
-  useEffect(() => {
-    setUsers(undefined);
-    searchUser(word).then((res) => {
-      if (res.total === 0) return;
-      setTotal(res.total);
-      setUsers(res.users);
-    });
-  }, [word]);
-
-  if (!users) return <></>;
 
   return (
-    <>
-      <SearchTitle>全部用户 共{total}位</SearchTitle>
-      {users.slice(0, MaxPreviewUser).map((user) => (
-        <UserCard key={user.id} userInfo={user} novelInfoList={user.novels} />
-      ))}
-    </>
+    <SearchBase
+      word={word}
+      title={`全部用户 共${total}位`}
+      renderEle={(word) =>
+        searchUser(word).then(({ total, users }) => {
+          if (total === 0) return null;
+          setTotal(total);
+          return (
+            <>
+              {users.slice(0, MaxPreviewUser).map((user) => (
+                <UserCard
+                  key={user.id}
+                  userInfo={user}
+                  novelInfoList={user.novels}
+                />
+              ))}
+            </>
+          );
+        })
+      }
+    />
   );
 }
 
@@ -187,26 +175,25 @@ function PixivNovel({ word }: ISearch) {
   const MaxPreviewUser = 3;
 
   const [total, setTotal] = useState<ISearchNovel['total']>();
-  const [novels, setNovels] = useState<ISearchNovel['novels']>();
-
-  useEffect(() => {
-    setNovels(undefined);
-    searchNovel(word).then((res) => {
-      if (res.total === 0) return;
-      setTotal(res.total);
-      setNovels(res.novels);
-    });
-  }, [word]);
-
-  if (!novels) return <></>;
 
   return (
-    <>
-      <SearchTitle>全部小说 共{total}篇</SearchTitle>
-      {novels.slice(0, MaxPreviewUser).map((novel) => (
-        <NovelCard key={novel.id} {...novel} />
-      ))}
-    </>
+    <SearchBase
+      word={word}
+      title={`全部小说 共${total}篇`}
+      renderEle={(word) =>
+        searchNovel(word).then(({ total, novels }) => {
+          if (total === 0) return null;
+          setTotal(total);
+          return (
+            <>
+              {novels.slice(0, MaxPreviewUser).map((novel) => (
+                <NovelCard key={novel.id} {...novel} />
+              ))}
+            </>
+          );
+        })
+      }
+    />
   );
 }
 
@@ -245,6 +232,7 @@ export default function Search() {
       <SearchBar
         initWord={word}
         onSearch={(newWord) => {
+          if (newWord === word) return;
           history.replace(`/pixiv/search?word=${newWord}`);
           setWord(newWord);
         }}
