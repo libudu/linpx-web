@@ -1,7 +1,7 @@
 import { history } from 'umi';
 import SearchBar from '@/components/SearchBar';
 import { useEffect, useState } from 'react';
-import { transformLink } from '../../components/TransLink';
+import { transformLink } from '../components/TransLink';
 import {
   getFavUserTagInfo,
   searchNovel,
@@ -15,7 +15,7 @@ import UserCard from '@/components/UserCard';
 import { renderUserCards } from '@/components/UserCardList';
 import { renderNovelCards } from '@/components/NovelCardList';
 
-interface ISearch {
+export interface ISearch {
   word: string;
 }
 
@@ -103,13 +103,11 @@ function FavUserTagNovels({ word }: ISearch) {
         // 搜索匹配的标签
         const favUser = getFavUserTagInfo();
         const matchTag = favUser.data.find((tag) => tag.tagName === word);
-        if (matchTag) {
-          // 提取标签中小说渲染
-          setTotal(matchTag.novels.length);
-          const novelIds = matchTag.novels.slice(0, MaxPreviewNovel);
-          return renderNovelCards(novelIds);
-        }
-        return null;
+        if (!matchTag) return null;
+        // 提取标签中小说渲染
+        setTotal(matchTag.novels.length);
+        const novelIds = matchTag.novels.slice(0, MaxPreviewNovel);
+        return renderNovelCards(novelIds);
       }}
     />
   );
@@ -233,7 +231,7 @@ export default function Search() {
         initWord={word}
         onSearch={(newWord) => {
           if (newWord === word) return;
-          history.replace(`/pixiv/search?word=${newWord}`);
+          history.replace(`/search?word=${newWord}`);
           setWord(newWord);
         }}
       />

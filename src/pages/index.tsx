@@ -78,9 +78,7 @@ export default function IndexPage() {
       <HomeBanner />
       <InfoModal />
       <div className="px-6 pb-6">
-        <SearchBar
-          onSearch={(word) => history.push(`/pixiv/search?word=${word}`)}
-        />
+        <SearchBar onSearch={(word) => history.push(`/search?word=${word}`)} />
         <ContentTitle
           left="作者推荐"
           clickRightPath="/pixiv/recommend/users"

@@ -31,7 +31,7 @@ export const drawerItems: IDrawerItem[] = [
   {
     icon: <SmileOutlined />,
     title: '搜索',
-    link: '/pixiv/search',
+    link: '/search',
   },
   {
     icon: <SmileOutlined />,
