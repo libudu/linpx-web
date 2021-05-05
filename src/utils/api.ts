@@ -76,8 +76,8 @@ export const getPixivNovelProfiles = async (
         novelProfile && (novelProfileCache[novelProfile.id] = novelProfile),
     );
   }
-  // 拼接结果
-  return idList.map((id) => novelProfileCache[id]);
+  // 拼接结果，过滤无效结果
+  return idList.map((id) => novelProfileCache[id]).filter((profile) => profile);
 };
 
 export interface ITagSet {
@@ -94,13 +94,19 @@ export interface IUserInfo {
   backgroundUrl?: string;
   tags: ITagSet;
 }
-export const getPixivUser = (id: string): Promise<IUserInfo> => {
-  return linpxRequest(`/pixiv/user/${id}`);
+export const getPixivUser = (id: string): Promise<IUserInfo | null> => {
+  // 结果出错，返回null
+  return linpxRequest(`/pixiv/user/${id}`).then((res) =>
+    res.error ? null : res,
+  );
 };
 
 // 获取一系列用户信息
 export const getPixivUserList = (idList: string[]) => {
-  return Promise.all(idList.map((id) => getPixivUser(id)));
+  // 过滤无效id
+  return Promise.all(idList.map((id) => getPixivUser(id))).then((res) =>
+    res.filter((user) => user),
+  ) as Promise<IUserInfo[]>;
 };
 
 // 推荐作者列表

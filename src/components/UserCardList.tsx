@@ -8,6 +8,7 @@ import UserCard, { NovelNumber } from './UserCard';
 
 export async function renderUserCards(userIdList: string[]) {
   const userList = await getPixivUserList(userIdList);
+  if (userList.length === 0) return null;
   // 加载当页用户最近小说
   const userNovelsMap: { [userId: string]: INovelProfile[] } = {};
   const allNovelIds = userList

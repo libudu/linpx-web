@@ -25,7 +25,7 @@ export default function UserTag(props: IRouteProps) {
   useEffect(() => {
     getPixivUser(id).then((res) => {
       // @ts-ignore
-      if (res?.error) return props.history.push('/404');
+      if (!res) return props.history.push('/404');
       setUserInfo(res);
     });
     getUserTagNovels(id, tagName).then((res) => {

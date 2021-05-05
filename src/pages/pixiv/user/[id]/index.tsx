@@ -70,7 +70,7 @@ export default function PixivUser(props: IRouteProps) {
   useEffect(() => {
     getPixivUser(id).then((userInfo) => {
       // @ts-ignore
-      if (userInfo?.error) return props.history.push('/404');
+      if (!userInfo) return props.history.push('/404');
       setUserInfo(userInfo);
     });
   }, []);
