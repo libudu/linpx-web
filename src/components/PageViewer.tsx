@@ -17,6 +17,7 @@ export default function PageViewer({
   const [page, setPage] = useState<number>(
     Number(history.location?.query?.page) || 1,
   );
+
   // 计算真实页数，处理页数过大、过小情况
   const maxPage = Math.ceil(total / pageSize);
   const truePage = Math.min(Math.max(page, 1), maxPage);
@@ -46,7 +47,9 @@ export default function PageViewer({
               showSizeChanger={false}
               onChange={(page) => {
                 setPage(page);
-                history.push(history.location.pathname + `?page=${page}`);
+                const urlObj = new URL(location.href);
+                urlObj.searchParams.set('page', String(page));
+                history.push(urlObj.pathname + urlObj.search);
                 novelsRef.current?.scrollIntoView({ behavior: 'smooth' });
               }}
             />

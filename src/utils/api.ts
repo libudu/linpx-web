@@ -175,9 +175,12 @@ export interface ISearchUser {
 }
 
 // 搜索用户
-export const searchUser = (userName: string): Promise<ISearchUser> => {
+export const searchUser = (
+  userName: string,
+  page: number = 1,
+): Promise<ISearchUser> => {
   userName = encodeURIComponent(userName);
-  return linpxRequest(`/pixiv/search/user/${userName}`);
+  return linpxRequest(`/pixiv/search/user/${userName}?page=${page}`);
 };
 
 export interface ISearchNovel {
@@ -186,7 +189,10 @@ export interface ISearchNovel {
 }
 
 // 搜索小说
-export const searchNovel = (novelName: string): Promise<ISearchNovel> => {
+export const searchNovel = (
+  novelName: string,
+  page: number = 1,
+): Promise<ISearchNovel> => {
   novelName = encodeURIComponent(novelName);
-  return linpxRequest(`/pixiv/search/novel/${novelName}`);
+  return linpxRequest(`/pixiv/search/novel/${novelName}?page=${page}`);
 };
