@@ -1,4 +1,4 @@
-import { InputItem } from 'antd-mobile';
+import { InputItem, List } from 'antd-mobile';
 import { SearchOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 
@@ -20,15 +20,17 @@ export default function SearchBar({ initWord = '', onSearch }: ISearchBar) {
         style={{ color: '#888', fontSize: '28px' }}
         onClick={startSearch}
       />
-      <InputItem
-        className="w-full"
-        value={word}
-        editable
-        clear
-        placeholder="支持链接、id、标题、tag……"
-        onChange={(value) => setWord(value)}
-        onVirtualKeyboardConfirm={startSearch}
-      />
+      <List className="w-full">
+        <InputItem
+          className="w-full"
+          value={word}
+          editable
+          clear
+          placeholder="支持链接、id、标题、tag……"
+          onChange={(value) => setWord(value)}
+          onKeyPress={({ key }) => key === 'Enter' && startSearch()}
+        />
+      </List>
     </div>
   );
 }

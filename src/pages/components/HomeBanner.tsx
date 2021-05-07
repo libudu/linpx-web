@@ -11,8 +11,7 @@ export default function HomeBanner() {
     <Carousel autoplay dots={false}>
       <Box>
         <div>
-          <div>是的！</div>
-          <div>还没做完！</div>
+          <div>快做完了！</div>
         </div>
       </Box>
       <Box>
