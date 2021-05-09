@@ -5,9 +5,8 @@
 <div align='center'>
     Linpx，即“Linpx Is Not PiXiv”<br/>
     亦为“LINpicio's PiXiv”<br/>
-    logo作者：apoto5
+    logo设计师：apoto5
 </div>
-
 
 
 
@@ -104,7 +103,7 @@ Linpx目前完全依托于pixiv，没有自建数据库，后端仅提供基本�
 | mingi           | https://afdian.net/u/6ae4dbb292c011eb876452540025c377 | 5    | 2021.4.1  | 爱发电 |
 | 爱发电用户_k63e | https://afdian.net/u/658e112e047d11ea905752540025c377 | 10   | 2021.4.1  | 爱发电 |
 | 红龙基金        | https://afdian.net/@reddragon                         | 180  | 2021.4.2  | 爱发电 |
-|                 |                                                       |      |           |        |
+| 德斯            | https://afdian.net/@desi1234                          | 260  | 2021.4.18 | 爱发电 |
 
 
 
