@@ -1,11 +1,11 @@
 import axios from 'axios';
+import { randomByDay } from '@/utils/util';
+import favUserTagData from './../data/favUser.json';
 
 export const BASE_URL = 'https://api.linpx.linpicio.com';
 //const BASE_URL = 'http://localhost:8000'
 
 const requestCache: any = {};
-
-import favUserTagData from './../data/favUser.json';
 
 export const linpxRequest = async (path: string) => {
   const cache = requestCache[path];
@@ -119,8 +119,9 @@ export const getRecommendPixivAuthors = async (): Promise<string[]> => {
     (res: { [index: string]: string }) => {
       // 第一次加载的时候取随机
       cacheRandomRecommendIds = Object.values(res).sort(
-        () => Math.random() - 0.5,
+        (a, b) => randomByDay(Number(a) * Number(b)) - 0.5,
       );
+
       return cacheRandomRecommendIds;
     },
   );

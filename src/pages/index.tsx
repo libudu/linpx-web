@@ -86,7 +86,7 @@ export default function IndexPage() {
             <div className="text-base">
               <div>推荐一些不错的作者</div>
               <div>主要是兽文作者</div>
-              <div>每次刷新时随机排序</div>
+              <div>排序每天0点随机刷新一次</div>
               <div>欢迎举荐或自荐作者</div>
               <div>加群反馈：576268549</div>
             </div>
