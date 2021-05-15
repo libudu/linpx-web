@@ -1,13 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { IRouteProps, history } from 'umi';
 import { getPixivNovel, INovelInfo } from '@/utils/api';
 import { ArrowLeftOutlined, MenuOutlined } from '@ant-design/icons';
 import { Popover } from 'antd-mobile';
 import { throttle } from 'lodash';
+import classNames from 'classnames';
 
 import Navbar, { ContentNavbar } from '@/components/Navbar';
 import Tag from '@/components/Tag';
-import classNames from 'classnames';
+import { t2s } from '@/utils/util';
 
 import NovelMenu from './components/NovelMenu';
 
@@ -23,6 +24,7 @@ let lastScrollTop = 0;
 
 export default function PixivNovel({ match }: IRouteProps) {
   document.title = 'Linpx - 小说详情';
+  console.log(t2s);
   const id = match.params.id;
 
   const [novelInfo, setNovelInfo] = useState<INovelInfo>();
@@ -138,7 +140,7 @@ export default function PixivNovel({ match }: IRouteProps) {
               fontFamily: novelStyle.fontFamily,
             }}
           >
-            {content}
+            {t2s(content)}
           </div>
           <div className="absolute bottom-0 w-full bg-white">
             <div></div>

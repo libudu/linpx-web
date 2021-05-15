@@ -25,6 +25,7 @@
     "@umijs/preset-react": "1.x",
     "antd": "^4.14.0",
     "axios": "^0.21.1",
+    "chinese-s2t": "^1.0.0",
     "classnames": "^2.2.6",
     "global": "^4.4.0",
     "lodash": "^4.17.21",
