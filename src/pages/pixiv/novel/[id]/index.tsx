@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { IRouteProps } from 'umi';
+import { IRouteProps, history } from 'umi';
 import { getPixivNovel, INovelInfo } from '@/utils/api';
 import { MenuOutlined } from '@ant-design/icons';
 import { Popover } from 'antd-mobile';
@@ -107,7 +107,12 @@ export default function PixivNovel({ match }: IRouteProps) {
               <img src={coverUrl} className="h-64 rounded-lg" />
             </div>
             <div className="mt-2 mx-8 font-bold text-3xl">{title}</div>
-            <div className="px-16 text-2xl text-gray-500">{userName}</div>
+            <div
+              className="px-16 text-2xl text-gray-500 underline"
+              onClick={() => history.push(`/pixiv/user/${userId}`)}
+            >
+              {userName}
+            </div>
             <div className="mb-1 text-base text-gray-500">
               <span>{content.length}字</span>
               <span className="ml-4">

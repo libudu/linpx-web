@@ -42,7 +42,12 @@ function UserPart({
       </div>
       <div className="my-2 mx-10 font-bold text-4xl">{name}</div>
 
-      <div className="my-2 px-16 text-lg text-blue-400">Pixiv id: {id}</div>
+      <div
+        className="my-2 px-16 text-lg text-blue-400 underline"
+        onClick={() => window.open(`https://www.pixiv.net/users/${id}`)}
+      >
+        Pixiv Id: {id}
+      </div>
 
       <div className="whitespace-pre-line text-lg px-12">{comment}</div>
 
