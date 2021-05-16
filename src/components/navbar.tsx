@@ -2,6 +2,7 @@ import { ArrowLeftOutlined, MenuOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import ActionSheet from '@/utils/ActionSheet';
 import classnames from 'classnames';
+import { goBackOrTo } from '@/layouts/index';
 
 interface IHeaderProps {
   children?: any;
@@ -44,19 +45,17 @@ export default function Navbar({
 export function ContentNavbar({
   children,
   backTo,
+  rightEle,
 }: {
   children: any;
   backTo?: string;
+  rightEle?: any;
 }) {
   // 如果有backTo那就回到backTo，没有就返回上一个网页
-  const onClick = backTo
-    ? () => {
-        history.push(backTo);
-      }
-    : history.goBack;
+  const onClick = backTo ? () => goBackOrTo(backTo) : history.goBack;
   return Navbar({
     leftEle: <ArrowLeftOutlined onClick={onClick} />,
-    rightEle: (
+    rightEle: rightEle || (
       <MenuOutlined
         onClick={() => {
           ActionSheet();

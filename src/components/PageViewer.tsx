@@ -49,7 +49,7 @@ export default function PageViewer({
                 setPage(page);
                 const urlObj = new URL(location.href);
                 urlObj.searchParams.set('page', String(page));
-                history.push(urlObj.pathname + urlObj.search);
+                history.replace(urlObj.pathname + urlObj.search);
                 novelsRef.current?.scrollIntoView({ behavior: 'smooth' });
               }}
             />

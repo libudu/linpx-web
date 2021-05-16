@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { IRouteProps, history } from 'umi';
+import { IRouteProps } from 'umi';
 import { getPixivNovel, INovelInfo } from '@/utils/api';
-import { ArrowLeftOutlined, MenuOutlined } from '@ant-design/icons';
+import { MenuOutlined } from '@ant-design/icons';
 import { Popover } from 'antd-mobile';
 import { throttle } from 'lodash';
 import classNames from 'classnames';
 
-import Navbar, { ContentNavbar } from '@/components/Navbar';
+import { ContentNavbar } from '@/components/Navbar';
 import Tag from '@/components/Tag';
 import { t2s } from '@/utils/util';
 
@@ -24,7 +24,7 @@ let lastScrollTop = 0;
 
 export default function PixivNovel({ match }: IRouteProps) {
   document.title = 'Linpx - 小说详情';
-  console.log(t2s);
+
   const id = match.params.id;
 
   const [novelInfo, setNovelInfo] = useState<INovelInfo>();
@@ -84,12 +84,7 @@ export default function PixivNovel({ match }: IRouteProps) {
           className="relative w-full"
           style={{ transition: 'all 0.2s', top: showNavbar ? '0px' : '-64px' }}
         >
-          <Navbar
-            leftEle={
-              <ArrowLeftOutlined
-                onClick={() => history.push(`/pixiv/user/${userId}`)}
-              />
-            }
+          <ContentNavbar
             rightEle={
               <Popover
                 visible={showPopover}
@@ -100,6 +95,7 @@ export default function PixivNovel({ match }: IRouteProps) {
                 <MenuOutlined />
               </Popover>
             }
+            backTo={`/pixiv/user/${userId}`}
             children="小说详情"
           />
         </div>
