@@ -3,6 +3,9 @@ import {
   HomeOutlined,
   HeartOutlined,
   ShareAltOutlined,
+  SearchOutlined,
+  ClockCircleOutlined,
+  TagOutlined,
 } from '@ant-design/icons';
 import Navbar from '@/components/Navbar';
 import { Drawer } from 'antd-mobile';
@@ -29,7 +32,7 @@ export const drawerItems: IDrawerItem[] = [
     header: <img className="h-8" src={HeaderLogoPNG} />,
   },
   {
-    icon: <SmileOutlined />,
+    icon: <SearchOutlined />,
     title: '搜索',
     link: '/search',
   },
@@ -39,12 +42,12 @@ export const drawerItems: IDrawerItem[] = [
     link: '/pixiv/recommend/users',
   },
   {
-    icon: <SmileOutlined />,
+    icon: <ClockCircleOutlined />,
     title: '最近小说',
     link: '/pixiv/recent/novels',
   },
   {
-    icon: <SmileOutlined />,
+    icon: <TagOutlined />,
     title: '全站tag',
     link: '/pixiv/tags',
   },
@@ -75,7 +78,7 @@ export default function DrawerLayout({ children }: { children: any }) {
       <Navbar
         leftEle={<img className="h-6 mt-1" src={MenuSVG} />}
         children={header || title}
-        onClickLeft={() => setOpen(true)}
+        onClickLeft={() => setOpen(!open)}
       />
       <Drawer
         key={link}
@@ -105,7 +108,7 @@ interface IDrawerItem {
 function DrawerSidebar({ onDrawerClose }: { onDrawerClose: any }) {
   return (
     <div>
-      <div className="flex flex-col items-center mt-16 mb-6 text-base">
+      <div className="flex flex-col items-center mt-12 mb-6 text-base">
         <img className="w-20" src={BlackLogoPng}></img>
         <img className="w-28 mr-2 mb-1 mt-2" src={WordLogoPng}></img>
         <div className="text-xl">LINPX IS NOT PIXIV</div>
@@ -113,7 +116,7 @@ function DrawerSidebar({ onDrawerClose }: { onDrawerClose: any }) {
       {drawerItems.map((ele) => (
         <div
           key={ele.title}
-          className="pl-12 py-2 flex items-center active:bg-gray-200"
+          className="pl-10 py-2 flex items-center active:bg-gray-200"
           onClick={() => {
             history.push(ele.link);
             onDrawerClose();
