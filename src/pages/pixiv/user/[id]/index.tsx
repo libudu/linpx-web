@@ -6,22 +6,35 @@ import { TagBoxList, TagBoxListModal } from '@/components/TagBox';
 import NovelCardList from '@/components/NovelCardList';
 import PageLayout from '@/components/PageLayout';
 
+import DefaultBgImg from '@/assets/default/default_bg.jpg';
+
+const MaxUserComment = 50;
+
 function UserPart({
   name,
   id,
   comment,
   imageUrl,
-  backgroundUrl,
+  backgroundUrl = DefaultBgImg,
   tags,
 }: IUserInfo) {
+  // 全部的tag模态框
   const [showModal, setShowModal] = useState(false);
+  // 过长的自我介绍
+  let isLongComment = false;
+  if (comment.length > MaxUserComment) isLongComment = true;
+  const [allComment, setAllComment] = useState(false);
+
   const tagListData = Object.entries(tags).map(([tagName, time]) => ({
     tagName,
     time,
   }));
 
   return (
-    <div className="text-center pb-4 bg-yellow-100 bg-opacity-25 shadow-lg relative">
+    <div
+      className="text-center pb-4 shadow-lg relative"
+      style={{ backgroundColor: 'rgb(255,252,241)' }}
+    >
       <TagBoxListModal
         tagList={tagListData}
         show={showModal}
@@ -34,24 +47,47 @@ function UserPart({
         className="w-full h-28 bg-center absolute"
         style={{ backgroundImage: `url(${backgroundUrl})` }}
       />
-      <div className="flex justify-center pt-10 rounded-full">
+      {/* 头像、名字、id */}
+      <div className="mx-4 flex pt-12">
         <div
-          style={{ backgroundImage: `url(${imageUrl})` }}
-          className="h-36 w-36 rounded-full z-10 border-solid border-8 border-yellow-100 bg-center"
+          className="h-32 w-32 z-10 mt-2 bg-center rounded-full flex-shrink-0"
+          style={{
+            backgroundImage: `url(${imageUrl})`,
+            border: '8px solid rgb(255,252,241)',
+          }}
         />
+        <div className="z-10 mt-16 pb-2 mr-1 flex items-center">
+          <div className="text-left mt-1" style={{ height: 'max-content' }}>
+            <div
+              className="mb-1 font-bold text-left break-all align-text-bottom"
+              style={{ fontSize: '1.25rem' }}
+            >
+              {name}
+            </div>
+            <div
+              className="px-1.5 py-0.5 text-sm bg-blue-400 text-white rounded-lg"
+              style={{ width: 'max-content' }}
+              onClick={() => window.open(`https://www.pixiv.net/users/${id}`)}
+            >
+              PID:{id}
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="my-2 mx-10 font-bold text-4xl">{name}</div>
-
       <div
-        className="my-2 px-16 text-lg text-blue-400 underline"
-        onClick={() => window.open(`https://www.pixiv.net/users/${id}`)}
+        className="mx-4 whitespace-pre-line"
+        style={{ fontSize: '16px', lineHeight: '30px' }}
       >
-        Pixiv Id: {id}
+        {allComment ? comment : comment.slice(0, MaxUserComment)}
+        <span
+          className="text-gray-400 border-gray-400 ml-2"
+          style={{ borderBottom: '1px solid' }}
+          onClick={() => setAllComment(!allComment)}
+        >
+          {isLongComment && (allComment ? '收起全部' : '查看全部')}
+        </span>
       </div>
-
-      <div className="whitespace-pre-line text-lg px-12">{comment}</div>
-
-      <div className="mx-8 mr-6 my-2">
+      <div className="m-2">
         <TagBoxList
           tagList={tagListData.slice(0, 7)}
           showTotalButton={tagListData.length > 7}
