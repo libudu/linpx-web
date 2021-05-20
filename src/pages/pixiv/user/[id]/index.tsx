@@ -7,6 +7,7 @@ import NovelCardList from '@/components/NovelCardList';
 import PageLayout from '@/components/PageLayout';
 
 import DefaultBgImg from '@/assets/default/default_bg.jpg';
+import AfdianImg from '@/assets/icon/afdian.png';
 
 const MaxUserComment = 50;
 
@@ -17,6 +18,7 @@ function UserPart({
   imageUrl,
   backgroundUrl = DefaultBgImg,
   tags,
+  afdian,
 }: IUserInfo) {
   // 全部的tag模态框
   const [showModal, setShowModal] = useState(false);
@@ -64,16 +66,31 @@ function UserPart({
             >
               {name}
             </div>
-            <div
-              className="px-1.5 py-0.5 text-sm bg-blue-400 text-white rounded-lg"
-              style={{ width: 'max-content' }}
-              onClick={() => window.open(`https://www.pixiv.net/users/${id}`)}
-            >
-              PID:{id}
+            <div className="flex">
+              <div
+                className="mr-2 px-1.5 py-0.5 text-sm bg-blue-400 text-white rounded-lg"
+                style={{ width: 'max-content' }}
+                onClick={() => window.open(`https://www.pixiv.net/users/${id}`)}
+              >
+                PID:{id}
+              </div>
+              {afdian && (
+                <div
+                  className="px-2 py-0.5 text-sm bg-purple-500 text-white rounded-lg flex items-center"
+                  style={{ width: 'max-content' }}
+                  onClick={() =>
+                    window.open(`https://www.pixiv.net/users/${id}`)
+                  }
+                >
+                  <img src={AfdianImg} style={{ height: 16, marginRight: 3 }} />
+                  <span>支持作者</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
+      {/* 简介、标签 */}
       <div
         className="mx-4 whitespace-pre-line"
         style={{ fontSize: '16px', lineHeight: '30px' }}

@@ -93,6 +93,7 @@ export interface IUserInfo {
   comment: string;
   backgroundUrl?: string;
   tags: ITagSet;
+  afdian?: string;
 }
 export const getPixivUser = (id: string): Promise<IUserInfo | null> => {
   // 结果出错，返回null
