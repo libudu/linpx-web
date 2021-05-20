@@ -1,19 +1,17 @@
 import NovelCardList from '@/components/NovelCardList';
 import PageLayout from '@/components/PageLayout';
 import UserCardList from '@/components/UserCardList';
-import { getFavUserInfo, getFavUserTagInfo } from '@/utils/api';
+import { getFavUserTagInfo } from '@/utils/api';
 import { useEffect, useState } from 'react';
 import { history } from 'umi';
 import { ISearch } from './index';
+import { searchFavUser } from './util';
 
 function LinpxUsers({ word }: ISearch) {
   const [idList, setIdList] = useState<string[]>();
 
   useEffect(() => {
-    getFavUserInfo().then(async (res) => {
-      const idList = Object.entries(res)
-        .filter(([userName, _]) => userName.includes(word))
-        .map(([_, userId]) => userId);
+    searchFavUser(word).then((idList) => {
       if (idList.length === 0) return;
       setIdList(idList);
     });

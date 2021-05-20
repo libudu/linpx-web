@@ -11,7 +11,7 @@ export default function DownloadNovel({ match }: IRouteProps) {
         `https://api.linpx.linpicio.com/pixiv/novel/${id}/download`,
         '_parent',
       );
-      history.push(`/pixiv/novel/${id}`);
+      history.replace(`/pixiv/novel/${id}`);
     });
   });
 

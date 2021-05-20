@@ -14,6 +14,7 @@ import NovelCard from '@/components/NovelCard';
 import UserCard from '@/components/UserCard';
 import { renderUserCards } from '@/components/UserCardList';
 import { renderNovelCards } from '@/components/NovelCardList';
+import { searchFavUser } from './util';
 
 export interface ISearch {
   word: string;
@@ -151,11 +152,13 @@ function FavUsers({ word }: ISearch) {
     <SearchBase
       word={word}
       title={`推荐作者 共${total}位`}
+      clickMorePath={
+        total && total > MaxPreviewUser
+          ? `/search/linpx?word=${word}&type=user`
+          : ''
+      }
       renderEle={(word) =>
-        getFavUserInfo().then(async (res) => {
-          const idList = Object.entries(res)
-            .filter(([userName, _]) => userName.includes(word))
-            .map(([_, userId]) => userId);
+        searchFavUser(word).then((idList) => {
           if (idList.length === 0) return null;
           setTotal(idList.length);
           return renderUserCards(idList.slice(0, MaxPreviewUser));
