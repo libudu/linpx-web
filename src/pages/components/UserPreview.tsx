@@ -1,6 +1,6 @@
 import { history } from 'umi';
 import { useState } from 'react';
-import { IUserInfo } from '@/utils/api';
+import { IUserInfo } from '@/types';
 
 // 首页用户卡片
 export default function UserPreview({ id, imageUrl, name }: IUserInfo) {

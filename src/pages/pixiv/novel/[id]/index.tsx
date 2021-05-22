@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { IRouteProps, history } from 'umi';
-import { getPixivNovel, INovelInfo } from '@/utils/api';
 import { MenuOutlined } from '@ant-design/icons';
 import { Popover } from 'antd-mobile';
 import { throttle } from 'lodash';
@@ -9,6 +8,8 @@ import classNames from 'classnames';
 import { ContentNavbar } from '@/components/Navbar';
 import Tag from '@/components/Tag';
 import { t2s } from '@/utils/util';
+import { getPixivNovel } from '@/utils/api';
+import { INovelInfo } from '@/types';
 
 import NovelMenu from './components/NovelMenu';
 

@@ -1,6 +1,6 @@
 import { history } from 'umi';
 
-import { INovelProfile } from '@/utils/api';
+import { INovelProfile } from '@/types';
 
 interface IUserCard {
   userInfo: {

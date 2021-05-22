@@ -1,6 +1,7 @@
 import { IRouteProps, history } from 'umi';
 import { useState, useEffect } from 'react';
-import { getPixivUser, IUserInfo } from '@/utils/api';
+import { getPixivUser } from '@/utils/api';
+import { IUserInfo } from '@/types';
 import { ContentNavbar } from '@/components/Navbar';
 import { TagBoxList, TagBoxListModal } from '@/components/TagBox';
 import NovelCardList from '@/components/NovelCardList';
@@ -18,7 +19,6 @@ function UserPart({
   imageUrl,
   backgroundUrl = DefaultBgImg,
   tags,
-  afdian,
 }: IUserInfo) {
   // 全部的tag模态框
   const [showModal, setShowModal] = useState(false);
@@ -74,7 +74,7 @@ function UserPart({
               >
                 PID:{id}
               </div>
-              {afdian && (
+              {false && (
                 <div
                   className="px-2 py-0.5 text-sm bg-purple-500 text-white rounded-lg flex items-center"
                   style={{ width: 'max-content' }}

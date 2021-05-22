@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { randomByDay } from '@/utils/util';
 import favUserTagData from './../data/favUser.json';
+import { IFavUser, INovelInfo, INovelProfile, IUserInfo } from '../types';
 
 export const BASE_URL = 'https://api.linpx.linpicio.com';
-//const BASE_URL = 'http://localhost:8000'
+//export const BASE_URL = 'http://localhost:3001';
 
 const requestCache: any = {};
 
@@ -25,34 +26,9 @@ export const linpxRequest = async (path: string) => {
   });
 };
 
-// 小说内容
-export interface INovelInfo {
-  id: string;
-  title: string;
-  userId: string;
-  userName: string;
-  content: string;
-  coverUrl: string;
-  tags: string[];
-  desc: string;
-  createDate: string;
-}
 export const getPixivNovel = (id: string): Promise<INovelInfo> => {
   return linpxRequest(`/pixiv/novel/${id}`);
 };
-
-// 一系列小说基本信息
-export interface INovelProfile {
-  id: string;
-  title: string;
-  coverUrl: string;
-  tags: string[];
-  userId: string;
-  userName: string;
-  desc: string;
-  length: number;
-  createDate: string;
-}
 
 const novelProfileCache: { [novelId: string]: INovelProfile } = {};
 
@@ -84,17 +60,6 @@ export interface ITagSet {
   [tagName: string]: number;
 }
 
-// 用户信息
-export interface IUserInfo {
-  id: string;
-  novels: string[];
-  name: string;
-  imageUrl: string;
-  comment: string;
-  backgroundUrl?: string;
-  tags: ITagSet;
-  afdian?: string;
-}
 export const getPixivUser = (id: string): Promise<IUserInfo | null> => {
   // 结果出错，返回null
   return linpxRequest(`/pixiv/user/${id}`).then((res) =>
@@ -110,18 +75,17 @@ export const getPixivUserList = (idList: string[]) => {
   ) as Promise<IUserInfo[]>;
 };
 
-// 推荐作者列表
 let cacheRandomRecommendIds: string[] = [];
 export const getRecommendPixivAuthors = async (): Promise<string[]> => {
   if (cacheRandomRecommendIds.length) {
     return cacheRandomRecommendIds;
   }
   return linpxRequest('/recommend/authors').then(
-    (res: { [index: string]: string }) => {
+    (res: { [index: string]: IFavUser }) => {
       // 第一次加载的时候取随机
-      cacheRandomRecommendIds = Object.values(res).sort(
-        (a, b) => randomByDay(Number(a) * Number(b)) - 0.5,
-      );
+      cacheRandomRecommendIds = Object.values(res)
+        .map((favUser) => favUser.id)
+        .sort((a, b) => randomByDay(Number(a) * Number(b)) - 0.5);
 
       return cacheRandomRecommendIds;
     },
@@ -129,7 +93,7 @@ export const getRecommendPixivAuthors = async (): Promise<string[]> => {
 };
 
 export const getFavUserInfo = async (): Promise<{
-  [index: string]: string;
+  [index: string]: IFavUser;
 }> => {
   return await linpxRequest('/recommend/authors');
 };

@@ -1,5 +1,5 @@
 import { history } from 'umi';
-import { INovelProfile } from '@/utils/api';
+import { INovelProfile } from '@/types';
 
 export default function NovelPreview({
   coverUrl,

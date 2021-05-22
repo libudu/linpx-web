@@ -1,4 +1,4 @@
-import { INovelProfile } from '@/utils/api';
+import { INovelProfile } from '@/types';
 import { history } from 'umi';
 
 // 最近小说页面

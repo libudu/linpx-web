@@ -3,10 +3,9 @@ import {
   getRecommendPixivAuthors,
   getPixivUserList,
   getRecentNovels,
-  IUserInfo,
-  INovelProfile,
   getFavUserTagInfo,
 } from '@/utils/api';
+import { IUserInfo, INovelProfile } from '@/types';
 import { useEffect, useState } from 'react';
 import { ContentTitle, ContentBox } from './components/ContentLayout';
 import TransLink from './components/TransLink';

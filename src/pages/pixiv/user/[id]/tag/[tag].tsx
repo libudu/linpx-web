@@ -1,12 +1,8 @@
 import { useEffect, useState } from 'react';
 import { IRouteProps } from 'umi';
 import { ContentNavbar } from '@/components/Navbar';
-import {
-  getPixivUser,
-  getUserTagNovels,
-  IUserInfo,
-  INovelProfile,
-} from '@/utils/api';
+import { getPixivUser, getUserTagNovels } from '@/utils/api';
+import { IUserInfo, INovelProfile } from '@/types';
 import PageViewer from '@/components/PageViewer';
 import NovelCard from '@/components/NovelCard';
 import PageLayout from '@/components/PageLayout';
