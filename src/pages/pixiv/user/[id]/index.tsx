@@ -17,7 +17,7 @@ function UserPart({
   id,
   comment,
   imageUrl,
-  backgroundUrl = DefaultBgImg,
+  backgroundUrl,
   tags,
 }: IUserInfo) {
   // 全部的tag模态框
@@ -47,7 +47,7 @@ function UserPart({
       />
       <div
         className="w-full h-28 bg-center absolute"
-        style={{ backgroundImage: `url(${backgroundUrl})` }}
+        style={{ backgroundImage: `url(${backgroundUrl || DefaultBgImg})` }}
       />
       {/* 头像、名字、id */}
       <div className="mx-4 flex pt-12">

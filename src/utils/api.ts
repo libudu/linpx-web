@@ -62,9 +62,15 @@ export interface ITagSet {
 
 export const getPixivUser = (id: string): Promise<IUserInfo | null> => {
   // 结果出错，返回null
-  return linpxRequest(`/pixiv/user/${id}`).then((res) =>
-    res.error ? null : res,
-  );
+  return linpxRequest(`/pixiv/user/${id}`).then((res) => {
+    if (res.error) return null;
+    if (res.tags instanceof Array) {
+      const tags: any = {};
+      res.tags.forEach((tag: any) => (tags[tag.tag] = tag.time));
+      res.tags = tags;
+    }
+    return res;
+  });
 };
 
 // 获取一系列用户信息
