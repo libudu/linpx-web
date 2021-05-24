@@ -3,12 +3,11 @@ import SearchBar from '@/components/SearchBar';
 import { useEffect, useState } from 'react';
 import { transformLink } from '../components/TransLink';
 import {
-  getFavUserTagInfo,
+  getAnalyseTag,
   searchNovel,
   ISearchNovel,
   searchUser,
   ISearchUser,
-  getFavUserInfo,
 } from '@/utils/api';
 import NovelCard from '@/components/NovelCard';
 import UserCard from '@/components/UserCard';
@@ -130,7 +129,7 @@ function FavUserTagNovels({ word }: ISearch) {
       }
       renderEle={async (word) => {
         // 搜索匹配的标签
-        const favUser = getFavUserTagInfo();
+        const favUser = await getAnalyseTag();
         const matchTag = favUser.data.find((tag) => tag.tagName === word);
         if (!matchTag) return null;
         // 提取标签中小说渲染

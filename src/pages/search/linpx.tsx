@@ -1,7 +1,7 @@
 import NovelCardList from '@/components/NovelCardList';
 import PageLayout from '@/components/PageLayout';
 import UserCardList from '@/components/UserCardList';
-import { getFavUserTagInfo } from '@/utils/api';
+import { useLinpxAnalyseTag } from '@/utils/api';
 import { useEffect, useState } from 'react';
 import { history } from 'umi';
 import { ISearch } from './index';
@@ -23,17 +23,11 @@ function LinpxUsers({ word }: ISearch) {
 }
 
 function LinpxNovels({ word }: ISearch) {
-  const [idList, setIdList] = useState<string[]>();
-
-  useEffect(() => {
-    const favUser = getFavUserTagInfo();
-    const matchTag = favUser.data.find((tag) => tag.tagName === word);
-    if (!matchTag) return;
-    setIdList(matchTag.novels);
-  }, [word]);
+  const analyseTag = useLinpxAnalyseTag();
+  const matchTag = analyseTag?.data.find((tag) => tag.tagName === word);
+  const idList = matchTag?.novels;
 
   if (!idList) return <></>;
-
   return <NovelCardList novelIdList={idList} />;
 }
 

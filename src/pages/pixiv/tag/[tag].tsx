@@ -1,6 +1,6 @@
 import { IRouteProps } from 'umi';
 import { ContentNavbar } from '@/components/Navbar';
-import { getFavUserTagInfo } from '@/utils/api';
+import { useLinpxAnalyseTag } from '@/utils/api';
 import NovelCardList from '@/components/NovelCardList';
 import PageLayout from '@/components/PageLayout';
 
@@ -9,13 +9,14 @@ export default function PixivTag(props: IRouteProps) {
   const title = `全站tag - ${tagName}`;
   document.title = title;
 
-  const favUserData = getFavUserTagInfo();
-  const matchTagData = favUserData.data.find(
+  const analyseTag = useLinpxAnalyseTag();
+  const matchTagData = analyseTag?.data.find(
     (tagData) => tagData.tagName === tagName,
   );
   if (!matchTagData) {
     return <ContentNavbar backTo="/">{title}</ContentNavbar>;
   }
+
   const tagNovels = matchTagData.novels.sort((x, y) => Number(y) - Number(x));
 
   return (

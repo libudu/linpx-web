@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { randomByDay } from '@/utils/util';
-import favUserTagData from './../data/favUser.json';
 import {
   IFavUser,
   INovelInfo,
@@ -8,6 +7,7 @@ import {
   IUserInfo,
   IAnalyseTag,
 } from '../types';
+import useSWR from 'swr';
 
 export const BASE_URL = 'https://api.linpx.linpicio.com';
 //export const BASE_URL = 'http://localhost:3001';
@@ -129,7 +129,13 @@ export const getUserTagNovels = (userId: string, tagName: string) => {
   return linpxRequest(`/pixiv/user/${userId}/tag/${tagName}`);
 };
 
-export const getFavUserTagInfo = (): IAnalyseTag => favUserTagData;
+export const getAnalyseTag = (): Promise<IAnalyseTag> =>
+  linpxRequest(`/analyse/tags`);
+
+export const useLinpxAnalyseTag = () => {
+  const { data } = useSWR<IAnalyseTag>('/analyse/tags');
+  return data;
+};
 
 export interface ISearchUser {
   users: {

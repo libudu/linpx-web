@@ -66,10 +66,10 @@ export interface IFavUserTagInfo {
 
 export interface IAnalyseTag {
   time: string;
-  localTime: string;
   data: {
     tagName: string;
     time: number;
     novels: string[];
   }[];
+  take: number;
 }

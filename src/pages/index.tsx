@@ -3,10 +3,12 @@ import {
   getRecommendPixivAuthors,
   getPixivUserList,
   getRecentNovels,
-  getFavUserTagInfo,
+  linpxRequest,
+  useLinpxAnalyseTag,
 } from '@/utils/api';
 import { IUserInfo, INovelProfile } from '@/types';
 import { useEffect, useState } from 'react';
+import { SWRConfig } from 'swr';
 import { ContentTitle, ContentBox } from './components/ContentLayout';
 import TransLink from './components/TransLink';
 import { InfoModal, showInfoModal } from './components/Modal';
@@ -21,11 +23,22 @@ let lastUserInfo: IUserInfo[] = Array(8).fill({
   name: '\n\n',
 });
 
-export default function IndexPage() {
+export default function App() {
+  return (
+    <SWRConfig
+      value={{
+        fetcher: linpxRequest,
+      }}
+    >
+      <IndexPage />
+    </SWRConfig>
+  );
+}
+function IndexPage() {
   document.title = 'Linpx - 首页';
 
-  const favUserData = getFavUserTagInfo();
-  const tagListData = favUserData.data.slice(0, 8);
+  const analyseTag = useLinpxAnalyseTag();
+  const tagListData = analyseTag?.data.slice(0, 8) || [];
 
   // 红龙基金
   useEffect(() => {
