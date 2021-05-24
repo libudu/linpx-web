@@ -1,8 +1,5 @@
-import {
-  getPixivUserList,
-  INovelProfile,
-  getPixivNovelProfiles,
-} from '@/utils/api';
+import { getPixivUserList, getPixivNovelProfiles } from '@/utils/api';
+import { INovelProfile } from '@/types';
 import PageViewer from './PageViewer';
 import UserCard, { NovelNumber } from './UserCard';
 

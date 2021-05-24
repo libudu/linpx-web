@@ -51,3 +51,25 @@ export interface INovelInfo {
   content: string;
   createDate: string;
 }
+
+export interface IFavUserTagInfo {
+  time: string;
+  localTime: string;
+  user: string[];
+  data: {
+    tagName: string;
+    time: number;
+    novels: string[];
+  }[];
+  take: number;
+}
+
+export interface IAnalyseTag {
+  time: string;
+  localTime: string;
+  data: {
+    tagName: string;
+    time: number;
+    novels: string[];
+  }[];
+}

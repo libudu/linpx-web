@@ -1,7 +1,13 @@
 import axios from 'axios';
 import { randomByDay } from '@/utils/util';
 import favUserTagData from './../data/favUser.json';
-import { IFavUser, INovelInfo, INovelProfile, IUserInfo } from '../types';
+import {
+  IFavUser,
+  INovelInfo,
+  INovelProfile,
+  IUserInfo,
+  IAnalyseTag,
+} from '../types';
 
 export const BASE_URL = 'https://api.linpx.linpicio.com';
 //export const BASE_URL = 'http://localhost:3001';
@@ -86,7 +92,7 @@ export const getRecommendPixivAuthors = async (): Promise<string[]> => {
   if (cacheRandomRecommendIds.length) {
     return cacheRandomRecommendIds;
   }
-  return linpxRequest('/recommend/authors').then(
+  return linpxRequest('/fav/user').then(
     (res: { [index: string]: IFavUser }) => {
       // 第一次加载的时候取随机
       cacheRandomRecommendIds = Object.values(res)
@@ -101,7 +107,7 @@ export const getRecommendPixivAuthors = async (): Promise<string[]> => {
 export const getFavUserInfo = async (): Promise<{
   [index: string]: IFavUser;
 }> => {
-  return await linpxRequest('/recommend/authors');
+  return await linpxRequest('/fav/user');
 };
 
 // 最近小说
@@ -123,17 +129,7 @@ export const getUserTagNovels = (userId: string, tagName: string) => {
   return linpxRequest(`/pixiv/user/${userId}/tag/${tagName}`);
 };
 
-interface IFavUserTagInfo {
-  time: string;
-  localTime: string;
-  user: string[];
-  data: {
-    tagName: string;
-    time: number;
-    novels: string[];
-  }[];
-}
-export const getFavUserTagInfo = (): IFavUserTagInfo => favUserTagData;
+export const getFavUserTagInfo = (): IAnalyseTag => favUserTagData;
 
 export interface ISearchUser {
   users: {
