@@ -1,14 +1,12 @@
 import { history } from 'umi';
 import {
-  getRecommendPixivAuthors,
-  getPixivUserList,
   getRecentNovels,
-  linpxRequest,
-  useLinpxAnalyseTag,
+  useAnalyseTag,
+  useFavUserIds,
+  usePixivUserList,
 } from '@/utils/api';
 import { IUserInfo, INovelProfile } from '@/types';
 import { useEffect, useState } from 'react';
-import { SWRConfig } from 'swr';
 import { ContentTitle, ContentBox } from './components/ContentLayout';
 import TransLink from './components/TransLink';
 import { InfoModal, showInfoModal } from './components/Modal';
@@ -23,21 +21,10 @@ let lastUserInfo: IUserInfo[] = Array(8).fill({
   name: '\n\n',
 });
 
-export default function App() {
-  return (
-    <SWRConfig
-      value={{
-        fetcher: linpxRequest,
-      }}
-    >
-      <IndexPage />
-    </SWRConfig>
-  );
-}
-function IndexPage() {
+export default function IndexPage() {
   document.title = 'Linpx - 首页';
 
-  const analyseTag = useLinpxAnalyseTag();
+  const analyseTag = useAnalyseTag();
   const tagListData = analyseTag?.data.slice(0, 8) || [];
 
   // 红龙基金
@@ -60,16 +47,8 @@ function IndexPage() {
   }, []);
 
   // 加载首页作者
-  const [userInfo, setUserInfo] = useState<IUserInfo[]>(lastUserInfo);
-  useEffect(() => {
-    getRecommendPixivAuthors().then((res) => {
-      // 只取前十个作为随机推荐作者
-      getPixivUserList((res as string[]).slice(0, 8)).then((res) => {
-        lastUserInfo = res;
-        setUserInfo(res);
-      });
-    });
-  }, []);
+  const favUserIds = useFavUserIds();
+  const userInfo = usePixivUserList(favUserIds.slice(0, 8)) || lastUserInfo;
 
   // 加载首页小说
   const emptyNovel = {
@@ -105,7 +84,7 @@ function IndexPage() {
           }
         />
         <ContentBox>
-          {lastUserInfo.map((ele, index) => (
+          {userInfo.map((ele, index) => (
             <UserPreview key={ele.id || index} {...ele} />
           ))}
         </ContentBox>

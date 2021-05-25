@@ -8,8 +8,7 @@ import classNames from 'classnames';
 import { ContentNavbar } from '@/components/Navbar';
 import Tag from '@/components/Tag';
 import { t2s } from '@/utils/util';
-import { getPixivNovel } from '@/utils/api';
-import { INovelInfo } from '@/types';
+import { usePixivNovel } from '@/utils/api';
 
 import NovelMenu from './components/NovelMenu';
 
@@ -28,20 +27,10 @@ export default function PixivNovel({ match }: IRouteProps) {
 
   const id = match.params.id;
 
-  const [novelInfo, setNovelInfo] = useState<INovelInfo>();
+  const [refresh, setRefresh] = useState({});
+  updateNovelStyle = () => setRefresh({});
 
-  // 样式设置函数
-  updateNovelStyle = () => {
-    setNovelInfo(Object.assign({}, novelInfo));
-  };
-
-  // 加载小说信息
-  useEffect(() => {
-    getPixivNovel(id).then((res: any) => {
-      if (res?.error) return;
-      setNovelInfo(res);
-    });
-  }, []);
+  const novelInfo = usePixivNovel(id);
 
   // navbar是否收起
   const [showNavbar, setShowNavbar] = useState(true);

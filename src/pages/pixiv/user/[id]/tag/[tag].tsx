@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
 import { IRouteProps } from 'umi';
 import { ContentNavbar } from '@/components/Navbar';
-import { getPixivUser, getUserTagNovels } from '@/utils/api';
-import { IUserInfo, INovelProfile } from '@/types';
+import { usePixivUser, useUserTagNovels } from '@/utils/api';
 import PageViewer from '@/components/PageViewer';
 import NovelCard from '@/components/NovelCard';
 import PageLayout from '@/components/PageLayout';
@@ -13,21 +11,8 @@ export default function UserTag(props: IRouteProps) {
   document.title = 'Linpx - 作者标签';
   const { tag: tagName, id } = props.match.params;
 
-  // 一次加载完所有该tag小说
-  const [userInfo, setUserInfo] = useState<IUserInfo>();
-  const [novels, setNovels] = useState<INovelProfile[]>();
-
-  // 加载全部数据
-  useEffect(() => {
-    getPixivUser(id).then((res) => {
-      // @ts-ignore
-      if (!res) return props.history.push('/404');
-      setUserInfo(res);
-    });
-    getUserTagNovels(id, tagName).then((res) => {
-      setNovels(res);
-    });
-  }, []);
+  const userInfo = usePixivUser(id);
+  const novels = useUserTagNovels(id, tagName);
 
   const title = `${userInfo?.name}-${tagName}`;
 

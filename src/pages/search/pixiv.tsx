@@ -2,7 +2,7 @@ import NovelCard from '@/components/NovelCard';
 import PageLayout from '@/components/PageLayout';
 import PageViewer from '@/components/PageViewer';
 import UserCard from '@/components/UserCard';
-import { searchNovel, searchUser } from '@/utils/api';
+import { usePixivSearchNovel, usePixivSearchUser } from '@/utils/api';
 import { useEffect, useState } from 'react';
 import { history } from 'umi';
 import { ISearch } from './index';
@@ -10,20 +10,18 @@ import { ISearch } from './index';
 function SearchPixivNovels({ word }: ISearch) {
   const pageSize = 24;
 
-  const [total, setTotal] = useState<number>();
+  const [page, setPage] = useState<number>();
+  const data = usePixivSearchNovel(word, page);
 
-  useEffect(() => {
-    searchNovel(word).then(({ total }) => setTotal(total));
-  }, [word]);
+  if (!data) return <></>;
 
-  if (!total) return <></>;
-
+  const { total, novels } = data;
   return (
     <PageViewer
       total={total}
       pageSize={pageSize}
       renderContent={async (page) => {
-        const { novels } = await searchNovel(word, page);
+        setPage(page);
         return novels.map((novel) => <NovelCard key={novel.id} {...novel} />);
       }}
     />
@@ -33,20 +31,19 @@ function SearchPixivNovels({ word }: ISearch) {
 function SearchPixivUsers({ word }: ISearch) {
   const PageSize = 6;
 
-  const [total, setTotal] = useState<number>();
+  const [page, setPage] = useState<number>();
+  const data = usePixivSearchUser(word, page);
 
-  useEffect(() => {
-    searchUser(word).then(({ total }) => setTotal(total));
-  }, [word]);
+  if (!data) return <></>;
 
-  if (!total) return <></>;
+  const { total, users } = data;
 
   return (
     <PageViewer
       total={total}
       pageSize={PageSize}
       renderContent={async (page) => {
-        const { users } = await searchUser(word, page);
+        setPage(page);
         return users.map((user) => (
           <UserCard key={user.id} userInfo={user} novelInfoList={user.novels} />
         ));

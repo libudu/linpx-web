@@ -1,6 +1,6 @@
 import { IRouteProps, history } from 'umi';
-import { useState, useEffect } from 'react';
-import { getPixivUser } from '@/utils/api';
+import { useState } from 'react';
+import { usePixivUser } from '@/utils/api';
 import { IUserInfo } from '@/types';
 import { ContentNavbar } from '@/components/Navbar';
 import { TagBoxList, TagBoxListModal } from '@/components/TagBox';
@@ -123,19 +123,12 @@ export default function PixivUser(props: IRouteProps) {
 
   const id = props.match.params.id;
 
-  const [userInfo, setUserInfo] = useState<IUserInfo>();
-
-  useEffect(() => {
-    getPixivUser(id).then((userInfo) => {
-      // @ts-ignore
-      if (!userInfo) return props.history.push('/404');
-      setUserInfo(userInfo);
-    });
-  }, []);
+  const userInfo = usePixivUser(id);
 
   if (!userInfo) {
     return <ContentNavbar backTo="/">作者详情</ContentNavbar>;
   }
+
   return (
     <PageLayout title="作者详情">
       <UserPart {...userInfo} />

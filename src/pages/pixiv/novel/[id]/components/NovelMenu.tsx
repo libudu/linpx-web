@@ -83,8 +83,6 @@ function FontFamilyPicker({
 }
 
 export default function NovelMenu({ id }: INovelMenu) {
-  const download = history.location.query?.download;
-  console.log('download', download, typeof download);
   return (
     <div className="text-lg lp-bgcolor">
       <Item>

@@ -1,11 +1,12 @@
 import axios from 'axios';
-import { randomByDay } from '@/utils/util';
+import { list2query, randomByDay } from '@/utils/util';
 import {
   IFavUser,
   INovelInfo,
   INovelProfile,
   IUserInfo,
   IAnalyseTag,
+  IMap,
 } from '../types';
 import useSWR from 'swr';
 
@@ -32,39 +33,39 @@ export const linpxRequest = async (path: string) => {
   });
 };
 
-export const getPixivNovel = (id: string): Promise<INovelInfo> => {
-  return linpxRequest(`/pixiv/novel/${id}`);
+export const usePixivNovel = (id: string) => {
+  return useSWR<INovelInfo>(`/pixiv/novel/${id}`).data;
 };
 
 const novelProfileCache: { [novelId: string]: INovelProfile } = {};
 
-export const getPixivNovelProfiles = async (
-  idList: string[],
-): Promise<INovelProfile[]> => {
-  if (idList.length === 0) return [];
-  let query = '';
-  for (const id of idList) {
-    // 缓冲中没有则构造请求
-    if (!novelProfileCache[id]) query += `ids[]=${id}&`;
-  }
-  // 发起请求
-  if (query) {
-    const leftNovelProfileList: INovelProfile[] = await linpxRequest(
-      `/pixiv/novels?${query}`,
-    );
-    // 缓存请求结果，过滤无效结果
-    leftNovelProfileList.forEach(
-      (novelProfile) =>
-        novelProfile && (novelProfileCache[novelProfile.id] = novelProfile),
-    );
-  }
-  // 拼接结果，过滤无效结果
-  return idList.map((id) => novelProfileCache[id]).filter((profile) => profile);
-};
+// export const getPixivNovelProfiles = async (
+//   idList: string[],
+// ): Promise<INovelProfile[]> => {
+//   if (idList.length === 0) return [];
+//   const query = list2query(idList);
+//   // 发起请求
+//   if (query) {
+//     const leftNovelProfileList: INovelProfile[] = await linpxRequest(
+//       `/pixiv/novels?${query}`,
+//     );
+//     // 缓存请求结果，过滤无效结果
+//     leftNovelProfileList.forEach(
+//       (novelProfile) =>
+//         novelProfile && (novelProfileCache[novelProfile.id] = novelProfile),
+//     );
+//   }
+//   // 拼接结果，过滤无效结果
+//   return idList.map((id) => novelProfileCache[id]).filter((profile) => profile);
+// };
 
-export interface ITagSet {
-  [tagName: string]: number;
-}
+// todo: 缓存
+export const usePixivNovelProfiles = (idList: string[]) => {
+  const { data } = useSWR<INovelProfile[]>(
+    idList.length === 0 ? null : `/pixiv/novels?${list2query(idList)}`,
+  );
+  return data || [];
+};
 
 export const getPixivUser = (id: string): Promise<IUserInfo | null> => {
   // 结果出错，返回null
@@ -79,35 +80,47 @@ export const getPixivUser = (id: string): Promise<IUserInfo | null> => {
   });
 };
 
-// 获取一系列用户信息
-export const getPixivUserList = (idList: string[]) => {
-  // 过滤无效id
-  return Promise.all(idList.map((id) => getPixivUser(id))).then((res) =>
-    res.filter((user) => user),
-  ) as Promise<IUserInfo[]>;
-};
-
-let cacheRandomRecommendIds: string[] = [];
-export const getRecommendPixivAuthors = async (): Promise<string[]> => {
-  if (cacheRandomRecommendIds.length) {
-    return cacheRandomRecommendIds;
+export const usePixivUser = (id: string) => {
+  const { data } = useSWR<IUserInfo>(`/pixiv/user/${id}`);
+  // @ts-ignore
+  if (!data || data?.error) return undefined;
+  if (data.tags instanceof Array) {
+    console.log('user tags array to object!');
+    const tags: any = {};
+    data.tags.forEach((tag: any) => (tags[tag.tag] = tag.time));
+    data.tags = tags;
   }
-  return linpxRequest('/fav/user').then(
-    (res: { [index: string]: IFavUser }) => {
-      // 第一次加载的时候取随机
-      cacheRandomRecommendIds = Object.values(res)
-        .map((favUser) => favUser.id)
-        .sort((a, b) => randomByDay(Number(a) * Number(b)) - 0.5);
-
-      return cacheRandomRecommendIds;
-    },
-  );
+  return data;
 };
 
-export const getFavUserInfo = async (): Promise<{
-  [index: string]: IFavUser;
-}> => {
-  return await linpxRequest('/fav/user');
+export const usePixivUserList = (idList: string[]) => {
+  const { data } = useSWR<IUserInfo[]>(
+    idList.length === 0 ? null : `/pixiv/users?${list2query(idList)}`,
+  );
+  return data || [];
+};
+
+export const useFavUserIds = () => {
+  const { data } = useSWR<IFavUser[]>('/fav/user');
+  console.log('get fav user ids');
+  if (!data) return [];
+  return data
+    .map((favUser) => favUser.id)
+    .sort((a, b) => randomByDay(Number(a) * Number(b)) - 0.5);
+};
+
+export const useFavUser = () => {
+  const { data } = useSWR<IFavUser[]>('/fav/user');
+  return data || [];
+};
+
+export const useSearchFavUser = (word: string) => {
+  const { data } = useSWR<IMap<IFavUser>>('/fav/user');
+  if (!data) return [];
+  const idList = Object.values(data)
+    .filter(({ name }) => name.includes(word))
+    .map(({ id }) => id);
+  return idList;
 };
 
 // 最近小说
@@ -124,20 +137,24 @@ export const getRecentNovels = async (
   return recentNovelProfileList;
 };
 
-// 用户tag的全部小说
-export const getUserTagNovels = (userId: string, tagName: string) => {
-  return linpxRequest(`/pixiv/user/${userId}/tag/${tagName}`);
+export const usePixivRecentNovels = (page: number = 1) => {
+  const { data } = useSWR<INovelProfile[]>(`/pixiv/novels/recent?page=${page}`);
+  return data || [];
 };
 
-export const getAnalyseTag = (): Promise<IAnalyseTag> =>
-  linpxRequest(`/analyse/tags`);
+export const useUserTagNovels = (userId: string, tagName: string) => {
+  const { data } = useSWR<INovelProfile[]>(
+    `/pixiv/user/${userId}/tag/${tagName}`,
+  );
+  return data || [];
+};
 
-export const useLinpxAnalyseTag = () => {
+export const useAnalyseTag = () => {
   const { data } = useSWR<IAnalyseTag>('/analyse/tags');
   return data;
 };
 
-export interface ISearchUser {
+interface ISearchUser {
   users: {
     id: string;
     name: string;
@@ -148,25 +165,24 @@ export interface ISearchUser {
   total: number;
 }
 
-// 搜索用户
-export const searchUser = (
-  userName: string,
-  page: number = 1,
-): Promise<ISearchUser> => {
+export const usePixivSearchUser = (userName: string, page: number = 1) => {
   userName = encodeURIComponent(userName);
-  return linpxRequest(`/pixiv/search/user/${userName}?page=${page}`);
+  const { data } = useSWR<ISearchUser>(
+    `/pixiv/search/user/${userName}?page=${page}`,
+  );
+  return data;
 };
 
-export interface ISearchNovel {
+interface ISearchNovel {
   novels: INovelProfile[];
   total: number;
 }
 
 // 搜索小说
-export const searchNovel = (
-  novelName: string,
-  page: number = 1,
-): Promise<ISearchNovel> => {
+export const usePixivSearchNovel = (novelName: string, page: number = 1) => {
   novelName = encodeURIComponent(novelName);
-  return linpxRequest(`/pixiv/search/novel/${novelName}?page=${page}`);
+  const { data } = useSWR<ISearchNovel>(
+    `/pixiv/search/novel/${novelName}?page=${page}`,
+  );
+  return data;
 };

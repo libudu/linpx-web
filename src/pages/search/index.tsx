@@ -3,17 +3,15 @@ import SearchBar from '@/components/SearchBar';
 import { useEffect, useState } from 'react';
 import { transformLink } from '../components/TransLink';
 import {
-  getAnalyseTag,
-  searchNovel,
-  ISearchNovel,
-  searchUser,
-  ISearchUser,
+  useSearchFavUser,
+  usePixivSearchNovel,
+  useAnalyseTag,
+  usePixivSearchUser,
 } from '@/utils/api';
 import NovelCard from '@/components/NovelCard';
 import UserCard from '@/components/UserCard';
-import { renderUserCards } from '@/components/UserCardList';
-import { renderNovelCards } from '@/components/NovelCardList';
-import { searchFavUser } from './util';
+import { RenderUserCards } from '@/components/UserCardList';
+import { RenderNovelCards } from '@/components/NovelCardList';
 
 export interface ISearch {
   word: string;
@@ -64,28 +62,18 @@ function SearchTitle({
 }
 
 interface ISearchBase {
-  word: string;
   title: string;
   clickMorePath?: string;
-  renderEle: (word: string) => Promise<JSX.Element | null>;
+  children: React.ReactNode;
 }
 
 // 抽象公共逻辑
 // 搜索页各个搜索项都包括标题、渲染元素、新渲染清空、空结果不渲染等逻辑
-function SearchBase({ word, renderEle, title, clickMorePath }: ISearchBase) {
-  const [ele, setEle] = useState<JSX.Element>();
-
-  useEffect(() => {
-    setEle(undefined);
-    renderEle(word).then((res) => res && setEle(res));
-  }, [word]);
-
-  if (!ele) return <></>;
-
+function SearchBase({ children, title, clickMorePath }: ISearchBase) {
   return (
     <>
       <SearchTitle clickMorePath={clickMorePath}>{title}</SearchTitle>
-      {ele}
+      {children}
     </>
   );
 }
@@ -93,22 +81,19 @@ function SearchBase({ word, renderEle, title, clickMorePath }: ISearchBase) {
 // 搜索小说id
 function SearchNovelById({ word }: ISearch) {
   return (
-    <SearchBase
-      word={word}
-      title="该id小说："
-      renderEle={(word) => renderNovelCards([word])}
-    />
+    <SearchBase title="该id小说：">
+      <RenderNovelCards novelIdList={[word]} />
+    </SearchBase>
   );
 }
 
 // 搜索作者id
 function SearchUserById({ word }: ISearch) {
   return (
-    <SearchBase
-      word={word}
-      title="该id作者："
-      renderEle={(word) => renderUserCards([word])}
-    />
+    <SearchBase title="该id作者：">
+      <RenderUserCards userIdList={[word]} />
+      <div></div>
+    </SearchBase>
   );
 }
 
@@ -116,28 +101,24 @@ function SearchUserById({ word }: ISearch) {
 function FavUserTagNovels({ word }: ISearch) {
   const MaxPreviewNovel = 3;
 
-  const [total, setTotal] = useState<number>();
+  const analyseTag = useAnalyseTag();
+  const matchTag = analyseTag?.data.find((tag) => tag.tagName === word);
 
+  if (!matchTag) return <></>;
+
+  const total = matchTag.novels.length;
+  const novelIds = matchTag.novels.slice(0, MaxPreviewNovel);
   return (
     <SearchBase
-      word={word}
       title={`站内小说 共${total}篇`}
       clickMorePath={
         total && total > MaxPreviewNovel
           ? `/search/linpx?word=${word}&type=novel`
           : ''
       }
-      renderEle={async (word) => {
-        // 搜索匹配的标签
-        const favUser = await getAnalyseTag();
-        const matchTag = favUser.data.find((tag) => tag.tagName === word);
-        if (!matchTag) return null;
-        // 提取标签中小说渲染
-        setTotal(matchTag.novels.length);
-        const novelIds = matchTag.novels.slice(0, MaxPreviewNovel);
-        return renderNovelCards(novelIds);
-      }}
-    />
+    >
+      <RenderNovelCards novelIdList={novelIds} />
+    </SearchBase>
   );
 }
 
@@ -145,25 +126,20 @@ function FavUserTagNovels({ word }: ISearch) {
 function FavUsers({ word }: ISearch) {
   const MaxPreviewUser = 3;
 
-  const [total, setTotal] = useState<number>();
+  const idList = useSearchFavUser(word);
+  const total = idList.length;
 
   return (
     <SearchBase
-      word={word}
       title={`推荐作者 共${total}位`}
       clickMorePath={
         total && total > MaxPreviewUser
           ? `/search/linpx?word=${word}&type=user`
           : ''
       }
-      renderEle={(word) =>
-        searchFavUser(word).then((idList) => {
-          if (idList.length === 0) return null;
-          setTotal(idList.length);
-          return renderUserCards(idList.slice(0, MaxPreviewUser));
-        })
-      }
-    />
+    >
+      <RenderUserCards userIdList={idList} />
+    </SearchBase>
   );
 }
 
@@ -171,35 +147,24 @@ function FavUsers({ word }: ISearch) {
 function PixivUser({ word }: ISearch) {
   const MaxPreviewUser = 3;
 
-  const [total, setTotal] = useState<ISearchUser['total']>();
+  const data = usePixivSearchUser(word);
+  if (!data) return <></>;
+
+  const { total, users } = data;
 
   return (
     <SearchBase
-      word={word}
       title={`全部用户 共${total}位`}
       clickMorePath={
         total && total > MaxPreviewUser
           ? `/search/pixiv?word=${word}&type=user`
           : ''
       }
-      renderEle={(word) =>
-        searchUser(word).then(({ total, users }) => {
-          if (total === 0) return null;
-          setTotal(total);
-          return (
-            <>
-              {users.slice(0, MaxPreviewUser).map((user) => (
-                <UserCard
-                  key={user.id}
-                  userInfo={user}
-                  novelInfoList={user.novels}
-                />
-              ))}
-            </>
-          );
-        })
-      }
-    />
+    >
+      {users.slice(0, MaxPreviewUser).map((user) => (
+        <UserCard key={user.id} userInfo={user} novelInfoList={user.novels} />
+      ))}
+    </SearchBase>
   );
 }
 
@@ -207,31 +172,24 @@ function PixivUser({ word }: ISearch) {
 function PixivNovel({ word }: ISearch) {
   const MaxPreview = 3;
 
-  const [total, setTotal] = useState<ISearchNovel['total']>();
+  const data = usePixivSearchNovel(word);
+  if (!data) return <></>;
+
+  const { total, novels } = data;
 
   return (
     <SearchBase
-      word={word}
       title={`全部小说 共${total}篇`}
       clickMorePath={
         total && total > MaxPreview
           ? `/search/pixiv?word=${word}&type=novel`
           : ''
       }
-      renderEle={(word) =>
-        searchNovel(word).then(({ total, novels }) => {
-          if (total === 0) return null;
-          setTotal(total);
-          return (
-            <>
-              {novels.slice(0, MaxPreview).map((novel) => (
-                <NovelCard key={novel.id} {...novel} />
-              ))}
-            </>
-          );
-        })
-      }
-    />
+    >
+      {novels.slice(0, MaxPreview).map((novel) => (
+        <NovelCard key={novel.id} {...novel} />
+      ))}
+    </SearchBase>
   );
 }
 

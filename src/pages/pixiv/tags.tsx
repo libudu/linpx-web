@@ -1,9 +1,9 @@
 import { TagBoxList } from '@/components/TagBox';
-import { useLinpxAnalyseTag } from '@/utils/api';
+import { useAnalyseTag } from '@/utils/api';
 import { history } from 'umi';
 
 export default function PixivAllTags() {
-  const analyseTag = useLinpxAnalyseTag();
+  const analyseTag = useAnalyseTag();
   const tagListData = analyseTag?.data || [];
 
   return (

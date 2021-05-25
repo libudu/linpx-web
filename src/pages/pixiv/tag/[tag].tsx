@@ -1,6 +1,6 @@
 import { IRouteProps } from 'umi';
 import { ContentNavbar } from '@/components/Navbar';
-import { useLinpxAnalyseTag } from '@/utils/api';
+import { useAnalyseTag } from '@/utils/api';
 import NovelCardList from '@/components/NovelCardList';
 import PageLayout from '@/components/PageLayout';
 
@@ -9,7 +9,7 @@ export default function PixivTag(props: IRouteProps) {
   const title = `全站tag - ${tagName}`;
   document.title = title;
 
-  const analyseTag = useLinpxAnalyseTag();
+  const analyseTag = useAnalyseTag();
   const matchTagData = analyseTag?.data.find(
     (tagData) => tagData.tagName === tagName,
   );
