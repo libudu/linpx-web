@@ -2,6 +2,7 @@ import { usePixivNovelProfiles, usePixivUserList } from '@/utils/api';
 import { INovelProfile, IMap } from '@/types';
 import PageViewer from './PageViewer';
 import UserCard, { NovelNumber } from './UserCard';
+import { useState } from 'react';
 
 export function RenderUserCards({ userIdList }: { userIdList: string[] }) {
   const userList = usePixivUserList(userIdList);
@@ -42,18 +43,17 @@ export default function UserCardList({
   pageSize = 6,
   userIdList,
 }: IUserCardList) {
+  const [page, setPage] = useState<number>(1);
+
+  const userIds = userIdList.slice((page - 1) * pageSize, page * pageSize);
+
   return (
     <PageViewer
       pageSize={pageSize}
       total={userIdList.length}
-      renderContent={async (page) => {
-        // 当前显示的id
-        const userIds = userIdList.slice(
-          (page - 1) * pageSize,
-          page * pageSize,
-        );
-        return <RenderUserCards userIdList={userIds} />;
-      }}
-    />
+      onPageChange={setPage}
+    >
+      <RenderUserCards userIdList={userIds} />
+    </PageViewer>
   );
 }

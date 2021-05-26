@@ -4,6 +4,7 @@ import { usePixivUser, useUserTagNovels } from '@/utils/api';
 import PageViewer from '@/components/PageViewer';
 import NovelCard from '@/components/NovelCard';
 import PageLayout from '@/components/PageLayout';
+import { useState } from 'react';
 
 const pageSize = 20;
 
@@ -13,6 +14,7 @@ export default function UserTag(props: IRouteProps) {
 
   const userInfo = usePixivUser(id);
   const novels = useUserTagNovels(id, tagName);
+  const [page, setPage] = useState<number>(1);
 
   const title = `${userInfo?.name}-${tagName}`;
 
@@ -21,6 +23,7 @@ export default function UserTag(props: IRouteProps) {
   }
 
   const { backgroundUrl, imageUrl, name } = userInfo;
+  const showNovels = novels.slice((page - 1) * pageSize, page * pageSize);
 
   return (
     <PageLayout title={title} backToPath={`/pixiv/user/${id}`}>
@@ -39,23 +42,17 @@ export default function UserTag(props: IRouteProps) {
         <div className="text-4xl font-bold">{`#${tagName}`}</div>
       </div>
 
-      {novels && (
-        <div className="mx-6">
-          <PageViewer
-            total={novels.length}
-            pageSize={pageSize}
-            renderContent={async (page) => {
-              const showNovels = novels.slice(
-                (page - 1) * pageSize,
-                page * pageSize,
-              );
-              return showNovels.map((novel) => (
-                <NovelCard {...novel} key={novel.id} />
-              ));
-            }}
-          />
-        </div>
-      )}
+      <div className="mx-6">
+        <PageViewer
+          pageSize={pageSize}
+          total={novels.length}
+          onPageChange={setPage}
+        >
+          {showNovels.map((novel) => (
+            <NovelCard {...novel} key={novel.id} />
+          ))}
+        </PageViewer>
+      </div>
     </PageLayout>
   );
 }

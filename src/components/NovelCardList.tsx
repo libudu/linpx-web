@@ -1,5 +1,6 @@
 import PageViewer from '@/components/PageViewer';
 import { usePixivNovelProfiles } from '@/utils/api';
+import { useState } from 'react';
 import NovelCard from './NovelCard';
 
 interface INovelCardList {
@@ -21,17 +22,18 @@ export function RenderNovelCards({ novelIdList }: INovelCardList) {
 // 带分页器的小说卡片列表
 export default function NovelCardList({ novelIdList }: INovelCardList) {
   const pageSize = 24;
+
+  const [page, setPage] = useState<number>(1);
+
+  const novelIds = novelIdList.slice((page - 1) * pageSize, page * pageSize);
+
   return (
     <PageViewer
-      total={novelIdList.length}
       pageSize={pageSize}
-      renderContent={async (page) => {
-        const novelIds = novelIdList.slice(
-          (page - 1) * pageSize,
-          page * pageSize,
-        );
-        return <RenderNovelCards novelIdList={novelIds} />;
-      }}
-    />
+      total={novelIdList.length}
+      onPageChange={setPage}
+    >
+      <RenderNovelCards novelIdList={novelIds} />
+    </PageViewer>
   );
 }

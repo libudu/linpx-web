@@ -15,15 +15,14 @@ export default function () {
   return (
     <div className="px-4">
       <PageViewer
-        total={pageSize * TotalPage}
         pageSize={pageSize}
-        renderContent={async (page) => {
-          setPage(page);
-          return novels.map((novelProfile) => (
-            <NovelCard {...novelProfile} key={novelProfile.id} />
-          ));
-        }}
-      />
+        total={pageSize * TotalPage}
+        onPageChange={setPage}
+      >
+        {novels.map((novelProfile) => (
+          <NovelCard {...novelProfile} key={novelProfile.id} />
+        ))}
+      </PageViewer>
     </div>
   );
 }

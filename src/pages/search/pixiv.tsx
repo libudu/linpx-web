@@ -16,20 +16,18 @@ function SearchPixivNovels({ word }: ISearch) {
   if (!data) return <></>;
 
   const { total, novels } = data;
+
   return (
-    <PageViewer
-      total={total}
-      pageSize={pageSize}
-      renderContent={async (page) => {
-        setPage(page);
-        return novels.map((novel) => <NovelCard key={novel.id} {...novel} />);
-      }}
-    />
+    <PageViewer pageSize={pageSize} total={total} onPageChange={setPage}>
+      {novels.map((novel) => (
+        <NovelCard key={novel.id} {...novel} />
+      ))}
+    </PageViewer>
   );
 }
 
 function SearchPixivUsers({ word }: ISearch) {
-  const PageSize = 6;
+  const pageSize = 6;
 
   const [page, setPage] = useState<number>();
   const data = usePixivSearchUser(word, page);
@@ -39,16 +37,11 @@ function SearchPixivUsers({ word }: ISearch) {
   const { total, users } = data;
 
   return (
-    <PageViewer
-      total={total}
-      pageSize={PageSize}
-      renderContent={async (page) => {
-        setPage(page);
-        return users.map((user) => (
-          <UserCard key={user.id} userInfo={user} novelInfoList={user.novels} />
-        ));
-      }}
-    />
+    <PageViewer pageSize={pageSize} total={total} onPageChange={setPage}>
+      {users.map((user) => (
+        <UserCard key={user.id} userInfo={user} novelInfoList={user.novels} />
+      ))}
+    </PageViewer>
   );
 }
 

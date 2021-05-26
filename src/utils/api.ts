@@ -85,7 +85,7 @@ export const usePixivNovelProfiles = (idList: string[]) => {
     cache.novelProfiles.setList(data);
     data.forEach((item) => (result[item.id] = item));
   }
-  return data || [];
+  return idList.map((id) => result[id]).filter((data) => data) || [];
 };
 
 export const usePixivUser = (id: string) => {
