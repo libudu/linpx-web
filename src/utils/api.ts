@@ -81,11 +81,17 @@ export const usePixivNovelProfiles = (idList: string[]) => {
   const { data } = useSWR<INovelProfile[]>(
     left && `/pixiv/novels?${list2query(left)}`,
   );
+  // 全部从缓存取到了
+  if (!left) return idList.map((id) => result[id]).filter((data) => data);
+  // 有些缓存里没有
+  // 数据到了
   if (data) {
     cache.novelProfiles.setList(data);
     data.forEach((item) => (result[item.id] = item));
+    return idList.map((id) => result[id]).filter((data) => data);
   }
-  return idList.map((id) => result[id]).filter((data) => data) || [];
+  // 数据没到
+  return null;
 };
 
 export const usePixivUser = (id: string) => {
@@ -133,7 +139,7 @@ export const useSearchFavUser = (word: string) => {
 export const usePixivRecentNovels = (page: number = 1) => {
   const { data } = useSWR<INovelProfile[]>(`/pixiv/novels/recent?page=${page}`);
   if (data) cache.novelProfiles.setList(data);
-  return data || [];
+  return data;
 };
 
 export const useUserTagNovels = (userId: string, tagName: string) => {

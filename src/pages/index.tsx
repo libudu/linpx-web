@@ -5,8 +5,8 @@ import {
   usePixivRecentNovels,
   usePixivUserList,
 } from '@/utils/api';
-import { IUserInfo, INovelProfile } from '@/types';
-import { useEffect, useState } from 'react';
+import { IUserInfo } from '@/types';
+import { useEffect } from 'react';
 import { ContentTitle, ContentBox } from './components/ContentLayout';
 import TransLink from './components/TransLink';
 import { InfoModal, showInfoModal } from './components/Modal';
@@ -57,7 +57,7 @@ export default function IndexPage() {
   };
 
   let novels = usePixivRecentNovels();
-  if (novels.length === 0) novels = Array(8).fill(emptyNovel);
+  if (!novels || novels.length === 0) novels = Array(8).fill(emptyNovel);
 
   return (
     <>

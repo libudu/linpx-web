@@ -1,4 +1,5 @@
 import PageViewer from '@/components/PageViewer';
+import NovelCardSkeleton from '@/skeleton/NovelCardSkeleton';
 import { usePixivNovelProfiles } from '@/utils/api';
 import { useState } from 'react';
 import NovelCard from './NovelCard';
@@ -10,11 +11,14 @@ interface INovelCardList {
 // 有一些场景可能不想要分页器，只想要多个小说卡片
 export function RenderNovelCards({ novelIdList }: INovelCardList) {
   const novelProfiles = usePixivNovelProfiles(novelIdList);
+
   return (
     <>
-      {novelProfiles.map((novel) => (
-        <NovelCard {...novel} key={novel.id} />
-      ))}
+      {novelProfiles ? (
+        novelProfiles.map((novel) => <NovelCard {...novel} key={novel.id} />)
+      ) : (
+        <NovelCardSkeleton number={novelIdList.length} />
+      )}
     </>
   );
 }

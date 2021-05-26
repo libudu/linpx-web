@@ -2,6 +2,7 @@ import NovelCard from '@/components/NovelCard';
 import PageLayout from '@/components/PageLayout';
 import PageViewer from '@/components/PageViewer';
 import UserCard from '@/components/UserCard';
+import NovelCardSkeleton from '@/skeleton/NovelCardSkeleton';
 import { usePixivSearchNovel, usePixivSearchUser } from '@/utils/api';
 import { useEffect, useState } from 'react';
 import { history } from 'umi';
@@ -13,7 +14,7 @@ function SearchPixivNovels({ word }: ISearch) {
   const [page, setPage] = useState<number>();
   const data = usePixivSearchNovel(word, page);
 
-  if (!data) return <></>;
+  if (!data) return <NovelCardSkeleton number={pageSize} />;
 
   const { total, novels } = data;
 

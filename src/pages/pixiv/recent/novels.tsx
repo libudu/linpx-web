@@ -2,6 +2,7 @@ import NovelCard from '@/components/NovelCard';
 import { usePixivRecentNovels } from '@/utils/api';
 import PageViewer from '@/components/PageViewer';
 import { useState } from 'react';
+import NovelCardSkeleton from '@/skeleton/NovelCardSkeleton';
 
 // 每页十个，由后端接口限定
 const pageSize = 10;
@@ -19,9 +20,13 @@ export default function () {
         total={pageSize * TotalPage}
         onPageChange={setPage}
       >
-        {novels.map((novelProfile) => (
-          <NovelCard {...novelProfile} key={novelProfile.id} />
-        ))}
+        {novels ? (
+          novels.map((novelProfile) => (
+            <NovelCard {...novelProfile} key={novelProfile.id} />
+          ))
+        ) : (
+          <NovelCardSkeleton number={pageSize} />
+        )}
       </PageViewer>
     </div>
   );
