@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { IRouteProps, history } from 'umi';
 import { MenuOutlined } from '@ant-design/icons';
 import { Popover } from 'antd-mobile';

@@ -1,8 +1,8 @@
 import { history } from 'umi';
 import {
-  getRecentNovels,
   useAnalyseTag,
   useFavUserIds,
+  usePixivRecentNovels,
   usePixivUserList,
 } from '@/utils/api';
 import { IUserInfo, INovelProfile } from '@/types';
@@ -55,14 +55,9 @@ export default function IndexPage() {
     title: '\n',
     userName: '\n',
   };
-  const [novelsInfo, setNovelsInfo] = useState<INovelProfile[]>(
-    Array(8).fill(emptyNovel),
-  );
-  useEffect(() => {
-    getRecentNovels().then((res) => {
-      setNovelsInfo(res);
-    });
-  }, []);
+
+  let novels = usePixivRecentNovels();
+  if (novels.length === 0) novels = Array(8).fill(emptyNovel);
 
   return (
     <>
@@ -101,7 +96,7 @@ export default function IndexPage() {
         />
         <ContentBox>
           <div className="px-2 flex">
-            {novelsInfo.map((novel, index) => {
+            {novels.map((novel, index) => {
               return (
                 <div className="p-2" key={novel.id || index}>
                   <NovelPreview {...novel} />

@@ -10,10 +10,40 @@ import {
 } from '../types';
 import useSWR from 'swr';
 
+class LinpxCache<T extends { id: string }> {
+  store: Map<string, T> = new Map();
+
+  get = (id: string) => {
+    return this.store.get(id);
+  };
+
+  set = (id: string, data: T) => {
+    return this.store.set(id, data);
+  };
+
+  getList = (idList: string[]) => {
+    const result: IMap<T> = {};
+    const left: string[] = [];
+    idList.forEach((id) => {
+      const data = this.store.get(id);
+      if (data) result[id] = data;
+      else left.push(id);
+    });
+    return {
+      result,
+      left: left.length ? left : null,
+    };
+  };
+
+  setList = (dataList: T[]) => {
+    dataList.map((data) => this.store.set(data.id, data));
+  };
+}
+
 export const BASE_URL = 'https://api.linpx.linpicio.com';
 //export const BASE_URL = 'http://localhost:3001';
 
-const requestCache: any = {};
+const requestCache: IMap<any> = {};
 
 export const linpxRequest = async (path: string) => {
   const cache = requestCache[path];
@@ -33,51 +63,29 @@ export const linpxRequest = async (path: string) => {
   });
 };
 
+const cache: {
+  user: LinpxCache<IUserInfo>;
+  novelProfiles: LinpxCache<INovelProfile>;
+} = {
+  user: new LinpxCache(),
+  novelProfiles: new LinpxCache(),
+};
+
 export const usePixivNovel = (id: string) => {
-  return useSWR<INovelInfo>(`/pixiv/novel/${id}`).data;
+  const { data } = useSWR<INovelInfo>(`/pixiv/novel/${id}`);
+  return data;
 };
 
-const novelProfileCache: { [novelId: string]: INovelProfile } = {};
-
-// export const getPixivNovelProfiles = async (
-//   idList: string[],
-// ): Promise<INovelProfile[]> => {
-//   if (idList.length === 0) return [];
-//   const query = list2query(idList);
-//   // 发起请求
-//   if (query) {
-//     const leftNovelProfileList: INovelProfile[] = await linpxRequest(
-//       `/pixiv/novels?${query}`,
-//     );
-//     // 缓存请求结果，过滤无效结果
-//     leftNovelProfileList.forEach(
-//       (novelProfile) =>
-//         novelProfile && (novelProfileCache[novelProfile.id] = novelProfile),
-//     );
-//   }
-//   // 拼接结果，过滤无效结果
-//   return idList.map((id) => novelProfileCache[id]).filter((profile) => profile);
-// };
-
-// todo: 缓存
 export const usePixivNovelProfiles = (idList: string[]) => {
+  const { result, left } = cache.novelProfiles.getList(idList);
   const { data } = useSWR<INovelProfile[]>(
-    idList.length === 0 ? null : `/pixiv/novels?${list2query(idList)}`,
+    left && `/pixiv/novels?${list2query(left)}`,
   );
+  if (data) {
+    cache.novelProfiles.setList(data);
+    data.forEach((item) => (result[item.id] = item));
+  }
   return data || [];
-};
-
-export const getPixivUser = (id: string): Promise<IUserInfo | null> => {
-  // 结果出错，返回null
-  return linpxRequest(`/pixiv/user/${id}`).then((res) => {
-    if (res.error) return null;
-    if (res.tags instanceof Array) {
-      const tags: any = {};
-      res.tags.forEach((tag: any) => (tags[tag.tag] = tag.time));
-      res.tags = tags;
-    }
-    return res;
-  });
 };
 
 export const usePixivUser = (id: string) => {
@@ -102,7 +110,6 @@ export const usePixivUserList = (idList: string[]) => {
 
 export const useFavUserIds = () => {
   const { data } = useSWR<IFavUser[]>('/fav/user');
-  console.log('get fav user ids');
   if (!data) return [];
   return data
     .map((favUser) => favUser.id)
@@ -123,22 +130,9 @@ export const useSearchFavUser = (word: string) => {
   return idList;
 };
 
-// 最近小说
-export const getRecentNovels = async (
-  page: number = 1,
-): Promise<INovelProfile[]> => {
-  const recentNovelProfileList: INovelProfile[] = await linpxRequest(
-    `/pixiv/novels/recent?page=${page}`,
-  );
-  // 记录到缓存
-  recentNovelProfileList.forEach(
-    (novelProfile) => (novelProfileCache[novelProfile.id] = novelProfile),
-  );
-  return recentNovelProfileList;
-};
-
 export const usePixivRecentNovels = (page: number = 1) => {
   const { data } = useSWR<INovelProfile[]>(`/pixiv/novels/recent?page=${page}`);
+  if (data) cache.novelProfiles.setList(data);
   return data || [];
 };
 
