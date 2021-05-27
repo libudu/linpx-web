@@ -18,7 +18,7 @@ export default function UserTag(props: IRouteProps) {
 
   const title = `${userInfo?.name}-${tagName}`;
 
-  if (!userInfo) {
+  if (!userInfo || !novels) {
     return <ContentNavbar backTo="/">{title}</ContentNavbar>;
   }
 

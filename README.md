@@ -127,6 +127,8 @@ Linpx目前完全依托于pixiv，没有自建数据库，后端仅提供基本�
 
 框架：react、umi
 
+react插件：swr、react-content-loader
+
 语言：typescript
 
 样式：tailwindcss、less    
@@ -135,5 +137,5 @@ Linpx目前完全依托于pixiv，没有自建数据库，后端仅提供基本�
 
 工具：axios、classnames
 
-
+繁简转换：chinese-s2
 

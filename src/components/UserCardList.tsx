@@ -3,32 +3,38 @@ import { INovelProfile, IMap } from '@/types';
 import PageViewer from './PageViewer';
 import UserCard, { NovelNumber } from './UserCard';
 import { useState } from 'react';
+import UserCardSkeleton from '@/skeleton/UserCardSkeleton';
 
 export function RenderUserCards({ userIdList }: { userIdList: string[] }) {
   const userList = usePixivUserList(userIdList);
   const userNovelsMap: IMap<INovelProfile[]> = {};
-  const allNovelIds = userList
-    .map((user) => {
-      userNovelsMap[user.id] = [];
-      // 取最后几本书，取完后再倒序
-      return user.novels.slice(-NovelNumber).reverse();
-    })
-    .flat();
+  const allNovelIds =
+    userList
+      ?.map((user) => {
+        userNovelsMap[user.id] = [];
+        // 取最后几本书，取完后再倒序
+        return user.novels.slice(-NovelNumber).reverse();
+      })
+      .flat() || [];
 
   const novelProfiles = usePixivNovelProfiles(allNovelIds);
-  novelProfiles.forEach((novelProfile) =>
+  novelProfiles?.forEach((novelProfile) =>
     userNovelsMap[novelProfile.userId].push(novelProfile),
   );
 
   return (
     <>
-      {userList.map((user) => (
-        <UserCard
-          key={user.id}
-          userInfo={user}
-          novelInfoList={userNovelsMap[user.id]}
-        />
-      ))}
+      {userList ? (
+        userList?.map((user) => (
+          <UserCard
+            key={user.id}
+            userInfo={user}
+            novelInfoList={userNovelsMap[user.id]}
+          />
+        ))
+      ) : (
+        <UserCardSkeleton number={userIdList.length} />
+      )}
     </>
   );
 }

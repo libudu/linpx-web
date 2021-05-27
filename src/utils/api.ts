@@ -111,7 +111,7 @@ export const usePixivUserList = (idList: string[]) => {
   const { data } = useSWR<IUserInfo[]>(
     idList.length === 0 ? null : `/pixiv/users?${list2query(idList)}`,
   );
-  return data || [];
+  return data;
 };
 
 export const useFavUserIds = () => {
@@ -146,7 +146,7 @@ export const useUserTagNovels = (userId: string, tagName: string) => {
   const { data } = useSWR<INovelProfile[]>(
     `/pixiv/user/${userId}/tag/${tagName}`,
   );
-  return data || [];
+  return data;
 };
 
 export const useAnalyseTag = () => {
