@@ -39,7 +39,7 @@ export const drawerItems: IDrawerItem[] = [
   {
     icon: <SmileOutlined />,
     title: '推荐作者',
-    link: '/pixiv/recommend/users',
+    link: '/pixiv/fav/user',
   },
   {
     icon: <ClockCircleOutlined />,

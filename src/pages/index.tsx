@@ -31,7 +31,7 @@ const FavUserContent: React.FC = () => {
     <>
       <ContentTitle
         left="作者推荐"
-        clickRightPath="/pixiv/recommend/users"
+        clickRightPath="/pixiv/fav/user"
         clickInfo={
           <div className="text-base">
             <div>推荐一些不错的作者</div>
