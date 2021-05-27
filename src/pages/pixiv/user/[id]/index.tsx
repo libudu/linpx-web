@@ -1,6 +1,6 @@
 import { IRouteProps, history } from 'umi';
 import { useState } from 'react';
-import { usePixivUser } from '@/utils/api';
+import { usePixivUser, useFavUserById } from '@/utils/api';
 import { IUserInfo } from '@/types';
 import { ContentNavbar } from '@/components/Navbar';
 import { TagBoxList, TagBoxListModal } from '@/components/TagBox';
@@ -22,6 +22,9 @@ function UserPart({
 }: IUserInfo) {
   // 全部的tag模态框
   const [showModal, setShowModal] = useState(false);
+  // 是否是推荐作者
+  const favUserInfo = useFavUserById(id);
+  const afdianUrl = favUserInfo?.afdian;
   // 过长的自我介绍
   let isLongComment = false;
   if (comment.length > MaxUserComment) isLongComment = true;
@@ -74,13 +77,11 @@ function UserPart({
               >
                 PID:{id}
               </div>
-              {false && (
+              {afdianUrl && (
                 <div
                   className="px-2 py-0.5 text-sm bg-purple-500 text-white rounded-lg flex items-center"
                   style={{ width: 'max-content' }}
-                  onClick={() =>
-                    window.open(`https://www.pixiv.net/users/${id}`)
-                  }
+                  onClick={() => window.open(afdianUrl)}
                 >
                   <img src={AfdianImg} style={{ height: 16, marginRight: 3 }} />
                   <span>支持作者</span>
