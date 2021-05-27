@@ -8,8 +8,9 @@ import classNames from 'classnames';
 import { ContentNavbar } from '@/components/Navbar';
 import Tag from '@/components/Tag';
 import { t2s } from '@/utils/util';
-import { usePixivNovel } from '@/utils/api';
+import { useFavUserById, usePixivNovel } from '@/utils/api';
 
+import AfdianButton from './components/AfdianButton';
 import NovelMenu from './components/NovelMenu';
 
 export let updateNovelStyle: any;
@@ -31,6 +32,8 @@ export default function PixivNovel({ match }: IRouteProps) {
   updateNovelStyle = () => setRefresh({});
 
   const novelInfo = usePixivNovel(id);
+  const favUser = useFavUserById(novelInfo?.userId || '');
+  const afdianUrl = favUser?.afdian;
 
   // navbar是否收起
   const [showNavbar, setShowNavbar] = useState(true);
@@ -91,7 +94,7 @@ export default function PixivNovel({ match }: IRouteProps) {
         </div>
       </div>
       {novelInfo && (
-        <>
+        <div className="mb-4">
           <div className="py-4 pt-20 text-center bg-yellow-100 bg-opacity-25 shadow-lg relative z-10">
             <div className="flex justify-center">
               <img src={coverUrl} className="h-64 rounded-lg" />
@@ -133,11 +136,8 @@ export default function PixivNovel({ match }: IRouteProps) {
           >
             {t2s(content)}
           </div>
-          <div className="absolute bottom-0 w-full bg-white">
-            <div></div>
-            <div></div>
-          </div>
-        </>
+          {afdianUrl && <AfdianButton url={afdianUrl} />}
+        </div>
       )}
     </div>
   );

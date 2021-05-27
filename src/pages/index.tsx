@@ -26,7 +26,7 @@ let lastUserInfo: IUserInfo[] = Array(8).fill({
 const FavUserContent: React.FC = () => {
   const favUserIds = useFavUserIds();
   const userInfo =
-    (favUserIds && usePixivUserList(favUserIds.slice(0, 8))) || lastUserInfo;
+    usePixivUserList(favUserIds?.slice(0, 8) || []) || lastUserInfo;
 
   return (
     <>
