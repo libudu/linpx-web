@@ -92,7 +92,6 @@ function SearchUserById({ word }: ISearch) {
   return (
     <SearchBase title="该id作者：">
       <RenderUserCards userIdList={[word]} />
-      <div></div>
     </SearchBase>
   );
 }

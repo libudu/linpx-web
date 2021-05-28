@@ -12,6 +12,7 @@ import { useFavUserById, usePixivNovel } from '@/api';
 
 import AfdianButton from './components/AfdianButton';
 import NovelMenu from './components/NovelMenu';
+import NovelIntro from './components/NovelIntro';
 
 export let updateNovelStyle: any;
 export let novelStyle = {
@@ -59,16 +60,7 @@ export default function PixivNovel({ match }: IRouteProps) {
     return <ContentNavbar>小说详情</ContentNavbar>;
   }
 
-  const {
-    title,
-    content,
-    userName,
-    userId,
-    coverUrl,
-    tags,
-    desc,
-    createDate,
-  } = novelInfo;
+  const { content, userId } = novelInfo;
 
   return (
     <div className="h-screen w-full overflow-y-scroll" onScroll={scrollHandler}>
@@ -95,33 +87,7 @@ export default function PixivNovel({ match }: IRouteProps) {
       </div>
       {novelInfo && (
         <div className="mb-4">
-          <div className="py-4 pt-20 text-center bg-yellow-100 bg-opacity-25 shadow-lg relative z-10">
-            <div className="flex justify-center">
-              <img src={coverUrl} className="h-64 rounded-lg" />
-            </div>
-            <div className="mt-2 mx-8 font-bold text-3xl">{title}</div>
-            <div
-              className="px-16 text-2xl text-gray-500 underline"
-              onClick={() => history.push(`/pixiv/user/${userId}`)}
-            >
-              {userName}
-            </div>
-            <div className="mb-1 text-base text-gray-500">
-              <span>{content.length}字</span>
-              <span className="ml-4">
-                {new Date(createDate).toLocaleString()}
-              </span>
-            </div>
-            <div className="text-gray-500 text-base px-8">
-              {tags.map((ele) => (
-                <Tag key={ele} children={ele} />
-              ))}
-            </div>
-            <div
-              className="px-8 mt-1 text-base"
-              dangerouslySetInnerHTML={{ __html: desc }}
-            />
-          </div>
+          <NovelIntro {...novelInfo} />
           <div
             className={classNames(
               'whitespace-pre-line p-4',

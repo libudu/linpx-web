@@ -2,7 +2,6 @@ import classNames from 'classnames';
 import Tag from '@/components/Tag';
 import { copyTextAndToast } from '@/utils/clipboard';
 import { updateNovelStyle, novelStyle } from '..';
-import { history } from 'umi';
 
 interface INovelMenu {
   id: string;
