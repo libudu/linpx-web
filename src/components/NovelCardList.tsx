@@ -1,6 +1,6 @@
 import PageViewer from '@/components/PageViewer';
 import NovelCardSkeleton from '@/skeleton/NovelCardSkeleton';
-import { usePixivNovelProfiles } from '@/utils/api';
+import { usePixivNovelProfiles } from '@/api';
 import { useState } from 'react';
 import NovelCard from './NovelCard';
 

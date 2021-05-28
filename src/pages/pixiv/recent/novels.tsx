@@ -1,5 +1,5 @@
 import NovelCard from '@/components/NovelCard';
-import { usePixivRecentNovels } from '@/utils/api';
+import { usePixivRecentNovels } from '@/api';
 import PageViewer from '@/components/PageViewer';
 import { useState } from 'react';
 import NovelCardSkeleton from '@/skeleton/NovelCardSkeleton';

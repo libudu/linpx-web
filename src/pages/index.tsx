@@ -4,7 +4,7 @@ import {
   useFavUserIds,
   usePixivRecentNovels,
   usePixivUserList,
-} from '@/utils/api';
+} from '@/api';
 import { IUserInfo } from '@/types';
 import { ContentTitle, ContentBox } from './components/ContentLayout';
 import TransLink from './components/TransLink';

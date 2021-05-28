@@ -1,6 +1,6 @@
 import { IRouteProps } from 'umi';
 import { ContentNavbar } from '@/components/Navbar';
-import { useAnalyseTag } from '@/utils/api';
+import { useAnalyseTag } from '@/api';
 import NovelCardList from '@/components/NovelCardList';
 import PageLayout from '@/components/PageLayout';
 

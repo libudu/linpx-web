@@ -7,7 +7,7 @@ import {
   usePixivSearchNovel,
   useAnalyseTag,
   usePixivSearchUser,
-} from '@/utils/api';
+} from '@/api';
 import NovelCard from '@/components/NovelCard';
 import UserCard from '@/components/UserCard';
 import { RenderUserCards } from '@/components/UserCardList';

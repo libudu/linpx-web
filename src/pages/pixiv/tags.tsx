@@ -1,5 +1,5 @@
 import { TagBoxList } from '@/components/TagBox';
-import { useAnalyseTag } from '@/utils/api';
+import { useAnalyseTag } from '@/api';
 import { history } from 'umi';
 
 export default function PixivAllTags() {

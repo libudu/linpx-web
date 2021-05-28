@@ -1,4 +1,4 @@
-import { useFavUserIds } from '@/utils/api';
+import { useFavUserIds } from '@/api';
 import UserCardList from '@/components/UserCardList';
 
 export default function () {

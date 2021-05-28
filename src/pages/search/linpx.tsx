@@ -1,7 +1,7 @@
 import NovelCardList from '@/components/NovelCardList';
 import PageLayout from '@/components/PageLayout';
 import UserCardList from '@/components/UserCardList';
-import { useAnalyseTag, useSearchFavUser } from '@/utils/api';
+import { useAnalyseTag, useSearchFavUser } from '@/api';
 import { useEffect } from 'react';
 import { history } from 'umi';
 import { ISearch } from './index';

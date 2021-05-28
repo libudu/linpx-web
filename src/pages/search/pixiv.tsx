@@ -4,7 +4,7 @@ import PageViewer from '@/components/PageViewer';
 import UserCard from '@/components/UserCard';
 import NovelCardSkeleton from '@/skeleton/NovelCardSkeleton';
 import UserCardSkeleton from '@/skeleton/UserCardSkeleton';
-import { usePixivSearchNovel, usePixivSearchUser } from '@/utils/api';
+import { usePixivSearchNovel, usePixivSearchUser } from '@/api';
 import { useEffect, useState } from 'react';
 import { history } from 'umi';
 import { ISearch } from './index';

@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import { ContentNavbar } from '@/components/Navbar';
 import Tag from '@/components/Tag';
 import { t2s } from '@/utils/util';
-import { useFavUserById, usePixivNovel } from '@/utils/api';
+import { useFavUserById, usePixivNovel } from '@/api';
 
 import AfdianButton from './components/AfdianButton';
 import NovelMenu from './components/NovelMenu';

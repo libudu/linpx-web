@@ -1,6 +1,6 @@
 import { IRouteProps } from 'umi';
 import { ContentNavbar } from '@/components/Navbar';
-import { usePixivUser, useUserTagNovels } from '@/utils/api';
+import { usePixivUser, useUserTagNovels } from '@/api';
 import PageViewer from '@/components/PageViewer';
 import NovelCard from '@/components/NovelCard';
 import PageLayout from '@/components/PageLayout';

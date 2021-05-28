@@ -1,6 +1,6 @@
 import { IRouteProps, history } from 'umi';
 import { useState } from 'react';
-import { usePixivUser, useFavUserById } from '@/utils/api';
+import { usePixivUser, useFavUserById } from '@/api';
 import { IUserInfo } from '@/types';
 import { ContentNavbar } from '@/components/Navbar';
 import { TagBoxList, TagBoxListModal } from '@/components/TagBox';

@@ -2,7 +2,7 @@ import { IRouteComponentProps, history } from 'umi';
 import DrawerLayout, { getDrawerItem } from './DrawerLayout';
 import { getAppWidth } from '@/utils/util';
 import { SWRConfig } from 'swr';
-import { linpxRequest } from '@/utils/api';
+import { linpxRequest } from '@/api/util/request';
 
 const _his: string[] = [];
 let _replace_his = '';
