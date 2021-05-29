@@ -3,10 +3,6 @@ import Tag from '@/components/Tag';
 import { copyTextAndToast } from '@/utils/clipboard';
 import { updateNovelStyle, novelStyle } from '..';
 
-interface INovelMenu {
-  id: string;
-}
-
 function Item({ children }: { children: any }) {
   return (
     <div className="px-2 py-1 flex items-center justify-between">
@@ -81,7 +77,17 @@ function FontFamilyPicker({
   );
 }
 
-export default function NovelMenu({ id }: INovelMenu) {
+interface INovelMenu {
+  id: string;
+  userName: string;
+  title: string;
+}
+
+export default function NovelMenu({ id, userName, title }: INovelMenu) {
+  const shareText =
+    `【我正在用LINPX看 ${userName} 写的《${title}》，快来一起看吧】\n` +
+    `链接1：http://furrynovel.xyz/pixiv/novel/${id}\n` +
+    `链接2：https://linpx.linpicio.com/pixiv/novel/${id}`;
   return (
     <div className="text-lg lp-bgcolor">
       <Item>
@@ -123,13 +129,7 @@ export default function NovelMenu({ id }: INovelMenu) {
       </Item>
       <Line />
       <Item>
-        <div
-          onClick={() =>
-            copyTextAndToast(`https://linpx.linpicio.com/pixiv/novel/${id}`)
-          }
-        >
-          复制LINPX链接
-        </div>
+        <div onClick={() => copyTextAndToast(shareText)}>复制LINPX链接</div>
       </Item>
     </div>
   );

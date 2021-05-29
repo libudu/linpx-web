@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { IRouteProps, history } from 'umi';
+import { IRouteProps } from 'umi';
 import { MenuOutlined } from '@ant-design/icons';
 import { Popover } from 'antd-mobile';
 import { throttle } from 'lodash';
 import classNames from 'classnames';
 
 import { ContentNavbar } from '@/components/Navbar';
-import Tag from '@/components/Tag';
 import { t2s } from '@/utils/util';
 import { useFavUserById, usePixivNovel } from '@/api';
 
@@ -73,7 +72,7 @@ export default function PixivNovel({ match }: IRouteProps) {
             rightEle={
               <Popover
                 visible={showPopover}
-                overlay={<NovelMenu id={id} />}
+                overlay={<NovelMenu {...novelInfo} />}
                 // @ts-ignore
                 overlayStyle={{ width: 'max-content' }}
               >
