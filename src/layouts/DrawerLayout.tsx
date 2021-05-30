@@ -131,7 +131,7 @@ function DrawerSidebar({ onDrawerClose }: { onDrawerClose: any }) {
           <div className="text-xl">{ele.title}</div>
         </div>
       ))}
-      <div className="mt-8 ml-4 text-base relative">
+      <div className="my-8 ml-4 text-base relative">
         <div className="opacity-50">
           <div>站长：林彼丢</div>
           <div>设计：apoto5</div>
