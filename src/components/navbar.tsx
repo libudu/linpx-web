@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined } from '@ant-design/icons';
+import BackImg from '@/assets/icon/back.png';
 import MenuSVG from '@/assets/icon/menu.svg';
 import { history } from 'umi';
 import ActionSheet from '@/utils/ActionSheet';
@@ -67,7 +67,7 @@ export function ContentNavbar({
   // 如果有backTo那就回到backTo，没有就返回上一个网页
   const onClick = backTo ? () => goBackOrTo(backTo) : history.goBack;
   return Navbar({
-    leftEle: <ArrowLeftOutlined onClick={onClick} />,
+    leftEle: <img style={{ width: 33 }} src={BackImg} onClick={onClick} />,
     rightEle: rightEle || <MenuIcon onClick={() => ActionSheet()} />,
     children,
   });

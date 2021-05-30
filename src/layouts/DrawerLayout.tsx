@@ -121,7 +121,7 @@ function DrawerSidebar({ onDrawerClose }: { onDrawerClose: any }) {
         <div
           key={ele.title}
           className="pl-9 flex items-center active:bg-gray-200"
-          style={{ paddingTop: '1.5vh' }}
+          style={{ paddingTop: '0.75vh', paddingBottom: '0.75vh' }}
           onClick={() => {
             history.push(ele.link);
             onDrawerClose();
