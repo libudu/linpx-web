@@ -7,13 +7,12 @@ import {
   ClockCircleOutlined,
   TagOutlined,
 } from '@ant-design/icons';
-import Navbar from '@/components/Navbar';
+import Navbar, { MenuIcon } from '@/components/Navbar';
 import { Drawer } from 'antd-mobile';
 import { history } from 'umi';
 
 import BlackLogoPng from '@/assets/logo/black_logo.png';
 import WordLogoPng from '@/assets/logo/word_logo.png';
-import MenuSVG from '@/assets/icon/menu.svg';
 import HeaderLogoPNG from '@/assets/icon/logo.png';
 import { useState } from 'react';
 
@@ -76,7 +75,7 @@ export default function DrawerLayout({ children }: { children: any }) {
   return (
     <div className="h-full flex flex-col">
       <Navbar
-        leftEle={<img className="h-6 mt-1" src={MenuSVG} />}
+        leftEle={<MenuIcon />}
         children={header || title}
         onClickLeft={() => setOpen(!open)}
       />

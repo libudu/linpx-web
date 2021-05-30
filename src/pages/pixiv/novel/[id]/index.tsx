@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { IRouteProps } from 'umi';
-import { MenuOutlined } from '@ant-design/icons';
 import { Popover } from 'antd-mobile';
 import { throttle } from 'lodash';
 import classNames from 'classnames';
 
-import { ContentNavbar } from '@/components/Navbar';
+import { ContentNavbar, MenuIcon } from '@/components/Navbar';
 import { t2s } from '@/utils/util';
 import { useFavUserById, usePixivNovel } from '@/api';
 
@@ -66,7 +65,7 @@ export default function PixivNovel({ match }: IRouteProps) {
       <div className="absolute w-full z-20">
         <div
           className="relative w-full"
-          style={{ transition: 'all 0.2s', top: showNavbar ? '0px' : '-64px' }}
+          style={{ transition: 'all 0.2s', top: showNavbar ? '0px' : '-60px' }}
         >
           <ContentNavbar
             rightEle={
@@ -76,7 +75,7 @@ export default function PixivNovel({ match }: IRouteProps) {
                 // @ts-ignore
                 overlayStyle={{ width: 'max-content' }}
               >
-                <MenuOutlined />
+                <MenuIcon />
               </Popover>
             }
             backTo={`/pixiv/user/${userId}`}

@@ -1,8 +1,17 @@
-import { ArrowLeftOutlined, MenuOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import MenuSVG from '@/assets/icon/menu.svg';
 import { history } from 'umi';
 import ActionSheet from '@/utils/ActionSheet';
 import classnames from 'classnames';
 import { goBackOrTo } from '@/layouts/index';
+
+interface IMenuIcon {
+  onClick?: () => any;
+}
+
+export const MenuIcon: React.FC<IMenuIcon> = ({ onClick }) => {
+  return <img className="h-7 mt-0.5" src={MenuSVG} onClick={onClick} />;
+};
 
 interface IHeaderProps {
   children?: any;
@@ -25,14 +34,18 @@ export default function Navbar({
     <div
       className={classnames(
         'flex justify-between items-center flex-nowrap',
-        'text-3xl text-center w-full bg-linpx h-16 font-bold z-20',
+        'text-3xl text-center w-full bg-linpx font-bold z-20',
         { absolute: fixed },
       )}
+      style={{ height: 60 }}
     >
       <span className="flex justify-center w-2/12" onClick={onClickLeft}>
         {leftEle}
       </span>
-      <span className="flex justify-center w-8/12 mx-2 u-line-1">
+      <span
+        className="u-line-1 justify-center items-center w-8/12 mx-2"
+        style={{ display: 'flex' }}
+      >
         {children}
       </span>
       <span className="flex justify-center w-2/12" onClick={onClickRight}>
@@ -55,13 +68,7 @@ export function ContentNavbar({
   const onClick = backTo ? () => goBackOrTo(backTo) : history.goBack;
   return Navbar({
     leftEle: <ArrowLeftOutlined onClick={onClick} />,
-    rightEle: rightEle || (
-      <MenuOutlined
-        onClick={() => {
-          ActionSheet();
-        }}
-      />
-    ),
+    rightEle: rightEle || <MenuIcon onClick={() => ActionSheet()} />,
     children,
   });
 }

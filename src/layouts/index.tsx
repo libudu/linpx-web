@@ -50,7 +50,6 @@ export default function Layout({ children }: IRouteComponentProps) {
     // 最外层框架，灰色
     // 内层居中的手机，白色
     // 内层滚动层
-
     <SWRConfig
       value={{
         fetcher: linpxRequest,
