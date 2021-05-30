@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { history } from 'umi';
 import {
   SmileOutlined,
   HomeOutlined,
@@ -7,14 +9,14 @@ import {
   ClockCircleOutlined,
   TagOutlined,
 } from '@ant-design/icons';
-import Navbar, { MenuIcon } from '@/components/Navbar';
 import { Drawer } from 'antd-mobile';
-import { history } from 'umi';
+
+import Navbar, { MenuIcon } from '@/components/Navbar';
 
 import BlackLogoPng from '@/assets/logo/black_logo.png';
 import WordLogoPng from '@/assets/logo/word_logo.png';
 import HeaderLogoPNG from '@/assets/icon/logo.png';
-import { useState } from 'react';
+import LinpicioLogoImg from '@/assets/logo/author_logo.png';
 
 // 获取Drawer项目
 export function getDrawerItem() {
@@ -107,7 +109,10 @@ interface IDrawerItem {
 function DrawerSidebar({ onDrawerClose }: { onDrawerClose: any }) {
   return (
     <div>
-      <div className="flex flex-col items-center mt-12 mb-6 text-base">
+      <div
+        className="flex flex-col items-center text-base"
+        style={{ marginTop: '5vh', marginBottom: '2vh' }}
+      >
         <img className="w-20" src={BlackLogoPng}></img>
         <img className="w-28 mr-2 mb-1 mt-2" src={WordLogoPng}></img>
         <div className="text-xl">LINPX IS NOT PIXIV</div>
@@ -115,7 +120,8 @@ function DrawerSidebar({ onDrawerClose }: { onDrawerClose: any }) {
       {drawerItems.map((ele) => (
         <div
           key={ele.title}
-          className="pl-10 py-2 flex items-center active:bg-gray-200"
+          className="pl-9 flex items-center active:bg-gray-200"
+          style={{ paddingTop: '1.5vh' }}
           onClick={() => {
             history.push(ele.link);
             onDrawerClose();
@@ -125,6 +131,16 @@ function DrawerSidebar({ onDrawerClose }: { onDrawerClose: any }) {
           <div className="text-xl">{ele.title}</div>
         </div>
       ))}
+      <div className="mt-8 ml-4 text-base relative">
+        <div className="opacity-50">
+          <div>站长：林彼丢</div>
+          <div>设计：apoto5</div>
+          <div>协助：V.C</div>
+          <div>顾问：空狼</div>
+        </div>
+        <img src={LinpicioLogoImg} className="w-24 absolute top-4 right-4" />
+      </div>
+      <div></div>
     </div>
   );
 }

@@ -1,11 +1,28 @@
+@linpx-orange: rgb(249, 157, 88);
+@linpx-color: linear-gradient(
+  45deg,
+  rgb(236, 115, 55) 0%,
+  rgb(236, 138, 58) 25%,
+  rgb(237, 178, 63) 75%,
+  rgb(238, 199, 65) 100%
+);
+
+.text-linpx-orange {
+  color: @linpx-orange;
+}
+
+.text-linpx {
+  background-image: @linpx-color;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-linpx-orange {
+  background-color: @linpx-orange;
+}
+
 .bg-linpx {
-  background-image: linear-gradient(
-    45deg,
-    rgb(236, 115, 55) 0%,
-    rgb(236, 138, 58) 25%,
-    rgb(237, 178, 63) 75%,
-    rgb(238, 199, 65) 100%
-  );
+  background-image: @linpx-color;
 }
 
 ::-webkit-scrollbar {
