@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { history } from 'umi';
-import { showInfoModal } from '../components/Modal';
+import { openInfoModal } from '../components/Modal';
 
 export const useRDF = () => {
   // 红龙基金
@@ -8,7 +8,7 @@ export const useRDF = () => {
     const initRDF =
       String(history.location.query?.from).toLocaleLowerCase() === 'rdf';
     if (initRDF) {
-      showInfoModal({
+      openInfoModal({
         title: '红龙基金新人礼',
         children: (
           <div className="text-base">

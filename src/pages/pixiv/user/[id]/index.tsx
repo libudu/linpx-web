@@ -9,6 +9,7 @@ import PageLayout from '@/components/PageLayout';
 
 import DefaultBgImg from '@/assets/default/default_bg.jpg';
 import AfdianImg from '@/assets/icon/afdian.png';
+import { openAfdianUrl } from '@/pages/components/Afdian';
 
 const MaxUserComment = 50;
 
@@ -81,7 +82,7 @@ function UserPart({
                 <div
                   className="px-2 py-0.5 text-sm bg-purple-500 text-white rounded-lg flex items-center"
                   style={{ width: 'max-content' }}
-                  onClick={() => window.open(afdianUrl)}
+                  onClick={() => openAfdianUrl(name, afdianUrl)}
                 >
                   <img src={AfdianImg} style={{ height: 16, marginRight: 3 }} />
                   <span>支持作者</span>

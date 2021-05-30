@@ -1,33 +1,40 @@
 import { Modal } from 'antd-mobile';
 import { useState } from 'react';
 
-let infoModalChildren: any = null;
-let _showInfoModal: any = null;
-let _showInfoTitle: string;
-export let showInfoModal = ({
-  children,
-  title,
-}: {
+interface InfoModalProps {
   children: any;
   title: string;
-}) => {
-  infoModalChildren = children;
-  _showInfoTitle = title;
+  footer?: { text: string; onPress: () => any }[];
+}
+
+let infoModalProps: InfoModalProps | undefined;
+let _showInfoModal: (state: boolean) => void;
+export let closeInfoModal = () => _showInfoModal(false);
+export let openInfoModal = ({ children, title, footer }: InfoModalProps) => {
+  infoModalProps = {
+    children,
+    title,
+    footer,
+  };
   _showInfoModal(true);
 };
 
 export function InfoModal() {
   const [show, setShow] = useState(false);
   _showInfoModal = setShow;
+
+  if (!infoModalProps) return <></>;
+
+  const { title, footer, children } = infoModalProps;
   return (
     <Modal
       visible={show}
       transparent
       maskClosable={false}
-      title={_showInfoTitle}
-      footer={[{ text: '确认', onPress: () => setShow(false) }]}
+      title={title}
+      footer={footer || [{ text: '确认', onPress: () => setShow(false) }]}
     >
-      {infoModalChildren}
+      {children}
     </Modal>
   );
 }

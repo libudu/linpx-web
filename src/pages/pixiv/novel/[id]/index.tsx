@@ -9,7 +9,7 @@ import { ContentNavbar } from '@/components/Navbar';
 import { t2s } from '@/utils/util';
 import { useFavUserById, usePixivNovel } from '@/api';
 
-import AfdianButton from './components/AfdianButton';
+import { AfdianButton } from '../../../components/Afdian';
 import NovelMenu from './components/NovelMenu';
 import NovelIntro from './components/NovelIntro';
 
@@ -59,7 +59,7 @@ export default function PixivNovel({ match }: IRouteProps) {
     return <ContentNavbar>小说详情</ContentNavbar>;
   }
 
-  const { content, userId } = novelInfo;
+  const { content, userId, userName } = novelInfo;
 
   return (
     <div className="h-screen w-full overflow-y-scroll" onScroll={scrollHandler}>
@@ -101,7 +101,7 @@ export default function PixivNovel({ match }: IRouteProps) {
           >
             {t2s(content)}
           </div>
-          {afdianUrl && <AfdianButton url={afdianUrl} />}
+          {afdianUrl && <AfdianButton url={afdianUrl} user={userName} />}
         </div>
       )}
     </div>

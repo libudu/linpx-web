@@ -1,7 +1,7 @@
 import { history } from 'umi';
 import classnames from 'classnames';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { showInfoModal } from './Modal';
+import { openInfoModal } from './Modal';
 
 // 内容标题
 export function ContentTitle({
@@ -23,7 +23,7 @@ export function ContentTitle({
           <InfoCircleOutlined
             className="text-xl inline-block ml-2"
             onClick={() =>
-              showInfoModal({
+              openInfoModal({
                 title: left,
                 children: clickInfo,
               })

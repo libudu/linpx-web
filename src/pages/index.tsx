@@ -8,7 +8,6 @@ import {
 import { IUserInfo } from '@/types';
 import { ContentTitle, ContentBox } from './components/ContentLayout';
 import TransLink from './components/TransLink';
-import { InfoModal } from './components/Modal';
 import { TagBoxList } from '@/components/TagBox';
 import UserPreview from './components/UserPreview';
 import NovelPreview from './components/NovelPreview';
@@ -151,7 +150,6 @@ export default function IndexPage() {
   return (
     <>
       <HomeBanner />
-      <InfoModal />
       <div className="px-6 pb-6">
         <SearchBar onSearch={(word) => history.push(`/search?word=${word}`)} />
         <FavUserContent />

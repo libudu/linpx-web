@@ -3,6 +3,7 @@ import DrawerLayout, { getDrawerItem } from './DrawerLayout';
 import { getAppWidth } from '@/utils/util';
 import { SWRConfig } from 'swr';
 import { linpxRequest } from '@/api/util/request';
+import { InfoModal } from '@/pages/components/Modal';
 
 const _his: string[] = [];
 let _replace_his = '';
@@ -66,6 +67,7 @@ export default function Layout({ children }: IRouteComponentProps) {
           </div>
         </div>
       </div>
+      <InfoModal />
     </SWRConfig>
   );
 }
