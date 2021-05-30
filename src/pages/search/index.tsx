@@ -43,7 +43,7 @@ function SearchTitle({
   clickMorePath?: string;
 }) {
   return (
-    <div className="mb-3 mt-6 flex items-end">
+    <div className="mt-5 flex items-end">
       <div className="text-2xl font-bold">{children}</div>
       {clickMorePath && (
         <div className="text-base text-right pr-2 flex-grow">
@@ -106,6 +106,7 @@ function FavUserTagNovels({ word }: ISearch) {
   if (!matchTag) return <></>;
 
   const total = matchTag.novels.length;
+  if (total === 0) return <></>;
   const novelIds = matchTag.novels.slice(0, MaxPreviewNovel);
   return (
     <SearchBase
@@ -127,6 +128,7 @@ function FavUsers({ word }: ISearch) {
 
   const idList = useSearchFavUser(word);
   const total = idList.length;
+  if (total === 0) return <></>;
 
   return (
     <SearchBase
@@ -137,7 +139,7 @@ function FavUsers({ word }: ISearch) {
           : ''
       }
     >
-      <RenderUserCards userIdList={idList} />
+      <RenderUserCards userIdList={idList.slice(0, MaxPreviewUser)} />
     </SearchBase>
   );
 }
@@ -150,6 +152,7 @@ function PixivUser({ word }: ISearch) {
   if (!data) return <></>;
 
   const { total, users } = data;
+  if (total === 0) return <></>;
 
   return (
     <SearchBase
@@ -175,6 +178,7 @@ function PixivNovel({ word }: ISearch) {
   if (!data) return <></>;
 
   const { total, novels } = data;
+  if (total === 0) return <></>;
 
   return (
     <SearchBase
@@ -232,7 +236,7 @@ export default function Search() {
           setWord(newWord);
         }}
       />
-      <div>当前搜索：{word}</div>
+      <div className="mt-2">当前搜索：{word}</div>
       {
         // word非空才搜索
         search &&
