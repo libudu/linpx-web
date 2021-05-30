@@ -12,6 +12,7 @@ export const openAfdianUrl = (user: string, url: string) => {
       </>
     ),
     footer: [
+      { text: '返回', onPress: closeInfoModal },
       {
         text: '确认',
         onPress: () => {
@@ -19,7 +20,6 @@ export const openAfdianUrl = (user: string, url: string) => {
           closeInfoModal();
         },
       },
-      { text: '返回', onPress: closeInfoModal },
     ],
   });
 };
