@@ -1,8 +1,13 @@
 import axios from 'axios';
 import { IMap } from '../../types';
 
-export const BASE_URL = 'https://api.linpx.linpicio.com';
+const isHttps = window.location.protocol === 'https:';
+// https使用标准后端，http使用ip跳过DNS
+export const BASE_URL = isHttps
+  ? 'https://api.linpx.linpicio.com'
+  : 'http://45.76.105.135:81';
 //export const BASE_URL = 'http://localhost:3001';
+console.log('backend url', BASE_URL);
 
 const requestCache: IMap<any> = {};
 
