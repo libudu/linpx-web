@@ -1,6 +1,7 @@
 import { history } from 'umi';
 
 import { INovelProfile } from '@/types';
+import { AfdianAvatar } from '@/pages/components/Afdian';
 
 interface IUserCard {
   userInfo: {
@@ -47,14 +48,7 @@ export default function UserCard({ userInfo, novelInfoList }: IUserCard) {
         className="mt-1 flex flex-col items-center flex-grow"
         onClick={() => history.push(`/pixiv/user/${id}`)}
       >
-        <div
-          className="rounded-full bg-center"
-          style={{
-            backgroundImage: `url(${imageUrl})`,
-            width: '4.7rem',
-            height: '4.7rem',
-          }}
-        />
+        <AfdianAvatar id={id} size={76} imageUrl={imageUrl} />
         <div
           className="py-1 w-24 text-center text-base font-bold u-line-2"
           style={{ lineHeight: '1.1rem' }}

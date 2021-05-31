@@ -1,5 +1,8 @@
 import AfdianImg from '@/assets/icon/afdian.png';
 import { openInfoModal, closeInfoModal } from '@/pages/components/Modal';
+import classnames from 'classnames';
+import { Avatar } from 'antd';
+import { useFavUserById } from '@/api';
 
 export const openAfdianUrl = (user: string, url: string) => {
   openInfoModal({
@@ -28,6 +31,49 @@ interface AfdianButtonProps {
   url: string;
   user: string;
 }
+
+interface AfdianIconProps {
+  style?: React.CSSProperties;
+  className?: string;
+}
+
+interface AfdianAvatarProps {
+  imageUrl: string;
+  size: number;
+  id: string;
+}
+export const AfdianAvatar: React.FC<AfdianAvatarProps> = ({
+  size,
+  imageUrl,
+  id,
+}) => {
+  const afdianUrl = useFavUserById(id)?.afdian;
+  return (
+    <div className="relative">
+      <Avatar src={imageUrl} size={size} />
+      {afdianUrl && (
+        <AfdianIcon
+          className="absolute"
+          style={{ bottom: 0, right: 0, boxShadow: '2px 2px 4px #aaa' }}
+        />
+      )}
+    </div>
+  );
+};
+
+export const AfdianIcon: React.FC<AfdianIconProps> = ({ className, style }) => {
+  return (
+    <div
+      className={classnames(
+        'w-5 h-5 rounded-full flex justify-center items-center bg-purple-500',
+        className,
+      )}
+      style={style}
+    >
+      <img className="w-3" src={AfdianImg} />
+    </div>
+  );
+};
 
 export const AfdianButton: React.FC<AfdianButtonProps> = ({ url, user }) => {
   return (
