@@ -52,6 +52,12 @@ export default function UserCardList({
   const [page, setPage] = useState<number>(1);
 
   const userIds = userIdList.slice((page - 1) * pageSize, page * pageSize);
+  // 预加载下一页用户信息
+  const preloadUserIds = userIdList.slice(
+    page * pageSize,
+    (page + 1) * pageSize,
+  );
+  usePixivUserList(preloadUserIds);
 
   return (
     <PageViewer

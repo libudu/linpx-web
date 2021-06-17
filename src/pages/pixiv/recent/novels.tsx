@@ -12,6 +12,8 @@ export default function () {
   document.title = 'Linpx - 最近小说';
   const [page, setPage] = useState<number>(0);
   const novels = usePixivRecentNovels(page);
+  // 预加载下一页的小说
+  usePixivRecentNovels(page + 1);
 
   return (
     <div className="px-4">

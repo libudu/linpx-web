@@ -30,6 +30,12 @@ export default function NovelCardList({ novelIdList }: INovelCardList) {
   const [page, setPage] = useState<number>(1);
 
   const novelIds = novelIdList.slice((page - 1) * pageSize, page * pageSize);
+  // 预加载下一页小说
+  const preloadNovelIds = novelIdList.slice(
+    page * pageSize,
+    (page + 1) * pageSize,
+  );
+  usePixivNovelProfiles(preloadNovelIds);
 
   return (
     <PageViewer
