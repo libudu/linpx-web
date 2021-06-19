@@ -5,7 +5,7 @@ import { updateNovelStyle, novelStyle } from '..';
 
 function Item({ children }: { children: any }) {
   return (
-    <div className="px-2 py-1 flex items-center justify-between">
+    <div className="px-2 py-1.5 flex items-center justify-between">
       {children}
     </div>
   );
@@ -24,7 +24,7 @@ function ColorPicker({
 }) {
   return (
     <div
-      className="rounded-full border-black border-solid border mx-1 mt-0.5 w-6 h-6 bg-gray-500"
+      className="rounded-full border-black border-solid border mx-1 mt-0.5 w-5 h-5 bg-gray-500"
       style={{ background: bgColor }}
       onClick={() => {
         novelStyle.bgColor = bgColor;
@@ -89,7 +89,7 @@ export default function NovelMenu({ id, userName, title }: INovelMenu) {
     `链接1：http://furrynovel.xyz/pixiv/novel/${id}\n` +
     `链接2：https://linpx.linpicio.com/pixiv/novel/${id}`;
   return (
-    <div className="text-lg lp-bgcolor">
+    <div className="text-base lp-bgcolor">
       <Item>
         <div className="mr-2">背景色</div>
         <div className="flex">
@@ -102,7 +102,7 @@ export default function NovelMenu({ id, userName, title }: INovelMenu) {
       <Line />
       <Item>
         <div>字号</div>
-        <div className="flex items-center mr-3">
+        <div className="flex items-center mr-1">
           <FontSizePicker sizeClass="text-lg" name="小" />
           <FontSizePicker sizeClass="text-xl" name="中" />
           <FontSizePicker sizeClass="text-2xl" name="大" />
@@ -111,7 +111,7 @@ export default function NovelMenu({ id, userName, title }: INovelMenu) {
       <Line />
       <Item>
         <div>字体</div>
-        <div className="flex flex-col mr-4 text-base">
+        <div className="flex flex-col mr-2 text-base">
           <FontFamilyPicker fontFamily="auto" name="系统默认" />
           <FontFamilyPicker fontFamily="Noto Sans SC" name="思源黑体" />
           <FontFamilyPicker fontFamily="Noto Serif SC" name="思源宋体" />
@@ -124,12 +124,12 @@ export default function NovelMenu({ id, userName, title }: INovelMenu) {
             copyTextAndToast(`https://www.pixiv.net/novel/show.php?id=${id}`)
           }
         >
-          复制pixiv链接
+          分享pixiv链接
         </div>
       </Item>
       <Line />
       <Item>
-        <div onClick={() => copyTextAndToast(shareText)}>复制LINPX链接</div>
+        <div onClick={() => copyTextAndToast(shareText)}>分享LINPX链接</div>
       </Item>
     </div>
   );

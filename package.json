@@ -24,6 +24,7 @@
     "@ant-design/pro-layout": "^6.5.0",
     "@umijs/preset-react": "1.x",
     "antd": "^4.14.0",
+    "antd-mobile": "^2.3.4",
     "axios": "^0.21.1",
     "chinese-s2t": "^1.0.0",
     "classnames": "^2.2.6",

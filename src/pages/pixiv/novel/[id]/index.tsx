@@ -112,8 +112,15 @@ export default function PixivNovel({ match }: IRouteProps) {
               <Popover
                 visible={showPopover}
                 overlay={<NovelMenu {...novelInfo} />}
-                // @ts-ignore
-                overlayStyle={{ width: 'max-content' }}
+                overlayStyle={{
+                  width: 'max-content',
+                  borderRadius: '10px',
+                  position: 'relative',
+                }}
+                align={{
+                  // @ts-ignore
+                  offset: [3, 30],
+                }}
               >
                 <MenuIcon />
               </Popover>

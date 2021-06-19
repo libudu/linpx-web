@@ -8,6 +8,14 @@
 );
 
 // antd popover组件，不要角标
+.am-popover-content {
+  border-radius: 6px;
+  box-shadow: 0px 0px 10px #4448;
+  .am-popover-inner {
+    border-radius: 6px;
+  }
+}
+
 .am-popover-arrow {
   display: none;
 }
@@ -95,9 +103,4 @@
   text-overflow: ellipsis;
   display: -webkit-box; // 弹性伸缩盒
   -webkit-box-orient: vertical; // 设置伸缩盒子元素排列方式
-}
-
-.am-popover-inner {
-  overflow: visible !important;
-  box-shadow: 0px 0px 10px #444 !important;
 }
