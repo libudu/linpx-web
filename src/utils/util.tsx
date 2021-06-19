@@ -13,3 +13,8 @@ export function randomByDay(seed: number) {
 export const list2query = (itemList: string[], keyName = 'ids') => {
   return itemList.map((item) => `${keyName}[]=${item}`).join('&');
 };
+
+export function proxyImg(url: string) {
+  if (!url) return;
+  return `https://api.linpx.linpicio.com/proxy/pximg?url=${url}`;
+}

@@ -33,11 +33,16 @@ export interface INovelProfile {
   title: string;
   userId: string;
   userName: string;
-  coverUrl: string;
+  coverUrl: string | undefined;
   tags: string[];
   desc: string;
   length: number;
   createDate: string;
+}
+
+export interface INovelImage {
+  preview: string;
+  origin: string;
 }
 
 export interface INovelInfo {
@@ -50,6 +55,28 @@ export interface INovelInfo {
   desc: string;
   content: string;
   createDate: string;
+  // 系列小说
+  series: {
+    title: string;
+    order: string;
+    next: {
+      id: string;
+      title: string;
+      order: string;
+    } | null;
+    prev: {
+      id: string;
+      title: string;
+      order: string;
+    } | null;
+  } | null;
+  // 相邻小说
+  next: INovelProfile | null;
+  prev: INovelProfile | null;
+  // 插入图片
+  images?: {
+    [id: string]: INovelImage;
+  };
 }
 
 export interface IFavUserTagInfo {
