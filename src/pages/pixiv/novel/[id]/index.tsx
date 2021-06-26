@@ -1,17 +1,17 @@
 import { useState, ReactElement } from 'react';
 import { IRouteProps } from 'umi';
-import { Popover } from 'antd-mobile';
-import { throttle } from 'lodash';
 import classNames from 'classnames';
 
-import { ContentNavbar, MenuIcon } from '@/components/Navbar';
+import { ContentNavbar } from '@/components/Navbar';
 import { proxyImg, t2s } from '@/utils/util';
 import { useFavUserById, usePixivNovel } from '@/api';
 
 import { AfdianButton } from '../../../components/Afdian';
-import NovelMenu from './components/NovelMenu';
 import NovelIntro from './components/NovelIntro';
+import NovelNavbar from './components/NovelNavbar';
 import { INovelInfo } from '@/types';
+import { useCallback } from 'react';
+import { throttle } from 'lodash';
 
 export let updateNovelStyle: any;
 export let novelStyle = {
@@ -20,8 +20,6 @@ export let novelStyle = {
   bgColor: '',
   color: '#000',
 };
-
-let lastScrollTop = 0;
 
 const processContent = (
   text: string,
@@ -62,6 +60,7 @@ const processContent = (
   return text;
 };
 
+let lastScrollTop = 0;
 export default function PixivNovel({ match }: IRouteProps) {
   document.title = 'Linpx - 小说详情';
 
@@ -74,62 +73,35 @@ export default function PixivNovel({ match }: IRouteProps) {
   const favUser = useFavUserById(novelInfo?.userId || '');
   const afdianUrl = favUser?.afdian;
 
-  // navbar是否收起
-  const [showNavbar, setShowNavbar] = useState(true);
-  const [showPopover, setShowPopover] = useState(false);
-
   // 监听滚动
-  const scrollHandler = throttle((e: any) => {
-    const scrollTop: number = e.target.scrollTop;
-    const shake = 20;
-    const change = scrollTop - lastScrollTop;
-    // 上滑
-    if (change < -shake || scrollTop < 60) {
-      setShowNavbar(true);
-      // 下滑
-    } else if (change > shake) {
-      setShowNavbar(false);
-      setShowPopover(false);
-    }
-    lastScrollTop = scrollTop;
-  }, 100);
+  const [showNavbar, setShowNavbar] = useState(true);
+
+  const scrollHandler = useCallback(
+    throttle((e: any) => {
+      const scrollTop: number = e.target.scrollTop;
+      const shake = 20;
+      const change = scrollTop - lastScrollTop;
+      // 上滑
+      if (change < -shake || scrollTop < 60) {
+        setShowNavbar(true);
+        // 下滑
+      } else if (change > shake) {
+        setShowNavbar(false);
+      }
+      lastScrollTop = scrollTop;
+    }, 100),
+    [],
+  );
 
   if (!novelInfo) {
     return <ContentNavbar>小说详情</ContentNavbar>;
   }
 
-  const { content, userId, userName, images } = novelInfo;
+  const { content, userName, images } = novelInfo;
 
   return (
     <div className="h-screen w-full overflow-y-scroll" onScroll={scrollHandler}>
-      <div className="absolute w-full z-20">
-        <div
-          className="relative w-full"
-          style={{ transition: 'all 0.2s', top: showNavbar ? '0px' : '-60px' }}
-        >
-          <ContentNavbar
-            rightEle={
-              <Popover
-                visible={showPopover}
-                overlay={<NovelMenu {...novelInfo} />}
-                overlayStyle={{
-                  width: 'max-content',
-                  borderRadius: '10px',
-                  position: 'relative',
-                }}
-                align={{
-                  // @ts-ignore
-                  offset: [3, 30],
-                }}
-              >
-                <MenuIcon />
-              </Popover>
-            }
-            backTo={`/pixiv/user/${userId}`}
-            children="小说详情"
-          />
-        </div>
-      </div>
+      <NovelNavbar showNavbar={showNavbar} novelInfo={novelInfo} />
       {novelInfo && (
         <div className="mb-4">
           <NovelIntro {...novelInfo} />
