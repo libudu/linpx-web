@@ -1,15 +1,14 @@
-import { useState, ReactElement } from 'react';
+import { useState } from 'react';
 import { IRouteProps } from 'umi';
 import classNames from 'classnames';
 
 import { ContentNavbar } from '@/components/Navbar';
-import { proxyImg, t2s } from '@/utils/util';
 import { useFavUserById, usePixivNovel } from '@/api';
 
-import { AfdianButton } from '../../../components/Afdian';
 import NovelIntro from './components/NovelIntro';
 import NovelNavbar from './components/NovelNavbar';
-import { INovelInfo } from '@/types';
+import NovelContent from './components/NovelContent';
+import NovelFooter from './components/NovelFooter';
 import { useCallback } from 'react';
 import { throttle } from 'lodash';
 
@@ -19,45 +18,6 @@ export let novelStyle = {
   fontSizeClass: '',
   bgColor: '',
   color: '#000',
-};
-
-const processContent = (
-  text: string,
-  images: INovelInfo['images'] | undefined,
-) => {
-  // 繁简转换
-  const testText = text.slice(0, 50);
-  if (testText !== t2s(testText)) {
-    console.log('正文自动繁体转换');
-    text = t2s(text);
-  }
-  // 去除[newpage]
-  text = text.replaceAll('[newpage]', '');
-  // 渲染图片列表
-  if (images) {
-    let splitText = text.split(/\[uploadedimage:(\d*)\]/);
-    let childrenList: ReactElement[] = [];
-    splitText.forEach((text, index) => {
-      // 图片id
-      if (index % 2) {
-        const img = images[text];
-        childrenList.push(
-          <img
-            key={index}
-            className="w-full rounded-xl"
-            src={proxyImg(img.preview)}
-          />,
-        );
-        // 普通内容
-      } else {
-        if (text) {
-          childrenList.push(<div key={index}>{text}</div>);
-        }
-      }
-    });
-    return childrenList;
-  }
-  return text;
 };
 
 let lastScrollTop = 0;
@@ -117,9 +77,9 @@ export default function PixivNovel({ match }: IRouteProps) {
               fontFamily: novelStyle.fontFamily,
             }}
           >
-            {processContent(content, images)}
+            <NovelContent text={content} images={images} />
           </div>
-          {afdianUrl && <AfdianButton url={afdianUrl} user={userName} />}
+          <NovelFooter afdianUrl={afdianUrl} novelInfo={novelInfo} />
         </div>
       )}
     </div>
