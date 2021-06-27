@@ -18,3 +18,7 @@ export function proxyImg(url: string) {
   if (!url) return;
   return `https://api.linpx.linpicio.com/proxy/pximg?url=${url}`;
 }
+
+export function isDev() {
+  return process.env.NODE_ENV === 'development';
+}
