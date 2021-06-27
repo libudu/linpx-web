@@ -21,7 +21,8 @@ export let novelStyle = {
 };
 
 let lastScrollTop = 0;
-export default function PixivNovel({ match }: IRouteProps) {
+
+const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   document.title = 'Linpx - 小说详情';
 
   const id = match.params.id;
@@ -63,11 +64,11 @@ export default function PixivNovel({ match }: IRouteProps) {
     <div className="h-screen w-full overflow-y-scroll" onScroll={scrollHandler}>
       <NovelNavbar showNavbar={showNavbar} novelInfo={novelInfo} />
       {novelInfo && (
-        <div className="mb-4">
+        <div className="mb-4 w-full">
           <NovelIntro {...novelInfo} />
           <div
             className={classNames(
-              'whitespace-pre-line p-4',
+              'whitespace-pre-line break-all p-4 w-full',
               novelStyle.fontSizeClass,
             )}
             style={{
@@ -84,4 +85,9 @@ export default function PixivNovel({ match }: IRouteProps) {
       )}
     </div>
   );
+};
+
+// 页面直接禁止直接复用，避免不同页面跳转时状态混乱
+export default function ({ match }: IRouteProps) {
+  return <PixivNovel key={match.params.id} match={match} />;
 }

@@ -14,9 +14,16 @@ const NovelIntro: React.FC<INovelInfo> = ({
   desc,
 }) => {
   return (
-    <div className="py-4 pt-20 text-center bg-yellow-100 bg-opacity-25 shadow-lg relative z-10">
-      <div className="flex justify-center">
-        <img src={coverUrl} className="h-64 rounded-lg" />
+    <div className="py-4 pt-20 w-full text-center bg-yellow-100 bg-opacity-25 shadow-lg relative z-10">
+      <div className="flex justify-center w-full">
+        <img
+          className="rounded-lg"
+          style={{
+            maxWidth: '60%',
+            maxHeight: '240px',
+          }}
+          src={coverUrl}
+        />
       </div>
       <div className="mt-2 mx-8 font-bold text-3xl">{title}</div>
       <div
