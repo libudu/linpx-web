@@ -19,13 +19,13 @@ const LinkButton: React.FC<LinkButtonProps> = ({
   return (
     <div
       className={classnames(
-        'rounded-full w-36 px-5 flex flex-col justify-center bg-opacity-50',
+        'rounded-full w-36 px-4 py-1 flex flex-col justify-center bg-opacity-50',
         path ? 'bg-linpx-orange' : 'bg-linpx-orange-unable',
       )}
-      style={{ height: 56 }}
+      style={{ width: '47%' }}
       onClick={() => path && history.push(path)}
     >
-      <div className="text-lg font-bold text-center">{mainTitle}</div>
+      <div className="text-xl font-bold text-center">{mainTitle}</div>
       <div className="text-sm text-center u-line-1">{subTitle}</div>
     </div>
   );
@@ -34,6 +34,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({
 type AroundInfo = {
   title: string;
   id: string;
+  order?: string;
 };
 
 interface NextButtonProps {
@@ -43,16 +44,16 @@ interface NextButtonProps {
 
 const AroundButtons: React.FC<NextButtonProps> = ({ next, prev }) => {
   return (
-    <div className="flex justify-between px-6">
+    <div className="flex justify-between">
       <LinkButton
-        mainTitle={next?.title ? '上一篇' : '已是第一篇'}
-        subTitle={next?.title || ''}
-        path={next?.id && `/pixiv/novel/${next.id}`}
+        mainTitle={prev?.title ? '上一篇' : '已是第一篇'}
+        subTitle={prev?.title ? `#${prev.order} ${prev.title}` : '*一切的起点*'}
+        path={prev?.id && `/pixiv/novel/${prev.id}`}
       />
       <LinkButton
-        mainTitle={prev?.title ? '下一篇' : '已是最新篇'}
-        subTitle={prev?.title || '快快催更吧'}
-        path={prev?.id && `/pixiv/novel/${prev.id}`}
+        mainTitle={next?.title ? '下一篇' : '已是最新篇'}
+        subTitle={next?.title ? `#${next.order} ${next.title}` : '*快快催更吧*'}
+        path={next?.id && `/pixiv/novel/${next.id}`}
       />
     </div>
   );
@@ -64,12 +65,27 @@ interface NovelFooterProps {
 }
 
 const NovelFooter: React.FC<NovelFooterProps> = ({ novelInfo, afdianUrl }) => {
-  const { userName, next, prev } = novelInfo;
+  const { userName, next, prev, series } = novelInfo;
+
+  // 仅当系列存在且大于1篇时才显示系列上下篇
+  const showSeries = series && (series.next || series.prev);
 
   return (
-    <div className="mb-12">
+    <div className="mb-12 mt-10">
       {afdianUrl && <AfdianButton url={afdianUrl} user={userName} />}
-      <AroundButtons next={next} prev={prev} />
+      <div className="px-6">
+        {showSeries && series ? (
+          <>
+            <div className="mb-5 u-line-1">
+              <span className="text-3xl font-bold">系列</span>
+              <span>{series.title}</span>
+            </div>
+            <AroundButtons next={series.next} prev={series.prev} />
+          </>
+        ) : (
+          <AroundButtons next={next} prev={prev} />
+        )}
+      </div>
     </div>
   );
 };
