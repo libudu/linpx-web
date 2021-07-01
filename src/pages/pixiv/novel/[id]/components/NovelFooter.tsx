@@ -42,17 +42,25 @@ interface NextButtonProps {
   prev: AroundInfo | null;
 }
 
+function getSubTitle(info: AroundInfo | null, def: string) {
+  if (info?.title) {
+    if (info.order) return `#${info.order} ${info.title}`;
+    else return `${info.title}`;
+  }
+  return def;
+}
+
 const AroundButtons: React.FC<NextButtonProps> = ({ next, prev }) => {
   return (
     <div className="flex justify-between">
       <LinkButton
         mainTitle={prev?.title ? '上一篇' : '已是第一篇'}
-        subTitle={prev?.title ? `#${prev.order} ${prev.title}` : '*一切的起点*'}
+        subTitle={getSubTitle(prev, '*一切的起点*')}
         path={prev?.id && `/pixiv/novel/${prev.id}`}
       />
       <LinkButton
         mainTitle={next?.title ? '下一篇' : '已是最新篇'}
-        subTitle={next?.title ? `#${next.order} ${next.title}` : '*快快催更吧*'}
+        subTitle={getSubTitle(next, '*快快催更吧*')}
         path={next?.id && `/pixiv/novel/${next.id}`}
       />
     </div>
@@ -83,7 +91,7 @@ const NovelFooter: React.FC<NovelFooterProps> = ({ novelInfo, afdianUrl }) => {
             <AroundButtons next={series.next} prev={series.prev} />
           </>
         ) : (
-          <AroundButtons next={next} prev={prev} />
+          <AroundButtons next={prev} prev={next} />
         )}
       </div>
     </div>
