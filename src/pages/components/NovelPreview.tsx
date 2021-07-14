@@ -14,8 +14,12 @@ export default function NovelPreview({
       onClick={() => id && history.push(`/pixiv/novel/${id}`)}
     >
       {coverUrl ? (
-        <div className="h-24 w-full overflow-hidden flex items-center">
-          <img className="w-full" src={coverUrl} loading="lazy" />
+        <div className="h-24 w-full overflow-hidden">
+          <img
+            className="w-full h-full object-cover"
+            src={coverUrl}
+            loading="lazy"
+          />
         </div>
       ) : (
         <div className="h-24 w-full bg-gray-200" />

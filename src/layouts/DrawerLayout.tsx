@@ -30,7 +30,7 @@ export const drawerItems: IDrawerItem[] = [
     icon: <HomeOutlined />,
     title: '首页',
     link: '/',
-    header: <img className="h-8" src={HeaderLogoPNG} />,
+    header: <img className="h-10 pb-1.5" src={HeaderLogoPNG} />,
   },
   {
     icon: <SearchOutlined />,

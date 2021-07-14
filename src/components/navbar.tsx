@@ -42,10 +42,7 @@ export default function Navbar({
       <span className="flex justify-center w-2/12" onClick={onClickLeft}>
         {leftEle}
       </span>
-      <span
-        className="u-line-1 justify-center items-center w-8/12 mx-2"
-        style={{ display: 'flex' }}
-      >
+      <span className="u-line-1 justify-center items-center w-8/12 mx-2 leading-10">
         {children}
       </span>
       <span className="flex justify-center w-2/12" onClick={onClickRight}>
