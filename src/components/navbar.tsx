@@ -3,7 +3,7 @@ import BackImg from '@/assets/icon/back.png';
 import MenuSVG from '@/assets/icon/menu.svg';
 import ActionSheet from '@/utils/ActionSheet';
 import classnames from 'classnames';
-import { goBackOrTo } from '@/layouts/index';
+import { goBackOrTo } from '@/utils/history';
 
 interface IMenuIcon {
   onClick?: () => any;
