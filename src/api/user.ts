@@ -1,12 +1,13 @@
 import useSWR from 'swr';
 import { INovelProfile, IUserInfo } from '../types';
-import { list2query } from '@/utils/util';
+import { list2query, proxyImg } from '@/utils/util';
 import cache from './util/cache';
 
 export const useUserTagNovels = (userId: string, tagName: string) => {
   const { data } = useSWR<INovelProfile[]>(
     `/pixiv/user/${userId}/tag/${tagName}`,
   );
+  data?.forEach((item) => (item.coverUrl = proxyImg(item.coverUrl)));
   return data;
 };
 
@@ -16,6 +17,8 @@ const dealPixivUserTags = (data: IUserInfo) => {
     data.tags.forEach((tag: any) => (tags[tag.tag] = tag.time));
     data.tags = tags;
   }
+  data.backgroundUrl = proxyImg(data.backgroundUrl);
+  data.imageUrl = proxyImg(data.imageUrl);
   return data;
 };
 

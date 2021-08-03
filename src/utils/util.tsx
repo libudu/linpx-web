@@ -1,3 +1,5 @@
+import { BASE_URL } from '@/api/util/request';
+
 const chineseTrans = require('chinese-s2t');
 export const { t2s }: { t2s: (text: string) => string } = chineseTrans;
 
@@ -14,9 +16,11 @@ export const list2query = (itemList: string[], keyName = 'ids') => {
   return itemList.map((item) => `${keyName}[]=${item}`).join('&');
 };
 
-export function proxyImg(url: string) {
-  if (!url) return;
-  return `https://api.linpx.linpicio.com/proxy/pximg?url=${url}`;
+export function proxyImg(url: string | undefined) {
+  if (url && !url.startsWith(BASE_URL)) {
+    url = `${BASE_URL}/proxy/pximg?url=${url}`;
+  }
+  return url || '';
 }
 
 export function isDev() {

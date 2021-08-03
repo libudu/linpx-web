@@ -1,5 +1,6 @@
 import { INovelProfile, IMap, IFavUser } from '../types';
 import useSWR from 'swr';
+import { proxyImg } from '@/utils/util';
 
 interface ISearchUser {
   users: {
@@ -17,6 +18,7 @@ export const usePixivSearchUser = (userName: string, page: number = 1) => {
   const { data } = useSWR<ISearchUser>(
     `/pixiv/search/user/${userName}?page=${page}`,
   );
+  data?.users.forEach((item) => (item.imageUrl = proxyImg(item.imageUrl)));
   return data;
 };
 
@@ -31,6 +33,7 @@ export const usePixivSearchNovel = (novelName: string, page: number = 1) => {
   const { data } = useSWR<ISearchNovel>(
     `/pixiv/search/novel/${novelName}?page=${page}`,
   );
+  data?.novels.forEach((item) => (item.coverUrl = proxyImg(item.coverUrl)));
   return data;
 };
 

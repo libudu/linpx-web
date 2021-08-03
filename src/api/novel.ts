@@ -1,10 +1,13 @@
 import { INovelInfo, INovelProfile } from '../types';
 import useSWR from 'swr';
 import cache from './util/cache';
-import { list2query } from '@/utils/util';
+import { list2query, proxyImg } from '@/utils/util';
 
 export const usePixivNovel = (id: string) => {
   const { data } = useSWR<INovelInfo>(`/pixiv/novel/${id}`);
+  if (data) {
+    data.coverUrl = proxyImg(data.coverUrl);
+  }
   return data;
 };
 
@@ -19,7 +22,10 @@ export const usePixivNovelProfiles = (idList: string[]) => {
   // 数据到了
   if (data) {
     cache.novelProfiles.setList(data);
-    data.forEach((item) => (result[item.id] = item));
+    data.forEach((item) => {
+      result[item.id] = item;
+      item.coverUrl = proxyImg(item.coverUrl);
+    });
     return idList.map((id) => result[id]).filter((data) => data);
   }
   // 数据没到
@@ -28,6 +34,9 @@ export const usePixivNovelProfiles = (idList: string[]) => {
 
 export const usePixivRecentNovels = (page: number = 1) => {
   const { data } = useSWR<INovelProfile[]>(`/pixiv/novels/recent?page=${page}`);
-  if (data) cache.novelProfiles.setList(data);
+  if (data) {
+    data.forEach((item) => (item.coverUrl = proxyImg(item.coverUrl)));
+    cache.novelProfiles.setList(data);
+  }
   return data;
 };
