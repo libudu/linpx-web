@@ -1,7 +1,10 @@
 import axios from 'axios';
 import { IMap } from '../../types';
 
-export const BASE_URL = 'http://45.76.105.135:81';
+const isHttps = window.location.protocol === 'https:';
+export const BASE_URL = isHttps
+  ? 'https://linpxapi.linpicio.com'
+  : 'http://45.76.105.135:81';
 //export const BASE_URL = 'http://localhost:3001';
 
 console.log('backend url', BASE_URL);

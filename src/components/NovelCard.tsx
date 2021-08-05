@@ -1,5 +1,6 @@
 import { INovelProfile } from '@/types';
 import { history } from 'umi';
+import { LikeOutlined } from '@ant-design/icons';
 
 // 最近小说页面
 // 作者详情页面
@@ -12,14 +13,26 @@ export default function NovelCard({
   tags,
   length,
   createDate,
+  pixivLikeCount,
 }: INovelProfile) {
   return (
     <div
       className="lp-shadow my-5 flex lp-bgcolor overflow-hidden w-full"
       onClick={() => history.push(`/pixiv/novel/${id}`)}
     >
-      <div className="lp-shadow w-20 h-28 m-3 overflow-hidden flex-shrink-0 flex items-center justify-center">
-        <img className="h-full" src={coverUrl} loading="lazy" />
+      <div className="lp-shadow w-20 bg-white m-3 overflow-hidden flex-shrink-0 flex flex-col items-center justify-center">
+        <img
+          className="h-24 w-full object-cover"
+          src={coverUrl}
+          loading="lazy"
+        />
+        <div
+          className="h-4 text-xs w-full flex justify-center items-center"
+          style={{ boxShadow: '0 0 14px #888' }}
+        >
+          {pixivLikeCount}
+          <LikeOutlined size={12} color="orange" className="ml-1" />
+        </div>
       </div>
       <div className="text-left flex flex-col mt-2 mr-2 flex-shrink overflow-x-auto">
         <div className="font-bold u-line-1">{title}</div>

@@ -38,6 +38,7 @@ export interface INovelProfile {
   desc: string;
   length: number;
   createDate: string;
+  pixivLikeCount: number;
 }
 
 export interface INovelImage {

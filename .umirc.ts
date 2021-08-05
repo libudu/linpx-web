@@ -7,4 +7,5 @@ export default defineConfig({
   },
   fastRefresh: {},
   title: false,
+  hash: true,
 });
