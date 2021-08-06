@@ -16,6 +16,8 @@ const NovelIntro: React.FC<INovelInfo> = ({
   desc,
   pixivLikeCount,
   pixivReadCount,
+  likeCount,
+  readCount,
 }) => {
   return (
     <>
@@ -56,14 +58,14 @@ const NovelIntro: React.FC<INovelInfo> = ({
           className="flex justify-center items-center"
           style={{ width: '50%', borderRight: '2px solid #ddd' }}
         >
-          {pixivReadCount}
+          {pixivReadCount + readCount}
           <img className="w-5 mt-1 ml-2" src={ReadPng} />
         </div>
         <div
           className="flex justify-center items-center"
           style={{ width: '50%' }}
         >
-          {pixivLikeCount}
+          {pixivLikeCount + likeCount}
           <LikeOutlined className="ml-2 mt-0.5" style={{ fontSize: 22 }} />
         </div>
       </div>

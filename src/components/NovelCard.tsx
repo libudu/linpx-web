@@ -14,6 +14,7 @@ export default function NovelCard({
   length,
   createDate,
   pixivLikeCount,
+  likeCount,
 }: INovelProfile) {
   return (
     <div
@@ -30,7 +31,7 @@ export default function NovelCard({
           className="h-4 text-xs w-full flex justify-center items-center"
           style={{ boxShadow: '0 0 14px #888' }}
         >
-          {pixivLikeCount}
+          {pixivLikeCount + likeCount}
           <LikeOutlined size={12} color="orange" className="ml-1" />
         </div>
       </div>

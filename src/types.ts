@@ -39,6 +39,7 @@ export interface INovelProfile {
   length: number;
   createDate: string;
   pixivLikeCount: number;
+  likeCount: number;
 }
 
 export interface INovelImage {
@@ -80,6 +81,8 @@ export interface INovelInfo {
   };
   pixivLikeCount: number;
   pixivReadCount: number;
+  likeCount: number;
+  readCount: number;
 }
 
 export interface IFavUserTagInfo {
