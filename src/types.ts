@@ -78,6 +78,8 @@ export interface INovelInfo {
   images?: {
     [id: string]: INovelImage;
   };
+  pixivLikeCount: number;
+  pixivReadCount: number;
 }
 
 export interface IFavUserTagInfo {
