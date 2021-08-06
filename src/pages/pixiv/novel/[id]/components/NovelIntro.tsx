@@ -1,11 +1,11 @@
 import Tag from '@/components/Tag';
-import { INovelInfo } from '@/types';
+import { INovelAnalyse, INovelInfo } from '@/types';
 import React from 'react';
 import { history } from 'umi';
 import ReadPng from '@/assets/icon/read.png';
 import { LikeOutlined } from '@ant-design/icons';
 
-const NovelIntro: React.FC<INovelInfo> = ({
+const NovelIntro: React.FC<INovelInfo & INovelAnalyse> = ({
   coverUrl,
   title,
   userName,

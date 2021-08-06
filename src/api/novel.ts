@@ -1,7 +1,9 @@
-import { INovelInfo, INovelProfile } from '../types';
+import { INovelAnalyse, INovelInfo, INovelProfile } from '../types';
 import useSWR from 'swr';
 import cache from './util/cache';
 import { list2query, proxyImg } from '@/utils/util';
+import { linpxRequest } from './util/request';
+import { useEffect } from 'react';
 
 export const usePixivNovel = (id: string) => {
   const { data } = useSWR<INovelInfo>(`/pixiv/novel/${id}`);
@@ -38,5 +40,20 @@ export const usePixivRecentNovels = (page: number = 1) => {
     data.forEach((item) => (item.coverUrl = proxyImg(item.coverUrl)));
     cache.novelProfiles.setList(data);
   }
+  return data;
+};
+
+export const usePixivNovelRead = (id: string) => {
+  useEffect(() => {
+    linpxRequest(`/pixiv/novel/${id}/click`, false);
+    console.log(`read novel ${id}`);
+  }, []);
+};
+
+export const usePixivNovelAnalyse = (id: string) => {
+  const { data } = useSWR<INovelAnalyse>(
+    `/pixiv/novel/${id}/analyse`,
+    (path: string) => linpxRequest(path, false),
+  );
   return data;
 };

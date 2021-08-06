@@ -35,7 +35,7 @@ export default function NovelCard({
           <LikeOutlined size={12} color="orange" className="ml-1" />
         </div>
       </div>
-      <div className="text-left flex flex-col mt-2 mr-2 flex-shrink overflow-x-auto">
+      <div className="text-left flex flex-col mt-2 mr-2 flex-shrink flex-grow overflow-x-auto">
         <div className="font-bold u-line-1">{title}</div>
         <div className="text-xs font-bold">
           {userName}

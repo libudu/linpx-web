@@ -3,7 +3,12 @@ import { IRouteProps } from 'umi';
 import classNames from 'classnames';
 
 import { ContentNavbar } from '@/components/Navbar';
-import { useFavUserById, usePixivNovel } from '@/api';
+import {
+  useFavUserById,
+  usePixivNovel,
+  usePixivNovelAnalyse,
+  usePixivNovelRead,
+} from '@/api';
 
 import NovelIntro from './components/NovelIntro';
 import NovelNavbar from './components/NovelNavbar';
@@ -24,9 +29,12 @@ let lastScrollTop = 0;
 
 const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   document.title = 'Linpx - 小说详情';
-
+  // 小说阅读统计
   const id = match.params.id;
+  usePixivNovelRead(id);
+  const novelAnalyse = usePixivNovelAnalyse(id);
 
+  // 样式刷新
   const [refresh, setRefresh] = useState({});
   updateNovelStyle = () => setRefresh({});
 
@@ -54,18 +62,18 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
     [],
   );
 
-  if (!novelInfo) {
+  if (!novelInfo || !novelAnalyse) {
     return <ContentNavbar>小说详情</ContentNavbar>;
   }
 
-  const { content, userName, images } = novelInfo;
+  const { content, images } = novelInfo;
 
   return (
     <div className="h-screen w-full overflow-y-scroll" onScroll={scrollHandler}>
       <NovelNavbar showNavbar={showNavbar} novelInfo={novelInfo} />
       {novelInfo && (
         <div className="mb-4 w-full">
-          <NovelIntro {...novelInfo} />
+          <NovelIntro {...novelInfo} {...novelAnalyse} />
           <div
             className={classNames(
               'whitespace-pre-line break-all p-4 w-full',

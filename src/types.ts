@@ -81,8 +81,14 @@ export interface INovelInfo {
   };
   pixivLikeCount: number;
   pixivReadCount: number;
-  likeCount: number;
+}
+
+export interface INovelAnalyse {
+  id: string;
   readCount: number;
+  likeCount: number;
+  ip: string;
+  canLike: boolean;
 }
 
 export interface IFavUserTagInfo {
