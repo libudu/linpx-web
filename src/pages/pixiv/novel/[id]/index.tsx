@@ -121,7 +121,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
           />
           <div
             className={classNames(
-              'whitespace-pre-line break-all p-4 w-full',
+              'whitespace-pre-line p-4 w-full',
               novelStyle.fontSizeClass,
             )}
             style={{

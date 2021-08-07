@@ -121,7 +121,7 @@ const TransLinkContent: React.FC = () => {
         left="生成LINPX链接"
         right=""
         clickInfo={
-          <div className="text-base break-all">
+          <div className="text-base">
             <div>将pixiv链接转为linpx</div>
             <div>从而不需要翻墙、登录，点开即阅</div>
             <br />
