@@ -112,3 +112,11 @@ export interface IAnalyseTag {
   }[];
   take: number;
 }
+
+export interface INovelComment {
+  id: string;
+  content: string;
+  reply: string;
+  postTime: number;
+  ip: string;
+}

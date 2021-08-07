@@ -1,4 +1,9 @@
-import { INovelAnalyse, INovelInfo, INovelProfile } from '../types';
+import {
+  INovelAnalyse,
+  INovelComment,
+  INovelInfo,
+  INovelProfile,
+} from '../types';
 import useSWR from 'swr';
 import cache from './util/cache';
 import { list2query, proxyImg } from '@/utils/util';
@@ -64,4 +69,14 @@ export const likeNovel = (id: string) => {
 
 export const unlikeNovel = (id: string) => {
   linpxRequest(`/pixiv/novel/${id}/unlike`, false);
+};
+
+export const usePixivNovelComments = (id: string): INovelComment[] | null => {
+  const { data } = useSWR(`/pixiv/novel/${id}/comments`, (path: string) =>
+    linpxRequest(path, false),
+  );
+  if (data?.error) {
+    return null;
+  }
+  return data?.data;
 };
