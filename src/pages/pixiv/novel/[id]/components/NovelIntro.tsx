@@ -23,23 +23,6 @@ const NovelIntro: React.FC<INovelInfo & INovelAnalyse> = ({
   readCount,
   canLike,
 }) => {
-  const [like, setLike] = useState(!canLike);
-  const onClickLike = useCallback(
-    throttle(
-      (like: boolean) => {
-        if (like) {
-          unlikeNovel(id);
-          setLike(false);
-        } else {
-          likeNovel(id);
-          setLike(true);
-        }
-      },
-      500,
-      { trailing: false },
-    ),
-    [],
-  );
   return (
     <>
       <div className="py-4 pt-20 w-full text-center bg-yellow-100 bg-opacity-25 shadow-md relative z-10">
@@ -73,29 +56,6 @@ const NovelIntro: React.FC<INovelInfo & INovelAnalyse> = ({
           className="px-8 mt-1 text-base"
           dangerouslySetInnerHTML={{ __html: desc }}
         />
-      </div>
-      <div className="h-12 bg-white shadow-md flex">
-        <div
-          className="flex justify-center items-center"
-          style={{ width: '50%', borderRight: '2px solid #ddd' }}
-        >
-          {pixivReadCount + readCount}
-          <img className="w-5 mt-1 ml-2" src={ReadPng} />
-        </div>
-        <div
-          className="flex justify-center items-center"
-          style={{ width: '50%' }}
-          onClick={() => onClickLike(like)}
-        >
-          {pixivLikeCount +
-            likeCount +
-            Number(canLike && like) -
-            Number(!canLike && !like)}
-          <LikeOutlined
-            className="ml-2 mt-0.5"
-            style={{ fontSize: 22, color: like ? 'orange' : 'black' }}
-          />
-        </div>
       </div>
     </>
   );

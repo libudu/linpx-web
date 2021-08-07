@@ -6,8 +6,9 @@ import { ContentNavbar } from '@/components/Navbar';
 import {
   useFavUserById,
   usePixivNovel,
-  usePixivNovelAnalyse,
   usePixivNovelRead,
+  likeNovel,
+  unlikeNovel,
 } from '@/api';
 
 import NovelIntro from './components/NovelIntro';
@@ -17,6 +18,10 @@ import NovelFooter from './components/NovelFooter';
 import { useCallback } from 'react';
 import { throttle } from 'lodash';
 import NovelComment from './components/NovelComment';
+import NovelAnalyse from './components/NovelAnalyse';
+import { linpxRequest } from '@/api/util/request';
+import { useEffect } from 'react';
+import { INovelAnalyse } from '@/types';
 
 export const BORDER = '1px solid #ccc';
 
@@ -32,22 +37,46 @@ let lastScrollTop = 0;
 
 const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   document.title = 'Linpx - 小说详情';
-  // 小说阅读统计
   const id = match.params.id;
-  usePixivNovelRead(id);
-  const novelAnalyse = usePixivNovelAnalyse(id);
 
   // 样式刷新
   const [refresh, setRefresh] = useState({});
   updateNovelStyle = () => setRefresh({});
 
+  // 基本数据
   const novelInfo = usePixivNovel(id);
   const favUser = useFavUserById(novelInfo?.userId || '');
   const afdianUrl = favUser?.afdian;
 
+  // 统计数据
+  usePixivNovelRead(id);
+  const [like, setLike] = useState(false);
+  const [novelAnalyse, setNovelAnalyse] = useState<INovelAnalyse | null>(null);
+  useEffect(() => {
+    linpxRequest(`/pixiv/novel/${id}/analyse`).then((data: INovelAnalyse) => {
+      setNovelAnalyse(data);
+      setLike(!data.canLike);
+    });
+  }, []);
+  const onClickLike = useCallback(
+    throttle(
+      (like: boolean) => {
+        if (like) {
+          unlikeNovel(id);
+          setLike(false);
+        } else {
+          likeNovel(id);
+          setLike(true);
+        }
+      },
+      500,
+      { trailing: false },
+    ),
+    [],
+  );
+
   // 监听滚动
   const [showNavbar, setShowNavbar] = useState(true);
-
   const scrollHandler = useCallback(
     throttle((e: any) => {
       const scrollTop: number = e.target.scrollTop;
@@ -68,8 +97,15 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   if (!novelInfo || !novelAnalyse) {
     return <ContentNavbar>小说详情</ContentNavbar>;
   }
-
   const { content, images } = novelInfo;
+  const { readCount, likeCount, canLike } = novelAnalyse;
+  const { pixivReadCount, pixivLikeCount } = novelInfo;
+  const totalReadCount = readCount + pixivReadCount;
+  const totalLikeCount =
+    likeCount +
+    pixivLikeCount +
+    Number(canLike && like) -
+    Number(!canLike && !like);
 
   return (
     <div className="h-screen w-full overflow-y-scroll" onScroll={scrollHandler}>
@@ -77,6 +113,12 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
       {novelInfo && (
         <div className="mb-4 w-full">
           <NovelIntro {...novelInfo} {...novelAnalyse} />
+          <NovelAnalyse
+            like={like}
+            likeCount={totalLikeCount}
+            readCount={totalReadCount}
+            onClickLike={onClickLike}
+          />
           <div
             className={classNames(
               'whitespace-pre-line break-all p-4 w-full',
@@ -94,7 +136,9 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
           <NovelFooter
             afdianUrl={afdianUrl}
             novelInfo={novelInfo}
-            like={novelAnalyse.likeCount + novelInfo.pixivLikeCount}
+            like={like}
+            likeCount={totalLikeCount}
+            onClickLike={onClickLike}
           />
           <NovelComment id={id} />
         </div>

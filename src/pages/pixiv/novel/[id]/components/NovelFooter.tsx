@@ -7,6 +7,7 @@ import { INovelInfo } from '@/types';
 
 import SharePng from '@/assets/icon/share_big.png';
 import LikePng from '@/assets/icon/like_big.png';
+import UnlikePng from '@/assets/icon/unlike_big.png';
 import { BORDER } from '..';
 
 interface LinkButtonProps {
@@ -76,23 +77,55 @@ const AroundButtons: React.FC<NextButtonProps> = ({ next, prev }) => {
 interface NovelFooterProps {
   novelInfo: INovelInfo;
   afdianUrl: string | undefined;
-  like: number;
+  like: boolean;
+  likeCount: number;
+  onClickLike: (like: boolean) => any;
 }
 
 const NovelFooter: React.FC<NovelFooterProps> = ({
   novelInfo,
   afdianUrl,
   like,
+  likeCount,
+  onClickLike,
 }) => {
   const { userName, next, prev, series } = novelInfo;
 
   // 仅当系列存在且大于1篇时才显示系列上下篇
   const showSeries = series && (series.next || series.prev);
 
+  const likeContent = (
+    <div className="flex justify-center items-center flex-grow">
+      <div
+        className="flex justify-center items-center"
+        onClick={() => onClickLike(like)}
+      >
+        <img className="w-16 mr-2 h-16" src={like ? LikePng : UnlikePng} />
+        <div>
+          点赞
+          <div className="text-sm font-normal text-yellow-500 text-center">
+            {likeCount}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const shareContent = (
+    <div className="flex justify-center items-center flex-grow">
+      <img className="w-16 mr-2 h-16" src={SharePng} />
+      <div>分享</div>
+    </div>
+  );
+
   return (
     <div
       className="mb-12 mt-10 mx-6"
-      style={{ border: BORDER, borderRadius: '10px' }}
+      style={{
+        border: BORDER,
+        borderRadius: '10px',
+        boxShadow: '0 0 5px #888',
+      }}
     >
       <div className="flex text-2xl font-bold" style={{ borderBottom: BORDER }}>
         {afdianUrl ? (
@@ -100,43 +133,17 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
             <div className="w-1/2 py-6" style={{ borderRight: BORDER }}>
               <AfdianButton url={afdianUrl} user={userName} />
             </div>
-            <div className="w-1/2">
-              <div
-                className="flex justify-center items-center h-1/2"
-                style={{ borderBottom: BORDER }}
-              >
-                <img className="w-16 mr-2 h-16" src={SharePng} />
-                <div>分享</div>
-              </div>
-              <div className="flex justify-center items-center h-1/2">
-                <img className="w-16 mr-2 h-16" src={LikePng} />
-                <div>
-                  点赞
-                  <div className="text-sm font-normal text-yellow-500 text-center">
-                    {like}
-                  </div>
-                </div>
-              </div>
+            <div className="w-1/2 flex flex-col">
+              {shareContent}
+              <div className="w-full h-0" style={{ borderBottom: BORDER }} />
+              {likeContent}
             </div>
           </>
         ) : (
-          <div className="flex w-full">
-            <div
-              className="flex justify-center items-center w-1/2 py-4"
-              style={{ borderRight: BORDER }}
-            >
-              <img className="w-16 mr-2 h-16" src={SharePng} />
-              <div>分享</div>
-            </div>
-            <div className="flex justify-center items-center w-1/2">
-              <img className="w-16 mr-2 h-16" src={LikePng} />
-              <div>
-                点赞
-                <div className="text-sm font-normal text-yellow-500 text-center">
-                  {like}
-                </div>
-              </div>
-            </div>
+          <div className="flex w-full h-24">
+            {shareContent}
+            <div className="w-0 h-full" style={{ borderRight: BORDER }} />
+            {likeContent}
           </div>
         )}
       </div>
