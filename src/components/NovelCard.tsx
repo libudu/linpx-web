@@ -37,7 +37,7 @@ export default function NovelCard({
       </div>
       <div className="text-left flex flex-col mt-2 mr-2 flex-shrink flex-grow overflow-x-auto">
         <div className="font-bold u-line-1">{title}</div>
-        <div className="text-xs font-bold">
+        <div className="text-xs">
           {userName}
           <span className="inline-block ml-2 font-normal text-gray-400">
             {length}字
