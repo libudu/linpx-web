@@ -16,6 +16,9 @@ import NovelContent from './components/NovelContent';
 import NovelFooter from './components/NovelFooter';
 import { useCallback } from 'react';
 import { throttle } from 'lodash';
+import NovelComment from './components/NovelComment';
+
+export const BORDER = '1px solid #ccc';
 
 export let updateNovelStyle: any;
 export let novelStyle = {
@@ -88,7 +91,12 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
           >
             <NovelContent text={content} images={images} />
           </div>
-          <NovelFooter afdianUrl={afdianUrl} novelInfo={novelInfo} />
+          <NovelFooter
+            afdianUrl={afdianUrl}
+            novelInfo={novelInfo}
+            like={novelAnalyse.likeCount + novelInfo.pixivLikeCount}
+          />
+          <NovelComment id={id} />
         </div>
       )}
     </div>
