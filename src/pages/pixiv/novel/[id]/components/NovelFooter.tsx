@@ -103,9 +103,7 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
         <img className="w-16 mr-2 h-16" src={like ? LikePng : UnlikePng} />
         <div>
           点赞
-          <div className="text-sm font-normal text-yellow-500 text-center">
-            {likeCount}
-          </div>
+          <div className="text-sm font-normal text-yellow-500">{likeCount}</div>
         </div>
       </div>
     </div>
@@ -114,7 +112,10 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
   const shareContent = (
     <div className="flex justify-center items-center flex-grow">
       <img className="w-16 mr-2 h-16" src={SharePng} />
-      <div>分享</div>
+      <div>
+        分享
+        <div className="text-sm font-normal text-center">(还没做好)</div>
+      </div>
     </div>
   );
 
@@ -127,7 +128,10 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
         boxShadow: '0 0 5px #888',
       }}
     >
-      <div className="flex text-2xl font-bold" style={{ borderBottom: BORDER }}>
+      <div
+        className="flex text-2xl font-bold text-center"
+        style={{ borderBottom: BORDER }}
+      >
         {afdianUrl ? (
           <>
             <div className="w-1/2 py-6" style={{ borderRight: BORDER }}>
@@ -147,7 +151,7 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
           </div>
         )}
       </div>
-      <div className="px-4 pt-2 pb-4">
+      <div className="p-4 pt-2">
         {showSeries && series ? (
           <>
             <div className="mb-4 u-line-1">
@@ -157,7 +161,9 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
             <AroundButtons next={series.next} prev={series.prev} />
           </>
         ) : (
-          <AroundButtons next={prev} prev={next} />
+          <div className="mt-2">
+            <AroundButtons next={prev} prev={next} />
+          </div>
         )}
       </div>
     </div>
