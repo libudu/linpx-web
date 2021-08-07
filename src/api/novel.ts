@@ -57,3 +57,11 @@ export const usePixivNovelAnalyse = (id: string) => {
   );
   return data;
 };
+
+export const likeNovel = (id: string) => {
+  linpxRequest(`/pixiv/novel/${id}/like`, false);
+};
+
+export const unlikeNovel = (id: string) => {
+  linpxRequest(`/pixiv/novel/${id}/unlike`, false);
+};

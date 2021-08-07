@@ -1,11 +1,14 @@
 import Tag from '@/components/Tag';
 import { INovelAnalyse, INovelInfo } from '@/types';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { history } from 'umi';
 import ReadPng from '@/assets/icon/read.png';
 import { LikeOutlined } from '@ant-design/icons';
+import { likeNovel, unlikeNovel } from '@/api';
+import { throttle } from 'lodash';
 
 const NovelIntro: React.FC<INovelInfo & INovelAnalyse> = ({
+  id,
   coverUrl,
   title,
   userName,
@@ -18,7 +21,25 @@ const NovelIntro: React.FC<INovelInfo & INovelAnalyse> = ({
   pixivReadCount,
   likeCount,
   readCount,
+  canLike,
 }) => {
+  const [like, setLike] = useState(!canLike);
+  const onClickLike = useCallback(
+    throttle(
+      (like: boolean) => {
+        if (like) {
+          unlikeNovel(id);
+          setLike(false);
+        } else {
+          likeNovel(id);
+          setLike(true);
+        }
+      },
+      500,
+      { trailing: false },
+    ),
+    [],
+  );
   return (
     <>
       <div className="py-4 pt-20 w-full text-center bg-yellow-100 bg-opacity-25 shadow-md relative z-10">
@@ -64,9 +85,16 @@ const NovelIntro: React.FC<INovelInfo & INovelAnalyse> = ({
         <div
           className="flex justify-center items-center"
           style={{ width: '50%' }}
+          onClick={() => onClickLike(like)}
         >
-          {pixivLikeCount + likeCount}
-          <LikeOutlined className="ml-2 mt-0.5" style={{ fontSize: 22 }} />
+          {pixivLikeCount +
+            likeCount +
+            Number(canLike && like) -
+            Number(!canLike && !like)}
+          <LikeOutlined
+            className="ml-2 mt-0.5"
+            style={{ fontSize: 22, color: like ? 'orange' : 'black' }}
+          />
         </div>
       </div>
     </>
