@@ -18,7 +18,10 @@ export const usePixivSearchUser = (userName: string, page: number = 1) => {
   const { data } = useSWR<ISearchUser>(
     `/pixiv/search/user/${userName}?page=${page}`,
   );
-  data?.users.forEach((item) => (item.imageUrl = proxyImg(item.imageUrl)));
+  data?.users.forEach((item) => {
+    item.imageUrl = proxyImg(item.imageUrl);
+    item.novels.forEach((novel) => (novel.coverUrl = proxyImg(novel.coverUrl)));
+  });
   return data;
 };
 
