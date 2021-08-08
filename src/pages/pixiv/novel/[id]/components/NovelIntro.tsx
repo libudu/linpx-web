@@ -25,7 +25,7 @@ const NovelIntro: React.FC<INovelInfo> = ({
           src={coverUrl}
         />
       </div>
-      <div className="mt-2 mx-8 font-bold text-3xl">{title}</div>
+      <div className="mt-2 mx-8 font-black text-3xl">{title}</div>
       <div
         className="px-16 text-2xl text-gray-500 underline"
         onClick={() => history.push(`/pixiv/user/${userId}`)}

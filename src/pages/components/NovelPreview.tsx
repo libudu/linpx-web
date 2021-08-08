@@ -25,7 +25,7 @@ export default function NovelPreview({
         <div className="h-24 w-full bg-gray-200" />
       )}
       <div className="flex flex-col justify-center flex-grow">
-        <div className="u-line-2 m-1 mb-0 text-center font-bold text-sm whitespace-pre-line">
+        <div className="u-line-2 m-1 mb-0 text-center font-black text-sm whitespace-pre-line">
           {title}
         </div>
         <div className="u-line-1 m-1 mt-0 text-center text-xs whitespace-pre-line">

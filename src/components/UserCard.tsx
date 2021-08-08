@@ -27,7 +27,7 @@ function NovelCard({ coverUrl, title, id }: INovelProfile) {
       ) : (
         <div className="h-20 w-full bg-gray-200" />
       )}
-      <div className="u-line-2 m-1 text-center font-bold text-xs whitespace-pre-line flex-grow">
+      <div className="u-line-2 m-1 text-center font-black text-xs whitespace-pre-line flex-grow">
         {title || '\n\n'}
       </div>
     </div>
@@ -50,7 +50,7 @@ export default function UserCard({ userInfo, novelInfoList }: IUserCard) {
       >
         <AfdianAvatar id={id} size={76} imageUrl={imageUrl} />
         <div
-          className="py-1 w-24 text-center text-base font-bold u-line-2"
+          className="py-1 w-24 text-center text-base font-black u-line-2"
           style={{ lineHeight: '1.1rem' }}
         >
           {name}

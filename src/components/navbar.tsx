@@ -34,7 +34,7 @@ export default function Navbar({
     <div
       className={classnames(
         'flex justify-between items-center flex-nowrap',
-        'text-3xl text-center w-full bg-linpx-orange font-bold z-20',
+        'text-3xl text-center w-full bg-linpx-orange font-black z-20',
         { absolute: fixed },
       )}
       style={{ height: 60 }}

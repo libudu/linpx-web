@@ -18,7 +18,7 @@ export default function IndexPage() {
           <img src={AfdianImg} />
         </div>
       </div>
-      <div className="font-bold text-3xl">赞助我们</div>
+      <div className="font-black text-3xl">赞助我们</div>
       <div className="text-lg opacity-80 mt-2">
         <div>但赞助的并不是我们</div>
         <div>爱发电款项与本网站无关</div>

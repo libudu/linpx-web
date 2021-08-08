@@ -30,7 +30,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({
       style={{ width: '47%' }}
       onClick={() => path && history.push(path)}
     >
-      <div className="text-xl font-bold text-center">{mainTitle}</div>
+      <div className="text-xl font-black text-center">{mainTitle}</div>
       <div className="text-xs text-center u-line-1 px-4 mx-0.5 mb-0.5">
         {subTitle}
       </div>
@@ -129,7 +129,7 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
       }}
     >
       <div
-        className="flex text-2xl font-bold text-center"
+        className="flex text-2xl font-black text-center"
         style={{ borderBottom: BORDER }}
       >
         {afdianUrl ? (
@@ -155,7 +155,7 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
         {showSeries && series ? (
           <>
             <div className="mb-4 u-line-1">
-              <span className="text-3xl mr-1 font-bold">系列</span>
+              <span className="text-3xl mr-1 font-black">系列</span>
               <span>{series.title}</span>
             </div>
             <AroundButtons next={series.next} prev={series.prev} />

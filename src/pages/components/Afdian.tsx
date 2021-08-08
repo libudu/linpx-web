@@ -84,7 +84,7 @@ export const AfdianButton: React.FC<AfdianButtonProps> = ({ url, user }) => {
       >
         <img src={AfdianImg} />
       </div>
-      <div className="mb-2 text-2xl font-bold leading-5">支持作者</div>
+      <div className="mb-2 text-2xl font-black leading-5">支持作者</div>
       <div className="text-purple-500 text-base font-normal">爱发电赞助</div>
     </div>
   );

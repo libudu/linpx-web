@@ -65,7 +65,7 @@ function UserPart({
         <div className="z-10 mt-16 pb-2 mr-1 flex items-center">
           <div className="text-left mt-1" style={{ height: 'max-content' }}>
             <div
-              className="mb-1 font-bold text-left align-text-bottom"
+              className="mb-1 font-black text-left align-text-bottom"
               style={{ fontSize: '1.25rem' }}
             >
               {name}

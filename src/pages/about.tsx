@@ -63,7 +63,7 @@ export default function IndexPage() {
   return (
     <Accordion>
       {qaList.map(({ q, a }) => (
-        <Panel header={<div className="font-bold">{q}</div>} key={q}>
+        <Panel header={<div className="font-black">{q}</div>} key={q}>
           <div className="mx-4 whitespace-pre-wrap">{a}</div>
         </Panel>
       ))}

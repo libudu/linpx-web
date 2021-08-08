@@ -16,10 +16,10 @@ export default function IndexPage() {
           style={{ width: '30vw' }}
           src={LinpicioConfuseImg}
         />
-        <div className="font-bold text-3xl my-3">错误 - 404</div>
+        <div className="font-black text-3xl my-3">错误 - 404</div>
         <div className="mb-3">你来到了没有猫猫的荒原</div>
         <div
-          className="bg-linpx py-1.5 px-4 rounded-lg w-max font-bold"
+          className="bg-linpx py-1.5 px-4 rounded-lg w-max font-black"
           onClick={() => history.push('/')}
         >
           返回首页

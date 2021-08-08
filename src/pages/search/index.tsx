@@ -44,7 +44,7 @@ function SearchTitle({
 }) {
   return (
     <div className="mt-5 flex items-end">
-      <div className="text-2xl font-bold">{children}</div>
+      <div className="text-2xl font-black">{children}</div>
       {clickMorePath && (
         <div className="text-base text-right pr-2 flex-grow">
           <span

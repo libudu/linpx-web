@@ -61,7 +61,7 @@ export default function TransLink() {
             />
           </div>
           <div
-            className="flex justify-center items-center bg-yellow-400 text-white font-bold"
+            className="flex justify-center items-center bg-yellow-400 text-white font-black"
             style={{ width: '30%' }}
             onClick={() => {
               gtag('event', 'share', {

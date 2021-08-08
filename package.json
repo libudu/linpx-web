@@ -29,7 +29,6 @@
     "chinese-s2t": "^1.0.0",
     "classnames": "^2.2.6",
     "global": "^4.4.0",
-    "hasha": "^5.2.2",
     "lodash": "^4.17.21",
     "react-content-loader": "^6.0.3",
     "swr": "^0.5.6",

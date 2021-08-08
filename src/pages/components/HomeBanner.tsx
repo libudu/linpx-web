@@ -2,7 +2,7 @@ import { Carousel } from 'antd';
 
 const BannerBox: React.FC = ({ children }) => {
   return (
-    <div className="lp-bgcolor h-40 flex flex-col justify-center items-center font-bold text-2xl text-center">
+    <div className="lp-bgcolor h-40 flex flex-col justify-center items-center font-black text-2xl text-center">
       {children}
     </div>
   );

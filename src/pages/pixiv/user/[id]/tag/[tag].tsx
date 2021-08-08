@@ -38,8 +38,8 @@ export default function UserTag(props: IRouteProps) {
             className="h-36 w-36 rounded-full z-10 border-solid border-8 border-yellow-100 bg-center"
           />
         </div>
-        <div className="my-2 mx-10 font-bold text-2xl">{name}</div>
-        <div className="text-4xl font-bold">{`#${tagName}`}</div>
+        <div className="my-2 mx-10 font-black text-2xl">{name}</div>
+        <div className="text-4xl font-black">{`#${tagName}`}</div>
       </div>
 
       <div className="mx-6">

@@ -17,7 +17,7 @@ export function ContentTitle({
 }) {
   return (
     <div className="mb-3 mt-6 flex items-end">
-      <div className="font-bold text-3xl pl-2">
+      <div className="font-black text-3xl pl-2">
         {left}
         {clickInfo && (
           <InfoCircleOutlined

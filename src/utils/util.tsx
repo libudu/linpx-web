@@ -26,3 +26,22 @@ export function proxyImg(url: string | undefined) {
 export function isDev() {
   return process.env.NODE_ENV === 'development';
 }
+
+export function stringHash(str: string) {
+  let hash = 5381,
+    i = str.length;
+  while (i) {
+    hash = (hash * 33) ^ str.charCodeAt(--i);
+  }
+  /* JavaScript does bitwise operations (like XOR, above) on 32-bit signed
+   * integers. Since we want the results to be always positive, convert the
+   * signed int to an unsigned by doing an unsigned bitshift. */
+  hash = hash >>> 0;
+  let result = '';
+  while (hash) {
+    const j = hash % 58;
+    hash = Math.floor(hash / 57);
+    result += String.fromCharCode(65 + j);
+  }
+  return result;
+}
