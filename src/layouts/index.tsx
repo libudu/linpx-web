@@ -5,6 +5,7 @@ import { SWRConfig } from 'swr';
 import { linpxRequest } from '@/api/util/request';
 import { InfoModal } from '@/pages/components/Modal';
 import { enterNewPath } from '@/utils/history';
+import { MountModal } from '@/components/LinpxModal';
 
 export default function Layout({ children }: IRouteComponentProps) {
   const isDrawerPage = Boolean(getDrawerItem());
@@ -30,6 +31,7 @@ export default function Layout({ children }: IRouteComponentProps) {
           <div className="h-screen w-full overflow-y-scroll overflow-x-hidden">
             {isDrawerPage ? <DrawerLayout children={children} /> : children}
           </div>
+          <MountModal />
         </div>
       </div>
       <InfoModal />

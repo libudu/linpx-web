@@ -1,8 +1,49 @@
 import { usePixivNovelComments } from '@/api';
+import { openModal } from '@/components/LinpxModal';
 import { Array2Map } from '@/types';
 import { stringHash } from '@/utils/util';
-import React from 'react';
+import { Input } from 'antd';
+import React, { useRef, FC, useEffect, useState } from 'react';
 import { BORDER } from '..';
+
+const { TextArea } = Input;
+
+let lastCommentText = '';
+
+// 评论模态框
+const CommentModal: FC = () => {
+  const [text, setText] = useState(lastCommentText);
+  // 启动模态框时自动聚焦
+  const ref = useRef<HTMLTextAreaElement>(null);
+  useEffect(() => {
+    const textarea = ref.current as any;
+    if (textarea) {
+      textarea.focus();
+      console.log(textarea);
+      textarea.resizableTextArea.textArea.setSelectionRange(999, 999);
+    }
+  }, []);
+  return (
+    <div className="w-full absolute bottom-0 bg-white p-4">
+      <div className="flex justify-between">
+        <span>{text.length}/1000</span>
+        <span>评论</span>
+      </div>
+      <TextArea
+        autoSize={{ minRows: 2, maxRows: 4 }}
+        style={{ fontSize: 24 }}
+        ref={ref}
+        defaultValue={lastCommentText}
+        onChange={(e) => {
+          const text = e.target.value;
+          setText(text);
+          lastCommentText = text;
+        }}
+        maxLength={1000}
+      />
+    </div>
+  );
+};
 
 interface IComment {
   replyComment: IReplyComment | null;
@@ -14,6 +55,7 @@ interface IComment {
 
 type IReplyComment = Omit<IComment, 'replyComment'>;
 
+// 一条评论
 const Comment: React.FC<IComment> = ({
   content,
   postTime,
@@ -40,12 +82,13 @@ const Comment: React.FC<IComment> = ({
 
 const NovelComment: React.FC<{ id: string }> = ({ id }) => {
   const data = usePixivNovelComments(id, true);
+  const ref = useRef<HTMLDivElement>(null);
   if (!data) return <></>;
   const commentMap = Array2Map(
     data.map((comment, index) => ({ ...comment, index })),
   );
   return (
-    <div className="w-full" style={{ borderTop: BORDER }}>
+    <div className="w-full" style={{ borderTop: BORDER }} ref={ref}>
       <div className="flex justify-between items-baseline px-4 py-3">
         <div className="text-3xl font-black">评论</div>
         <div className="text-base font-black">最新回复</div>
@@ -72,6 +115,18 @@ const NovelComment: React.FC<{ id: string }> = ({ id }) => {
             />
           );
         })}
+      </div>
+      <div className="h-10" />
+      <div
+        className="py-3 pl-6 text-gray-400 absolute bottom-0 w-full bg-white"
+        style={{ borderTop: BORDER }}
+        onClick={() =>
+          openModal({
+            children: <CommentModal />,
+          })
+        }
+      >
+        添加评论
       </div>
     </div>
   );
