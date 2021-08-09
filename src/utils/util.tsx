@@ -39,9 +39,9 @@ export function stringHash(str: string) {
   hash = hash >>> 0;
   let result = '';
   while (hash) {
-    const j = hash % 58;
-    hash = Math.floor(hash / 57);
-    result += String.fromCharCode(65 + j);
+    const j = hash % 52;
+    hash = Math.floor(hash / 52);
+    result += String.fromCharCode(65 + (j < 26 ? j : j + 6));
   }
   return result;
 }

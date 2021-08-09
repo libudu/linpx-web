@@ -71,9 +71,12 @@ export const unlikeNovel = (id: string) => {
   linpxRequest(`/pixiv/novel/${id}/unlike`, false);
 };
 
-export const usePixivNovelComments = (id: string): INovelComment[] | null => {
+export const usePixivNovelComments = (
+  id: string,
+  useCache: boolean,
+): INovelComment[] | null => {
   const { data } = useSWR(`/pixiv/novel/${id}/comments`, (path: string) =>
-    linpxRequest(path, false),
+    linpxRequest(path, useCache),
   );
   if (data?.error) {
     return null;

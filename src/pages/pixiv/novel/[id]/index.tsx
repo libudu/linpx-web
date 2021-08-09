@@ -53,10 +53,12 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   const [like, setLike] = useState(false);
   const [novelAnalyse, setNovelAnalyse] = useState<INovelAnalyse | null>(null);
   useEffect(() => {
-    linpxRequest(`/pixiv/novel/${id}/analyse`).then((data: INovelAnalyse) => {
-      setNovelAnalyse(data);
-      setLike(!data.canLike);
-    });
+    linpxRequest(`/pixiv/novel/${id}/analyse`, false).then(
+      (data: INovelAnalyse) => {
+        setNovelAnalyse(data);
+        setLike(!data.canLike);
+      },
+    );
   }, []);
   const onClickLike = useCallback(
     throttle(

@@ -39,7 +39,7 @@ const Comment: React.FC<IComment> = ({
 };
 
 const NovelComment: React.FC<{ id: string }> = ({ id }) => {
-  const data = usePixivNovelComments(id);
+  const data = usePixivNovelComments(id, true);
   if (!data) return <></>;
   const commentMap = Array2Map(
     data.map((comment, index) => ({ ...comment, index })),
