@@ -1,6 +1,7 @@
 import { INovelProfile } from '@/types';
 import { history } from 'umi';
 import { LikeOutlined } from '@ant-design/icons';
+import NewPng from '@/assets/icon/new.png';
 
 // 最近小说页面
 // 作者详情页面
@@ -16,6 +17,10 @@ export default function NovelCard({
   pixivLikeCount,
   likeCount,
 }: INovelProfile) {
+  // 一天之内发布的小说判定为新小说
+  const createDateObj = new Date(createDate);
+  const isNew =
+    (Date.now() - createDateObj.getTime()) / 1000 / 60 / 60 / 24 < 2;
   return (
     <div
       className="lp-shadow my-5 flex lp-bgcolor overflow-hidden w-full"
@@ -36,14 +41,19 @@ export default function NovelCard({
         </div>
       </div>
       <div className="text-left flex flex-col mt-2 mr-2 flex-shrink flex-grow overflow-x-auto">
-        <div className="font-black u-line-1">{title}</div>
+        <div className="w-full flex items-center">
+          <div className="font-black u-line-1">{title}</div>
+          {isNew && (
+            <img className="h-5 mx-2 rounded-sm object-contain" src={NewPng} />
+          )}
+        </div>
         <div className="text-xs">
           {userName}
           <span className="inline-block ml-2 font-normal text-gray-400">
             {length}字
           </span>
           <span className="inline-block ml-2 font-normal text-gray-400">
-            {new Date(createDate).toLocaleDateString()}
+            {createDateObj.toLocaleDateString()}
           </span>
         </div>
         <div className="text-xs text-blue-400 u-line-1">
