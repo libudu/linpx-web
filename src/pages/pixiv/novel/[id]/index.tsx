@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { throttle } from 'lodash';
 import { IRouteProps } from 'umi';
 import classNames from 'classnames';
 
@@ -10,18 +11,15 @@ import {
   likeNovel,
   unlikeNovel,
 } from '@/api';
+import { linpxRequest } from '@/api/util/request';
+import { INovelAnalyse } from '@/types';
 
 import NovelIntro from './components/NovelIntro';
 import NovelNavbar from './components/NovelNavbar';
 import NovelContent from './components/NovelContent';
 import NovelFooter from './components/NovelFooter';
-import { useCallback } from 'react';
-import { throttle } from 'lodash';
 import NovelComment from './components/NovelComment';
 import NovelAnalyse from './components/NovelAnalyse';
-import { linpxRequest } from '@/api/util/request';
-import { useEffect } from 'react';
-import { INovelAnalyse } from '@/types';
 
 export const BORDER = '1px solid #ccc';
 
@@ -78,10 +76,12 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   );
 
   // 监听滚动
+  const commentRef = useRef<HTMLDivElement>(null);
+  const [showInput, setShowInput] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const scrollHandler = useCallback(
     throttle((e: any) => {
-      const scrollTop: number = e.target.scrollTop;
+      const { scrollTop, offsetHeight } = e.target;
       const shake = 20;
       const change = scrollTop - lastScrollTop;
       // 上滑
@@ -92,6 +92,13 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
         setShowNavbar(false);
       }
       lastScrollTop = scrollTop;
+      const commentDistance =
+        offsetHeight + scrollTop - (commentRef.current?.offsetTop || 0);
+      if (commentDistance > 150) {
+        setShowInput(true);
+      } else {
+        setShowInput(false);
+      }
     }, 100),
     [],
   );
@@ -142,7 +149,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
             likeCount={totalLikeCount}
             onClickLike={onClickLike}
           />
-          <NovelComment id={id} />
+          <NovelComment id={id} commentRef={commentRef} showInput={showInput} />
         </div>
       )}
     </div>
