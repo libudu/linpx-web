@@ -116,27 +116,21 @@ const Comment: React.FC<IComment> = ({
 
 interface NovelCommentProps {
   id: string;
+  comments: INovelComment[];
   commentRef: React.RefObject<HTMLDivElement>;
   showInput: boolean;
+  onCommentSuccess: () => any;
 }
 
 const NovelComment: React.FC<NovelCommentProps> = ({
   id,
+  comments,
   commentRef,
   showInput,
+  onCommentSuccess,
 }) => {
   // 发表评论后滚动到底部
   const endRef = useRef<HTMLDivElement>(null);
-  // 加载及刷新评论数据
-  const [comments, setComments] = useState<INovelComment[] | null>(null);
-  const refreshComments = () => {
-    return getPixivNovelComments(id).then((res) => {
-      setComments(res);
-    });
-  };
-  useEffect(() => {
-    refreshComments();
-  }, []);
   if (!comments) return <></>;
   const commentMap = Array2Map(
     comments.map((comment, index) => ({ ...comment, index })),
@@ -188,7 +182,7 @@ const NovelComment: React.FC<NovelCommentProps> = ({
               <CommentModal
                 id={id}
                 onCommentSuccess={async () => {
-                  await refreshComments();
+                  await onCommentSuccess();
                   endRef.current?.scrollIntoView({ behavior: 'smooth' });
                 }}
               />

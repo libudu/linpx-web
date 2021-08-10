@@ -75,6 +75,7 @@ const AroundButtons: React.FC<NextButtonProps> = ({ next, prev }) => {
 };
 
 interface NovelFooterProps {
+  footerRef: React.RefObject<HTMLDivElement>;
   novelInfo: INovelInfo;
   afdianUrl: string | undefined;
   like: boolean;
@@ -83,6 +84,7 @@ interface NovelFooterProps {
 }
 
 const NovelFooter: React.FC<NovelFooterProps> = ({
+  footerRef,
   novelInfo,
   afdianUrl,
   like,
@@ -121,6 +123,7 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
 
   return (
     <div
+      ref={footerRef}
       className="mb-12 mt-10 mx-6"
       style={{
         border: BORDER,

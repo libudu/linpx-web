@@ -10,9 +10,10 @@ import {
   usePixivNovelRead,
   likeNovel,
   unlikeNovel,
+  getPixivNovelComments,
 } from '@/api';
 import { linpxRequest } from '@/api/util/request';
-import { INovelAnalyse } from '@/types';
+import { INovelAnalyse, INovelComment } from '@/types';
 
 import NovelIntro from './components/NovelIntro';
 import NovelNavbar from './components/NovelNavbar';
@@ -46,11 +47,20 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   const favUser = useFavUserById(novelInfo?.userId || '');
   const afdianUrl = favUser?.afdian;
 
+  // 加载及刷新评论数据
+  const [comments, setComments] = useState<INovelComment[]>([]);
+  const refreshComments = () => {
+    return getPixivNovelComments(id).then((res) => {
+      setComments(res);
+    });
+  };
+
   // 统计数据
   usePixivNovelRead(id);
   const [like, setLike] = useState(false);
   const [novelAnalyse, setNovelAnalyse] = useState<INovelAnalyse | null>(null);
   useEffect(() => {
+    refreshComments();
     linpxRequest(`/pixiv/novel/${id}/analyse`, false).then(
       (data: INovelAnalyse) => {
         setNovelAnalyse(data);
@@ -58,6 +68,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
       },
     );
   }, []);
+  // 点击喜欢/取消喜欢
   const onClickLike = useCallback(
     throttle(
       (like: boolean) => {
@@ -84,6 +95,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
       const { scrollTop, offsetHeight } = e.target;
       const shake = 20;
       const change = scrollTop - lastScrollTop;
+      // 顶部标题
       // 上滑
       if (change < -shake || scrollTop < 60) {
         setShowNavbar(true);
@@ -92,6 +104,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
         setShowNavbar(false);
       }
       lastScrollTop = scrollTop;
+      // 底部评论
       const commentDistance =
         offsetHeight + scrollTop - (commentRef.current?.offsetTop || 0);
       if (commentDistance > 150) {
@@ -102,6 +115,9 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
     }, 100),
     [],
   );
+
+  // 底部工具栏引用
+  const footerRef = useRef<HTMLDivElement>(null);
 
   if (!novelInfo || !novelAnalyse) {
     return <ContentNavbar>小说详情</ContentNavbar>;
@@ -126,7 +142,11 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
             like={like}
             likeCount={totalLikeCount}
             readCount={totalReadCount}
+            commentCount={comments.length}
             onClickLike={onClickLike}
+            onClickComment={() => {
+              footerRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }}
           />
           <div
             className={classNames(
@@ -143,13 +163,20 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
             <NovelContent text={content} images={images} />
           </div>
           <NovelFooter
+            footerRef={footerRef}
             afdianUrl={afdianUrl}
             novelInfo={novelInfo}
             like={like}
             likeCount={totalLikeCount}
             onClickLike={onClickLike}
           />
-          <NovelComment id={id} commentRef={commentRef} showInput={showInput} />
+          <NovelComment
+            id={id}
+            commentRef={commentRef}
+            showInput={showInput}
+            comments={comments}
+            onCommentSuccess={() => refreshComments()}
+          />
         </div>
       )}
     </div>
