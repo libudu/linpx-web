@@ -44,7 +44,7 @@ export default function NovelCard({
         <div className="w-full flex items-center">
           <div className="font-black u-line-1">{title}</div>
           {isNew && (
-            <img className="h-5 mx-2 rounded-sm object-contain" src={NewPng} />
+            <img className="h-4 mx-2 rounded-sm object-contain" src={NewPng} />
           )}
         </div>
         <div className="text-xs">
