@@ -1,9 +1,12 @@
-import { usePixivNovelComments } from '@/api';
-import { openModal } from '@/components/LinpxModal';
-import { Array2Map } from '@/types';
+import { getPixivNovelComments, pixivNovelNewComment } from '@/api';
+import { closeModal, openModal } from '@/components/LinpxModal';
+import { Array2Map, INovelComment } from '@/types';
 import { stringHash } from '@/utils/util';
 import { Input } from 'antd';
-import React, { useRef, FC, useEffect, useState } from 'react';
+import { Toast } from 'antd-mobile';
+import classNames from 'classnames';
+import { throttle } from 'lodash';
+import React, { useRef, FC, useEffect, useState, useCallback } from 'react';
 import { BORDER } from '..';
 
 const { TextArea } = Input;
@@ -11,7 +14,12 @@ const { TextArea } = Input;
 let lastCommentText = '';
 
 // 评论模态框
-const CommentModal: FC = () => {
+interface CommentModalProps {
+  id: string;
+  onCommentSuccess: () => any;
+}
+
+const CommentModal: FC<CommentModalProps> = ({ id, onCommentSuccess }) => {
   const [text, setText] = useState(lastCommentText);
   // 启动模态框时自动聚焦
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -19,26 +27,52 @@ const CommentModal: FC = () => {
     const textarea = ref.current as any;
     if (textarea) {
       textarea.focus();
-      console.log(textarea);
       textarea.resizableTextArea.textArea.setSelectionRange(999, 999);
     }
   }, []);
+  // 避免快速输入时出现卡顿
+  const onTextChange = useCallback(
+    throttle((e: any) => {
+      const text = e.target.value;
+      setText(text);
+      lastCommentText = text;
+    }, 200),
+    [],
+  );
   return (
-    <div className="w-full absolute bottom-0 bg-white p-4">
-      <div className="flex justify-between">
-        <span>{text.length}/1000</span>
-        <span>评论</span>
+    <div className="w-full absolute bottom-0 bg-white p-4 pt-3">
+      <div className="flex justify-between mb-3 text-2xl items-end">
+        <span
+          className={classNames('text-gray-400', {
+            'text-red-600': text.length >= 1000,
+          })}
+        >
+          {text.length}/1000
+        </span>
+        <span
+          className="bg-yellow-500 py-1 px-2 rounded-md"
+          onClick={async () => {
+            const res = await pixivNovelNewComment(id, text);
+            if (res.error) {
+              Toast.info('评论失败', 1.0, undefined, false);
+            } else {
+              Toast.info('评论成功', 1.0, undefined, false);
+              onCommentSuccess();
+              lastCommentText = '';
+              closeModal();
+            }
+          }}
+        >
+          评论
+        </span>
       </div>
       <TextArea
+        color="yellow"
         autoSize={{ minRows: 2, maxRows: 4 }}
         style={{ fontSize: 24 }}
         ref={ref}
         defaultValue={lastCommentText}
-        onChange={(e) => {
-          const text = e.target.value;
-          setText(text);
-          lastCommentText = text;
-        }}
+        onChange={onTextChange}
         maxLength={1000}
       />
     </div>
@@ -80,30 +114,40 @@ const Comment: React.FC<IComment> = ({
   );
 };
 
-interface INovelComment {
+interface NovelCommentProps {
   id: string;
   commentRef: React.RefObject<HTMLDivElement>;
   showInput: boolean;
 }
 
-const NovelComment: React.FC<INovelComment> = ({
+const NovelComment: React.FC<NovelCommentProps> = ({
   id,
   commentRef,
   showInput,
 }) => {
-  const data = usePixivNovelComments(id, true);
-  if (!data) return <></>;
+  // 发表评论后滚动到底部
+  const endRef = useRef<HTMLDivElement>(null);
+  // 加载及刷新评论数据
+  const [comments, setComments] = useState<INovelComment[] | null>(null);
+  const refreshComments = () => {
+    return getPixivNovelComments(id).then((res) => {
+      setComments(res);
+    });
+  };
+  useEffect(() => {
+    refreshComments();
+  }, []);
+  if (!comments) return <></>;
   const commentMap = Array2Map(
-    data.map((comment, index) => ({ ...comment, index })),
+    comments.map((comment, index) => ({ ...comment, index })),
   );
   return (
     <div className="w-full" style={{ borderTop: BORDER }} ref={commentRef}>
       <div className="flex justify-between items-baseline px-4 py-3">
         <div className="text-3xl font-black">评论</div>
-        <div className="text-base font-black">最新回复</div>
       </div>
       <div className="w-full">
-        {data.length === 0 ? (
+        {comments.length === 0 ? (
           <div
             className="h-32 flex justify-center items-center text-gray-400"
             style={{ borderTop: BORDER }}
@@ -111,7 +155,7 @@ const NovelComment: React.FC<INovelComment> = ({
             快来添加第一条评论吧
           </div>
         ) : (
-          data.map(({ id, ip, content, reply, postTime }, index) => {
+          comments.map(({ id, ip, content, reply, postTime }, index) => {
             const replySource = commentMap[reply];
             const replyComment: IReplyComment | null = replySource
               ? {
@@ -134,13 +178,21 @@ const NovelComment: React.FC<INovelComment> = ({
           })
         )}
       </div>
-      <div className="h-10" />
+      <div className="h-10" ref={endRef} />
       <div
         className="py-3 pl-6 text-gray-400 absolute w-full bg-white transition-all duration-500"
         style={{ borderTop: BORDER, bottom: showInput ? 0 : -100 }}
         onClick={() =>
           openModal({
-            children: <CommentModal />,
+            children: (
+              <CommentModal
+                id={id}
+                onCommentSuccess={async () => {
+                  await refreshComments();
+                  endRef.current?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              />
+            ),
           })
         }
       >

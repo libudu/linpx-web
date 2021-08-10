@@ -71,6 +71,16 @@ export const unlikeNovel = (id: string) => {
   linpxRequest(`/pixiv/novel/${id}/unlike`, false);
 };
 
+export const getPixivNovelComments = (id: string): Promise<INovelComment[]> => {
+  return linpxRequest(`/pixiv/novel/${id}/comments`, false).then((res: any) => {
+    if (res.error) {
+      console.log('获取评论失败', res);
+      return [];
+    }
+    return res.data;
+  });
+};
+
 export const usePixivNovelComments = (
   id: string,
   useCache: boolean,
@@ -82,4 +92,8 @@ export const usePixivNovelComments = (
     return null;
   }
   return data?.data;
+};
+
+export const pixivNovelNewComment = (id: string, text: string) => {
+  return linpxRequest(`/pixiv/novel/${id}/comment/new?text=${text}`, false);
 };
