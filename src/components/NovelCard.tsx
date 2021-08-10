@@ -1,6 +1,10 @@
 import { INovelProfile } from '@/types';
 import { history } from 'umi';
-import { LikeOutlined } from '@ant-design/icons';
+import {
+  LikeOutlined,
+  MessageOutlined,
+  CommentOutlined,
+} from '@ant-design/icons';
 import NewPng from '@/assets/icon/new.png';
 
 // 最近小说页面
@@ -16,6 +20,7 @@ export default function NovelCard({
   createDate,
   pixivLikeCount,
   likeCount,
+  commentCount,
 }: INovelProfile) {
   // 一天之内发布的小说判定为新小说
   const createDateObj = new Date(createDate);
@@ -37,7 +42,17 @@ export default function NovelCard({
           style={{ boxShadow: '0 0 14px #888' }}
         >
           {pixivLikeCount + likeCount}
-          <LikeOutlined size={12} color="orange" className="ml-1" />
+          <LikeOutlined size={12} className="ml-1" />
+          {commentCount > 0 && (
+            <div className="ml-2 flex items-center">
+              {commentCount}
+              <MessageOutlined
+                style={{ zoom: 0.9 }}
+                size={12}
+                className="ml-1"
+              />
+            </div>
+          )}
         </div>
       </div>
       <div className="text-left flex flex-col mt-2 mr-2 flex-shrink flex-grow overflow-x-auto">

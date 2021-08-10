@@ -40,6 +40,7 @@ export interface INovelProfile {
   createDate: string;
   pixivLikeCount: number;
   likeCount: number;
+  commentCount: number;
 }
 
 export interface INovelImage {
