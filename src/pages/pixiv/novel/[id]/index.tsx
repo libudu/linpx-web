@@ -145,7 +145,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
             commentCount={comments.length}
             onClickLike={onClickLike}
             onClickComment={() => {
-              footerRef.current?.scrollIntoView({ behavior: 'smooth' });
+              footerRef.current?.scrollIntoView();
             }}
           />
           <div

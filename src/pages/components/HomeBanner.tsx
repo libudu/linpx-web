@@ -1,3 +1,4 @@
+import { getQQGroupShareLink } from '@/utils/util';
 import { Carousel } from 'antd';
 
 const BannerBox: React.FC = ({ children }) => {
@@ -18,6 +19,17 @@ export default function HomeBanner() {
       </BannerBox>
       <BannerBox>
         <div>群号:576268549</div>
+        <div className="flex items-center">
+          点击
+          <a target="_blank" href={getQQGroupShareLink(576268549)}>
+            <img
+              className="h-6"
+              src="//pub.idqqimg.com/wpa/images/group.png"
+              alt="橘猫的阅读器"
+              title="橘猫的阅读器"
+            />
+          </a>
+        </div>
         <div>欢迎反馈问题或提建议！</div>
       </BannerBox>
       <BannerBox>
