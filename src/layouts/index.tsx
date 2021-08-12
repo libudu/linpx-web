@@ -1,6 +1,5 @@
 import { IRouteComponentProps, history } from 'umi';
 import DrawerLayout, { getDrawerItem } from './DrawerLayout';
-import { getAppWidth } from '@/utils/util';
 import { SWRConfig } from 'swr';
 import { linpxRequest } from '@/api/util/request';
 import { InfoModal } from '@/pages/components/Modal';
@@ -23,10 +22,10 @@ export default function Layout({ children }: IRouteComponentProps) {
         revalidateOnFocus: false,
       }}
     >
-      <div className="h-screen w-screen bg-gray-100 text-xl flex">
+      <div className="h-screen w-screen bg-gray-100 text-xl flex flex-shrink-0">
         <div
-          className="h-screen mx-auto bg-white relative"
-          style={{ width: getAppWidth() }}
+          className="h-screen mx-auto bg-white relative flex-grow"
+          style={{ maxWidth: 448, minWidth: 300 }}
         >
           <div className="h-screen w-full overflow-y-scroll overflow-x-hidden">
             {isDrawerPage ? <DrawerLayout children={children} /> : children}

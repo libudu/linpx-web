@@ -10,6 +10,7 @@ import PageLayout from '@/components/PageLayout';
 import DefaultBgImg from '@/assets/default/default_bg.jpg';
 import AfdianImg from '@/assets/icon/afdian.png';
 import { openAfdianUrl } from '@/pages/components/Afdian';
+import { getQQGroupShareLink } from '@/utils/util';
 
 const MaxUserComment = 50;
 
@@ -26,6 +27,7 @@ function UserPart({
   // 是否是推荐作者
   const favUserInfo = useFavUserById(id);
   const afdianUrl = favUserInfo?.afdian;
+  const qqgroup = favUserInfo?.qqgroup;
   // 过长的自我介绍
   let isLongComment = false;
   if (comment.length > MaxUserComment) isLongComment = true;
@@ -35,6 +37,10 @@ function UserPart({
     tagName,
     time,
   }));
+
+  const clientWidth = document.documentElement.clientWidth;
+  // 屏宽小于350且同时存在爱发电和q群则头像变小
+  const isSmall = clientWidth < 350 && afdianUrl;
 
   return (
     <div
@@ -54,12 +60,18 @@ function UserPart({
         style={{ backgroundImage: `url(${backgroundUrl || DefaultBgImg})` }}
       />
       {/* 头像、名字、id */}
-      <div className="mx-4 flex pt-12">
+      <div
+        className="flex pt-12 w-full"
+        style={{ marginLeft: isSmall ? 5 : 10 }}
+      >
         <div
-          className="h-32 w-32 z-10 mt-2 bg-center rounded-full flex-shrink-0"
+          className={`${
+            isSmall ? 'h-28 w-28' : 'h-32 w-32'
+          } z-10 mt-2 bg-center rounded-full flex-shrink-0`}
           style={{
             backgroundImage: `url(${imageUrl})`,
             border: '8px solid rgb(255,252,241)',
+            marginRight: clientWidth > 370 ? 10 : 0,
           }}
         />
         <div className="z-10 mt-16 pb-2 mr-1 flex items-center">
@@ -72,20 +84,30 @@ function UserPart({
             </div>
             <div className="flex">
               <div
-                className="mr-2 px-1.5 py-0.5 text-sm bg-blue-400 text-white rounded-lg"
-                style={{ width: 'max-content' }}
+                className="mr-2 px-2 py-0.5 text-sm bg-blue-400 text-white rounded-lg"
+                style={{ width: 'max-content', letterSpacing: 2 }}
                 onClick={() => window.open(`https://www.pixiv.net/users/${id}`)}
               >
-                PID:{id}
+                PIXIV
               </div>
               {afdianUrl && (
                 <div
-                  className="px-2 py-0.5 text-sm bg-purple-500 text-white rounded-lg flex items-center"
-                  style={{ width: 'max-content' }}
+                  className="mr-2 px-2 py-0.5 text-sm bg-purple-500 text-white rounded-lg flex items-center"
                   onClick={() => openAfdianUrl(name, afdianUrl)}
                 >
-                  <img src={AfdianImg} style={{ height: 16, marginRight: 3 }} />
-                  <span>支持作者</span>
+                  <img
+                    src={AfdianImg}
+                    style={{ height: 16, marginRight: 2, marginTop: 3 }}
+                  />
+                  <span>支持</span>
+                </div>
+              )}
+              {qqgroup && (
+                <div
+                  className="px-2 py-0.5 bg-black text-sm text-white rounded-lg flex items-center"
+                  onClick={() => window.open(getQQGroupShareLink(qqgroup))}
+                >
+                  <span>作者Q群</span>
                 </div>
               )}
             </div>

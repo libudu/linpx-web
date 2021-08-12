@@ -16,6 +16,7 @@ export interface IFavUser {
   id: string;
   name: string;
   afdian?: string;
+  qqgroup?: string;
 }
 
 export interface IUserInfo {
