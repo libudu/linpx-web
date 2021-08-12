@@ -7,7 +7,7 @@ if (!isDev()) {
 }
 
 export function patchRoutes({ routes }: any) {
-  routes[0].routes = routes[0].routes.concat(
+  routes[0].routes.unshift(
     {
       path: '/pu/:id',
       redirect: '/pixiv/user/:id',
@@ -15,10 +15,6 @@ export function patchRoutes({ routes }: any) {
     {
       path: '/pn/:id',
       redirect: '/pixiv/novel/:id',
-    },
-    {
-      path: '*',
-      component: require('@/pages/404').default,
     },
   );
 }

@@ -13,7 +13,7 @@ export default function IndexPage() {
       <div className="flex flex-col items-center" style={{ marginTop: '25vh' }}>
         <img
           className="rounded-2xl"
-          style={{ width: '30vw' }}
+          style={{ width: '30%' }}
           src={LinpicioConfuseImg}
         />
         <div className="font-black text-3xl my-3">错误 - 404</div>
