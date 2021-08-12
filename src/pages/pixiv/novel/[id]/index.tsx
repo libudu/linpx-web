@@ -133,52 +133,54 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
     Number(!canLike && !like);
 
   return (
-    <div className="h-screen w-full overflow-y-scroll" onScroll={scrollHandler}>
-      <NovelNavbar showNavbar={showNavbar} novelInfo={novelInfo} />
-      {novelInfo && (
-        <div className="mb-4 w-full">
-          <NovelIntro {...novelInfo} {...novelAnalyse} />
-          <NovelAnalyse
-            like={like}
-            likeCount={totalLikeCount}
-            readCount={totalReadCount}
-            commentCount={comments.length}
-            onClickLike={onClickLike}
-            onClickComment={() => {
-              footerRef.current?.scrollIntoView();
-            }}
-          />
-          <div
-            className={classNames(
-              'whitespace-pre-line p-4 w-full',
-              novelStyle.fontSizeClass,
-            )}
-            style={{
-              pointerEvents: 'none',
-              background: novelStyle.bgColor,
-              color: novelStyle.color,
-              fontFamily: novelStyle.fontFamily,
-            }}
-          >
-            <NovelContent text={content} images={images} />
+    <div className="h-full relative">
+      <div className="h-full w-full overflow-y-scroll" onScroll={scrollHandler}>
+        <NovelNavbar showNavbar={showNavbar} novelInfo={novelInfo} />
+        {novelInfo && (
+          <div className="w-full">
+            <NovelIntro {...novelInfo} {...novelAnalyse} />
+            <NovelAnalyse
+              like={like}
+              likeCount={totalLikeCount}
+              readCount={totalReadCount}
+              commentCount={comments.length}
+              onClickLike={onClickLike}
+              onClickComment={() => {
+                footerRef.current?.scrollIntoView();
+              }}
+            />
+            <div
+              className={classNames(
+                'whitespace-pre-line p-4 w-full',
+                novelStyle.fontSizeClass,
+              )}
+              style={{
+                pointerEvents: 'none',
+                background: novelStyle.bgColor,
+                color: novelStyle.color,
+                fontFamily: novelStyle.fontFamily,
+              }}
+            >
+              <NovelContent text={content} images={images} />
+            </div>
+            <NovelFooter
+              footerRef={footerRef}
+              afdianUrl={afdianUrl}
+              novelInfo={novelInfo}
+              like={like}
+              likeCount={totalLikeCount}
+              onClickLike={onClickLike}
+            />
+            <NovelComment
+              id={id}
+              commentRef={commentRef}
+              showInput={showInput}
+              comments={comments}
+              onCommentSuccess={() => refreshComments()}
+            />
           </div>
-          <NovelFooter
-            footerRef={footerRef}
-            afdianUrl={afdianUrl}
-            novelInfo={novelInfo}
-            like={like}
-            likeCount={totalLikeCount}
-            onClickLike={onClickLike}
-          />
-          <NovelComment
-            id={id}
-            commentRef={commentRef}
-            showInput={showInput}
-            comments={comments}
-            onCommentSuccess={() => refreshComments()}
-          />
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
