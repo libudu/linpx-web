@@ -19,7 +19,8 @@ export default function NovelCard({
   length,
   createDate,
   pixivLikeCount,
-  likeCount,
+  // 避免全部小说没有like字段的问题
+  likeCount = 0,
   commentCount,
 }: INovelProfile) {
   // 一天之内发布的小说判定为新小说

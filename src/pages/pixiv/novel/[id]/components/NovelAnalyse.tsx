@@ -44,10 +44,7 @@ const NovelAnalyse: React.FC<{
         onClick={onClickComment}
       >
         {commentCount}
-        <MessageOutlined
-          className="ml-2 mt-0.5"
-          style={{ fontSize: 22, color: like ? 'orange' : 'black' }}
-        />
+        <MessageOutlined className="ml-2 mt-0.5" style={{ fontSize: 22 }} />
       </div>
     </div>
   );
