@@ -105,7 +105,9 @@ function UserPart({
               {qqgroup && (
                 <div
                   className="px-2 py-0.5 bg-black text-sm text-white rounded-lg flex items-center"
-                  onClick={() => window.open(getQQGroupShareLink(qqgroup))}
+                  onClick={() =>
+                    window.open(getQQGroupShareLink(qqgroup), '_self')
+                  }
                 >
                   <span>作者Q群</span>
                 </div>

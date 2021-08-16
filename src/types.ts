@@ -93,18 +93,6 @@ export interface INovelAnalyse {
   canLike: boolean;
 }
 
-export interface IFavUserTagInfo {
-  time: string;
-  localTime: string;
-  user: string[];
-  data: {
-    tagName: string;
-    time: number;
-    novels: string[];
-  }[];
-  take: number;
-}
-
 export interface IAnalyseTag {
   time: string;
   data: {

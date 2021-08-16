@@ -44,16 +44,10 @@ export default function NovelCard({
         >
           {pixivLikeCount + likeCount}
           <LikeOutlined size={12} className="ml-1" />
-          {commentCount > 0 && (
-            <div className="ml-2 flex items-center">
-              {commentCount}
-              <MessageOutlined
-                style={{ zoom: 0.9 }}
-                size={12}
-                className="ml-1"
-              />
-            </div>
-          )}
+          <div className="ml-2 flex items-center">
+            {commentCount}
+            <MessageOutlined style={{ zoom: 0.9 }} size={12} className="ml-1" />
+          </div>
         </div>
       </div>
       <div className="text-left flex flex-col mt-2 mr-2 flex-shrink flex-grow overflow-x-auto">
