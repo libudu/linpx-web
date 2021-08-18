@@ -13,7 +13,7 @@ export default function IndexPage() {
       <div className="flex justify-center mt-16 mb-2">
         <div
           className="mb-4 bg-purple-500 rounded-full w-24 h-24 flex items-center justify-center"
-          onClick={() => window.open('https://afdian.net/@LINPX')}
+          onClick={() => window.open('https://afdian.net/@orangecat')}
         >
           <img src={AfdianImg} />
         </div>

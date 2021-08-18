@@ -18,38 +18,12 @@ export default function HomeBanner() {
         <div className="text-xs opacity-30">骗你的，还有很多没做</div>
       </BannerBox>
       <BannerBox>
-        <div>群号:576268549</div>
-        <div className="flex items-center">
-          点击
-          <a target="_blank" href={getQQGroupShareLink(576268549)}>
-            <img
-              className="h-6"
-              src="//pub.idqqimg.com/wpa/images/group.png"
-              alt="橘猫的阅读器"
-              title="橘猫的阅读器"
-            />
-          </a>
-        </div>
-        <div>欢迎反馈问题或提建议！</div>
-      </BannerBox>
-      <BannerBox>
         <div
           onClick={() => {
-            window.open('https://weibo.com/linpicio');
+            window.open('https://afdian.net/@orangecat');
           }}
         >
-          <div>关注我的微博</div>
-          <div>@林彼丢带橘猫</div>
-          <div>点击跳转！</div>
-        </div>
-      </BannerBox>
-      <BannerBox>
-        <div
-          onClick={() => {
-            window.open('https://afdian.net/@LINPX');
-          }}
-        >
-          <div>爱发电赞助！</div>
+          <div>爱发电赞助作者！</div>
           <div>点击跳转！</div>
         </div>
       </BannerBox>
