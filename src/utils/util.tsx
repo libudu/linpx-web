@@ -1,6 +1,7 @@
 import { BASE_URL } from '@/api/util/request';
 
-const chineseTrans = require('chinese-s2t');
+import chineseTrans from 'chinese-s2t';
+
 export const { t2s }: { t2s: (text: string) => string } = chineseTrans;
 
 export function getAppWidth() {
@@ -16,6 +17,7 @@ export const list2query = (itemList: string[], keyName = 'ids') => {
   return itemList.map((item) => `${keyName}[]=${item}`).join('&');
 };
 
+// 可能被代理过一次的url再次调用该函数，注意修改url前必须判断是否已修改，避免每次渲染都重复代理
 export function proxyImg(url: string | undefined) {
   if (url && !url.startsWith(BASE_URL)) {
     url = `${BASE_URL}/proxy/pximg?url=${url}`;
