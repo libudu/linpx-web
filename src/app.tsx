@@ -1,5 +1,7 @@
 import './global.less';
 import { isDev } from './utils/util';
+import PixivUser from '@/pages/pixiv/user/[id]';
+import PixivNovel from '@/pages/pixiv/novel/[id]';
 
 // 生产环境下去除日志
 if (!isDev()) {
@@ -10,11 +12,11 @@ export function patchRoutes({ routes }: any) {
   routes[0].routes.unshift(
     {
       path: '/pu/:id',
-      redirect: '/pixiv/user/:id',
+      component: PixivUser,
     },
     {
       path: '/pn/:id',
-      redirect: '/pixiv/novel/:id',
+      component: PixivNovel,
     },
   );
 }

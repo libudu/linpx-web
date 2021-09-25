@@ -1,5 +1,6 @@
 import { getQQGroupShareLink } from '@/utils/util';
 import { Carousel } from 'antd';
+import MidAutumnImg from '@/assets/banner/midautumn.jpg';
 
 const BannerBox: React.FC = ({ children }) => {
   return (
@@ -13,6 +14,9 @@ const BannerBox: React.FC = ({ children }) => {
 export default function HomeBanner() {
   return (
     <Carousel autoplay dots={false}>
+      <BannerBox>
+        <img className="w-full h-full object-cover" src={MidAutumnImg} />
+      </BannerBox>
       <BannerBox>
         <div>快做完了！</div>
         <div className="text-xs opacity-30">骗你的，还有很多没做</div>
