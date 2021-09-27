@@ -13,14 +13,27 @@ const defaultStyle = {
 
 type StyleType = typeof defaultStyle;
 
-export default function () {
-  const [novelStyles, setStyle] = useState(defaultStyle);
+const saveStyles = (styles: StyleType) => {
+  localStorage.setItem('novelStyles', JSON.stringify(styles));
+};
 
-  const _setNovelStyles = useCallback((newStyles: Partial<StyleType>) => {
-    setStyle({
+// 先从缓存取，取不到用默认值
+let initStyle = JSON.parse(localStorage.getItem('novelStyles') || 'null');
+if (!initStyle) {
+  initStyle = defaultStyle;
+  saveStyles(defaultStyle);
+}
+
+export default function () {
+  const [novelStyles, setStyle] = useState(initStyle);
+
+  const _setNovelStyles = useCallback((styleChanges: Partial<StyleType>) => {
+    const newStyles = {
       ...novelStyles,
-      ...newStyles,
-    });
+      ...styleChanges,
+    };
+    setStyle(newStyles);
+    saveStyles(newStyles);
   }, []);
 
   setNovelStyles = _setNovelStyles;
