@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { throttle } from 'lodash';
 import { IRouteProps } from 'umi';
-import classNames from 'classnames';
 
 import { ContentNavbar } from '@/components/Navbar';
 import {
@@ -24,23 +23,11 @@ import NovelAnalyse from './components/NovelAnalyse';
 
 export const BORDER = '1px solid #ccc';
 
-export let updateNovelStyle: any;
-export let novelStyle = {
-  fontFamily: '',
-  fontSizeClass: 'text-lg',
-  bgColor: '',
-  color: '#000',
-};
-
 let lastScrollTop = 0;
 
 const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   document.title = 'Linpx - 小说详情';
   const id = match.params.id;
-
-  // 样式刷新
-  const [refresh, setRefresh] = useState({});
-  updateNovelStyle = () => setRefresh({});
 
   // 基本数据
   const novelInfo = usePixivNovel(id);
@@ -149,20 +136,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
                 footerRef.current?.scrollIntoView();
               }}
             />
-            <div
-              className={classNames(
-                'whitespace-pre-line p-4 w-full',
-                novelStyle.fontSizeClass,
-              )}
-              style={{
-                pointerEvents: 'none',
-                background: novelStyle.bgColor,
-                color: novelStyle.color,
-                fontFamily: novelStyle.fontFamily,
-              }}
-            >
-              <NovelContent text={content} images={images} />
-            </div>
+            <NovelContent text={content} images={images} />
             <NovelFooter
               footerRef={footerRef}
               afdianUrl={afdianUrl}

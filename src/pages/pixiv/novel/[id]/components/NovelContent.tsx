@@ -1,6 +1,8 @@
 import { ReactElement } from 'react';
 import { proxyImg, t2s } from '@/utils/util';
 import { INovelInfo } from '@/types';
+import { useModel } from '@/.umi/plugin-model/useModel';
+import classNames from 'classnames';
 
 interface NovelContentProps {
   text: string;
@@ -43,4 +45,22 @@ const NovelContent: React.FC<NovelContentProps> = ({ text, images }) => {
   return <>{text}</>;
 };
 
-export default NovelContent;
+export default (props: NovelContentProps) => {
+  const { novelStyles } = useModel('styles');
+  return (
+    <div
+      className={classNames(
+        'whitespace-pre-line p-4 w-full',
+        novelStyles.fontSizeClass,
+      )}
+      style={{
+        pointerEvents: 'none',
+        background: novelStyles.bgColor,
+        color: novelStyles.color,
+        fontFamily: novelStyles.fontFamily,
+      }}
+    >
+      <NovelContent {...props} />
+    </div>
+  );
+};
