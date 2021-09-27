@@ -27,7 +27,7 @@ export const BORDER = '1px solid #ccc';
 export let updateNovelStyle: any;
 export let novelStyle = {
   fontFamily: '',
-  fontSizeClass: '',
+  fontSizeClass: 'text-lg',
   bgColor: '',
   color: '#000',
 };

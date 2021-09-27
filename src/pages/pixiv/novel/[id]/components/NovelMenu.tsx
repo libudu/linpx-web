@@ -103,9 +103,9 @@ export default function NovelMenu({ id, userName, title }: INovelMenu) {
       <Item>
         <div>字号</div>
         <div className="flex items-center mr-1">
-          <FontSizePicker sizeClass="text-lg" name="小" />
-          <FontSizePicker sizeClass="text-xl" name="中" />
-          <FontSizePicker sizeClass="text-2xl" name="大" />
+          <FontSizePicker sizeClass="text-base" name="小" />
+          <FontSizePicker sizeClass="text-lg" name="中" />
+          <FontSizePicker sizeClass="text-xl" name="大" />
         </div>
       </Item>
       <Line />
