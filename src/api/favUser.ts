@@ -1,9 +1,9 @@
 import { randomByDay } from '@/utils/util';
 import { IFavUser } from '../types';
-import useSWR from 'swr';
+import { useLinpxSWR } from '.';
 
 export const useFavUserIds = () => {
-  const { data } = useSWR<IFavUser[]>('/fav/user');
+  const data = useLinpxSWR<IFavUser[]>('/fav/user');
   if (!data) return;
   return data
     .map((favUser) => favUser.id)
@@ -11,8 +11,7 @@ export const useFavUserIds = () => {
 };
 
 export const useFavUser = () => {
-  const { data } = useSWR<IFavUser[]>('/fav/user');
-  return data;
+  return useLinpxSWR<IFavUser[]>('/fav/user');
 };
 
 export const useFavUserById = (id: string) => {

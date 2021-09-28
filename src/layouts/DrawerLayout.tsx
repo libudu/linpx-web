@@ -92,7 +92,7 @@ export default function DrawerLayout({ children }: { children: any }) {
         sidebar={<DrawerSidebar onDrawerClose={() => setOpen(false)} />}
         onOpenChange={setOpen}
       >
-        <div>{children}</div>
+        {children}
       </Drawer>
     </div>
   );

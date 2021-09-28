@@ -5,8 +5,13 @@ export * from './user';
 
 import { IAnalyseTag } from '../types';
 import useSWR from 'swr';
+import { linpxRequest } from './util/request';
+
+export const useLinpxSWR = <T>(path: string | null) => {
+  const { data } = useSWR<T>(path, linpxRequest);
+  return data;
+};
 
 export const useAnalyseTag = () => {
-  const { data } = useSWR<IAnalyseTag>('/analyse/tags');
-  return data;
+  return useLinpxSWR<IAnalyseTag>('/analyse/tags');
 };

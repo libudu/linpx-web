@@ -1,10 +1,10 @@
-import useSWR from 'swr';
 import { INovelProfile, IUserInfo } from '../types';
 import { list2query, proxyImg } from '@/utils/util';
 import cache from './util/cache';
+import { useLinpxSWR } from '.';
 
 export const useUserTagNovels = (userId: string, tagName: string) => {
-  const { data } = useSWR<INovelProfile[]>(
+  const data = useLinpxSWR<INovelProfile[]>(
     `/pixiv/user/${userId}/tag/${tagName}`,
   );
   data?.forEach((item) => (item.coverUrl = proxyImg(item.coverUrl)));
@@ -24,7 +24,7 @@ const dealPixivUserTags = (data: IUserInfo) => {
 
 export const usePixivUser = (id: string) => {
   const cacheData = cache.user.get(id);
-  const { data } = useSWR<IUserInfo>(cacheData ? null : `/pixiv/user/${id}`);
+  const data = useLinpxSWR<IUserInfo>(cacheData ? null : `/pixiv/user/${id}`);
   if (cacheData) return cacheData;
   // @ts-ignore
   if (!data || data?.error) return undefined;
@@ -35,7 +35,7 @@ export const usePixivUser = (id: string) => {
 
 export const usePixivUserList = (idList: string[]) => {
   const { result, left } = cache.user.getList(idList);
-  const { data } = useSWR<IUserInfo[]>(
+  const data = useLinpxSWR<IUserInfo[]>(
     left && `/pixiv/users?${list2query(left)}`,
   );
   if (!left) return idList.map((id) => result[id]).filter((data) => data);

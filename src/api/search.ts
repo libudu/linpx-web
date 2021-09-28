@@ -1,6 +1,6 @@
 import { INovelProfile, IMap, IFavUser } from '../types';
-import useSWR from 'swr';
 import { proxyImg } from '@/utils/util';
+import { useLinpxSWR } from '.';
 
 interface ISearchUser {
   users: {
@@ -15,7 +15,7 @@ interface ISearchUser {
 
 export const usePixivSearchUser = (userName: string, page: number = 1) => {
   userName = encodeURIComponent(userName);
-  const { data } = useSWR<ISearchUser>(
+  const data = useLinpxSWR<ISearchUser>(
     `/pixiv/search/user/${userName}?page=${page}`,
   );
   data?.users.forEach((item) => {
@@ -33,7 +33,7 @@ interface ISearchNovel {
 // 搜索小说
 export const usePixivSearchNovel = (novelName: string, page: number = 1) => {
   novelName = encodeURIComponent(novelName);
-  const { data } = useSWR<ISearchNovel>(
+  const data = useLinpxSWR<ISearchNovel>(
     `/pixiv/search/novel/${novelName}?page=${page}`,
   );
   data?.novels.forEach((item) => (item.coverUrl = proxyImg(item.coverUrl)));
@@ -41,7 +41,7 @@ export const usePixivSearchNovel = (novelName: string, page: number = 1) => {
 };
 
 export const useSearchFavUser = (word: string) => {
-  const { data } = useSWR<IMap<IFavUser>>('/fav/user');
+  const data = useLinpxSWR<IMap<IFavUser>>('/fav/user');
   if (!data) return [];
   const idList = Object.values(data)
     .filter(({ name }) => name.includes(word))

@@ -9,9 +9,10 @@ import cache from './util/cache';
 import { list2query, proxyImg } from '@/utils/util';
 import { linpxRequest } from './util/request';
 import { useEffect } from 'react';
+import { useLinpxSWR } from '.';
 
 export const usePixivNovel = (id: string) => {
-  const { data } = useSWR<INovelInfo>(`/pixiv/novel/${id}`);
+  const data = useLinpxSWR<INovelInfo>(`/pixiv/novel/${id}`);
   if (data) {
     data.coverUrl = proxyImg(data.coverUrl);
   }
@@ -20,7 +21,7 @@ export const usePixivNovel = (id: string) => {
 
 export const usePixivNovelProfiles = (idList: string[]) => {
   const { result, left } = cache.novelProfiles.getList(idList);
-  const { data } = useSWR<INovelProfile[]>(
+  const data = useLinpxSWR<INovelProfile[]>(
     left && `/pixiv/novels?${list2query(left)}`,
   );
   // 全部从缓存取到了
@@ -40,7 +41,9 @@ export const usePixivNovelProfiles = (idList: string[]) => {
 };
 
 export const usePixivRecentNovels = (page: number = 1) => {
-  const { data } = useSWR<INovelProfile[]>(`/pixiv/novels/recent?page=${page}`);
+  const data = useLinpxSWR<INovelProfile[]>(
+    `/pixiv/novels/recent?page=${page}`,
+  );
   if (data) {
     data.forEach((item) => (item.coverUrl = proxyImg(item.coverUrl)));
     cache.novelProfiles.setList(data);
