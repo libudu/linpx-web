@@ -5,6 +5,7 @@ let lastBackPath = '';
 
 export function goBackOrTo(path: string) {
   if (historyRecord.length > 1) history.goBack();
+  // 空降到某个页面，后退使用备用路径
   else {
     lastBackPath = path;
     history.replace(path);

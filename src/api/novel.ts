@@ -54,7 +54,6 @@ export const usePixivRecentNovels = (page: number = 1) => {
 export const usePixivNovelRead = (id: string) => {
   useEffect(() => {
     linpxRequest(`/pixiv/novel/${id}/click`, false);
-    console.log(`read novel ${id}`);
   }, []);
 };
 

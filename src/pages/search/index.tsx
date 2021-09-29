@@ -209,7 +209,7 @@ export default function Search() {
     // 如果是linpx链接，直接跳转
     const linpxPath = extractLinpxLink(word);
     if (linpxPath) {
-      history.replace('/pixiv/search');
+      history.replace('/search');
       history.push(linpxPath);
       return;
     }
@@ -217,7 +217,7 @@ export default function Search() {
     const link = transformLink(word);
     if (link) {
       const { pathname } = new URL(link);
-      history.replace('/pixiv/search');
+      history.replace('/search');
       history.push(pathname);
       return;
     }

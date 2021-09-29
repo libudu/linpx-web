@@ -120,41 +120,39 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
     Number(!canLike && !like);
 
   return (
-    <div className="h-full relative">
-      <div className="h-full w-full overflow-y-scroll" onScroll={scrollHandler}>
-        <NovelNavbar showNavbar={showNavbar} novelInfo={novelInfo} />
-        {novelInfo && (
-          <div className="w-full">
-            <NovelIntro {...novelInfo} {...novelAnalyse} />
-            <NovelAnalyse
-              like={like}
-              likeCount={totalLikeCount}
-              readCount={totalReadCount}
-              commentCount={comments.length}
-              onClickLike={onClickLike}
-              onClickComment={() => {
-                footerRef.current?.scrollIntoView();
-              }}
-            />
-            <NovelContent text={content} images={images} />
-            <NovelFooter
-              footerRef={footerRef}
-              afdianUrl={afdianUrl}
-              novelInfo={novelInfo}
-              like={like}
-              likeCount={totalLikeCount}
-              onClickLike={onClickLike}
-            />
-            <NovelComment
-              id={id}
-              commentRef={commentRef}
-              showInput={showInput}
-              comments={comments}
-              onCommentSuccess={() => refreshComments()}
-            />
-          </div>
-        )}
-      </div>
+    <div className="w-full h-full overflow-y-scroll" onScroll={scrollHandler}>
+      <NovelNavbar showNavbar={showNavbar} novelInfo={novelInfo} />
+      {novelInfo && (
+        <div className="w-full">
+          <NovelIntro {...novelInfo} {...novelAnalyse} />
+          <NovelAnalyse
+            like={like}
+            likeCount={totalLikeCount}
+            readCount={totalReadCount}
+            commentCount={comments.length}
+            onClickLike={onClickLike}
+            onClickComment={() => {
+              footerRef.current?.scrollIntoView();
+            }}
+          />
+          <NovelContent text={content} images={images} />
+          <NovelFooter
+            footerRef={footerRef}
+            afdianUrl={afdianUrl}
+            novelInfo={novelInfo}
+            like={like}
+            likeCount={totalLikeCount}
+            onClickLike={onClickLike}
+          />
+          <NovelComment
+            id={id}
+            commentRef={commentRef}
+            showInput={showInput}
+            comments={comments}
+            onCommentSuccess={() => refreshComments()}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { MountModal } from '@/components/LinpxModal';
 import { useRef, useEffect } from 'react';
 
 const posMap: Record<string, number> = {};
+(window as any).posMap = posMap;
 
 export default function Layout({ children }: IRouteComponentProps) {
   const isDrawerPage = Boolean(getDrawerItem());
@@ -26,11 +27,13 @@ export default function Layout({ children }: IRouteComponentProps) {
     const lastPos = posMap[path];
     if (node) {
       // 上次位置存在则滚过去
-      if (lastPos) {
+      if (lastPos && history.action === 'POP') {
         node.scrollTo({ top: lastPos });
       }
       // 添加滚动监听
-      const handler = () => {
+      const handler = (e: Event) => {
+        // 上面组件里获取到的path会有延迟
+        const path = history.location.pathname;
         posMap[path] = node.scrollTop;
       };
       node.addEventListener('scroll', handler);
