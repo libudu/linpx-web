@@ -2,7 +2,7 @@ import { TagBoxList } from '@/components/TagBox';
 import { useAnalyseTag } from '@/api';
 import { history } from 'umi';
 
-export default function PixivAllTags() {
+function PixivAllTags() {
   const analyseTag = useAnalyseTag();
   const tagListData = analyseTag?.data || [];
 
@@ -15,3 +15,5 @@ export default function PixivAllTags() {
     </div>
   );
 }
+
+export default PixivAllTags;

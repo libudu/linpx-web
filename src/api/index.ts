@@ -8,7 +8,7 @@ import useSWR from 'swr';
 import { linpxRequest } from './util/request';
 
 export const useLinpxSWR = <T>(path: string | null) => {
-  const { data } = useSWR<T>(path, linpxRequest);
+  const { data } = useSWR<T>(path, linpxRequest, { revalidateOnFocus: false });
   return data;
 };
 

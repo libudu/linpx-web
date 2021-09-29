@@ -8,7 +8,7 @@ import NovelCardSkeleton from '@/skeleton/NovelCardSkeleton';
 const pageSize = 10;
 const TotalPage = 100;
 
-export default function () {
+function RecentNovels() {
   document.title = 'Linpx - 最近小说';
   const [page, setPage] = useState<number>(0);
   const novels = usePixivRecentNovels(page);
@@ -33,3 +33,5 @@ export default function () {
     </div>
   );
 }
+
+export default RecentNovels;

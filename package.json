@@ -23,6 +23,7 @@
     "@ant-design/icons": "^4.5.0",
     "@ant-design/pro-layout": "^6.5.0",
     "@umijs/preset-react": "1.x",
+    "ahooks": "^2.10.11",
     "antd": "^4.14.0",
     "antd-mobile": "^2.3.4",
     "axios": "^0.21.1",

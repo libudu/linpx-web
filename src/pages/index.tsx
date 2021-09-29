@@ -148,7 +148,7 @@ function IndexPage() {
   useRDF();
 
   return (
-    <div className="h-full overflow-scroll">
+    <>
       <HomeBanner />
       <div className="px-6 pb-6">
         <SearchBar onSearch={(word) => history.push(`/search?word=${word}`)} />
@@ -157,14 +157,8 @@ function IndexPage() {
         <LinpxTagContent />
         <TransLinkContent />
       </div>
-    </div>
+    </>
   );
 }
 
-export default () => {
-  return (
-    <KeepAlive name="/home" saveScrollPosition>
-      <IndexPage />
-    </KeepAlive>
-  );
-};
+export default IndexPage;
