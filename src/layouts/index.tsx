@@ -28,7 +28,10 @@ export default function Layout({ children }: IRouteComponentProps) {
     if (node) {
       // 上次位置存在则滚过去
       if (lastPos && history.action === 'POP') {
-        node.scrollTo({ top: lastPos });
+        // 夸克游览器上，不套setTimeout将无法滚动到位置
+        setTimeout(() => {
+          node.scrollTo({ top: lastPos });
+        }, 1);
       }
       // 添加滚动监听
       const handler = (e: Event) => {

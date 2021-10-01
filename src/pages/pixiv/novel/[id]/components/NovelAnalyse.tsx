@@ -20,7 +20,7 @@ const NovelAnalyse: React.FC<{
   onClickComment,
 }) => {
   return (
-    <div className="h-12 bg-white shadow-md flex">
+    <div className="h-12 bg-white shadow-md flex relative z-10">
       <div
         className="flex justify-center items-center"
         style={{ width: '33.3%', borderRight: BORDER }}

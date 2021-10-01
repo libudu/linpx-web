@@ -18,7 +18,7 @@ const NovelNavbar: React.FC<NovelNavbarProps> = ({ showNavbar, novelInfo }) => {
   }
 
   return (
-    <div className="absolute w-full z-20">
+    <div className="absolute w-full z-30">
       <div
         className="relative w-full"
         style={{ transition: 'all 0.2s', top: showNavbar ? '0px' : '-60px' }}

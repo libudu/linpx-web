@@ -14,7 +14,7 @@ const NovelIntro: React.FC<INovelInfo> = ({
   desc,
 }) => {
   return (
-    <div className="py-4 pt-20 w-full text-center bg-yellow-100 bg-opacity-25 shadow-md relative z-10">
+    <div className="py-4 pt-20 w-full text-center bg-yellow-100 bg-opacity-25 shadow-md relative z-20">
       <div className="flex justify-center w-full">
         <img
           className="rounded-lg object-cover"
