@@ -4,13 +4,12 @@ import classnames from 'classnames';
 import { INovelInfo } from '@/types';
 
 import { AfdianButton } from '@/pages/components/Afdian';
-import { openModal } from '@/components/LinpxModal';
-import NovelShare from './Share';
 
 import SharePng from '@/assets/icon/share_big.png';
 import LikePng from '@/assets/icon/like_big.png';
 import UnlikePng from '@/assets/icon/unlike_big.png';
 import { BORDER } from '../..';
+import { shareNovel } from '@/utils/share';
 
 interface LinkButtonProps {
   mainTitle: string;
@@ -93,7 +92,7 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
   likeCount,
   onClickLike,
 }) => {
-  const { userName, next, prev, series } = novelInfo;
+  const { userName, next, prev, series, id } = novelInfo;
 
   // 仅当系列存在且大于1篇时才显示系列上下篇
   const showSeries = series && (series.next || series.prev);
@@ -117,9 +116,7 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
     <div className="flex justify-center items-center flex-grow">
       <div
         className="flex justify-center items-center"
-        onClick={() =>
-          openModal({ children: <NovelShare novelInfo={novelInfo} /> })
-        }
+        onClick={() => shareNovel(id)}
       >
         <img className="w-16 mr-2 h-16" src={SharePng} />
         <div>分享</div>

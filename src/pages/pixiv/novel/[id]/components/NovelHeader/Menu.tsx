@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import classNames from 'classnames';
 import Tag from '@/components/Tag';
-import { copyTextAndToast } from '@/utils/clipboard';
 import { setNovelStyles } from '@/models/styles';
+import { shareNovel } from '@/utils/share';
 
 const Item: FC = ({ children }) => {
   return (
@@ -66,15 +66,10 @@ const FontFamilyPicker: FC<{
 
 interface INovelMenu {
   id: string;
-  userName: string;
-  title: string;
+  hideMenu: () => void;
 }
 
-export default ({ id, userName, title }: INovelMenu) => {
-  const shareText =
-    `【我正在用LINPX看 ${userName} 写的《${title}》，快来一起看吧】\n` +
-    `链接1：http://furrynovel.xyz/pixiv/novel/${id}\n` +
-    `链接2：https://linpx.linpicio.com/pixiv/novel/${id}`;
+export default ({ id, hideMenu }: INovelMenu) => {
   return (
     <div className="text-base lp-bgcolor">
       <Item>
@@ -107,16 +102,13 @@ export default ({ id, userName, title }: INovelMenu) => {
       <Line />
       <Item>
         <div
-          onClick={() =>
-            copyTextAndToast(`https://www.pixiv.net/novel/show.php?id=${id}`)
-          }
+          onClick={() => {
+            shareNovel(id);
+            hideMenu();
+          }}
         >
-          分享pixiv链接
+          分享小说
         </div>
-      </Item>
-      <Line />
-      <Item>
-        <div onClick={() => copyTextAndToast(shareText)}>分享LINPX链接</div>
       </Item>
     </div>
   );

@@ -11,7 +11,10 @@ console.log('backend url', BASE_URL);
 
 const requestCache: IMap<any> = {};
 
-export const linpxRequest = async (path: string, useCache = true) => {
+export const linpxRequest = async <T = any>(
+  path: string,
+  useCache = true,
+): Promise<T> => {
   const cache = requestCache[path];
   if (cache && useCache) {
     console.log('cache request:', path);

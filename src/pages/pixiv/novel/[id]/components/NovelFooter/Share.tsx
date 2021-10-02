@@ -94,9 +94,11 @@ const NovelShare: React.FC<{ novelInfo: INovelInfo }> = ({ novelInfo }) => {
               onChange={(e) => setContentTypeIndex(e.target.value)}
               value={contentTypeIndex}
             >
-              <Radio value={0}>简介链接</Radio>
-              <Radio value={1}>纯链接</Radio>
-              <Radio value={2}>介绍链接</Radio>
+              {contentTypeList.map(({ name }, index) => (
+                <Radio value={index} key={name}>
+                  {name}
+                </Radio>
+              ))}
             </Radio.Group>
           </ItemBox>
 
@@ -107,7 +109,7 @@ const NovelShare: React.FC<{ novelInfo: INovelInfo }> = ({ novelInfo }) => {
               value={linkTypeIndex}
             >
               {linkTypeList.map(({ name }, index) => (
-                <Radio className="w-5/12" value={index}>
+                <Radio className="w-5/12" value={index} key={name}>
                   {name}
                 </Radio>
               ))}

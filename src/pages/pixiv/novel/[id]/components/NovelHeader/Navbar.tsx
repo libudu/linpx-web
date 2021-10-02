@@ -27,12 +27,20 @@ const NovelNavbar: React.FC<NovelNavbarProps> = ({ showNavbar, novelInfo }) => {
           rightEle={
             <Popover
               visible={showPopover}
-              overlay={<NovelMenu {...novelInfo} />}
+              overlay={
+                <NovelMenu
+                  id={novelInfo.id}
+                  hideMenu={() => {
+                    setShowPopover(false);
+                  }}
+                />
+              }
               overlayStyle={{
                 width: 'max-content',
                 borderRadius: '10px',
                 position: 'relative',
               }}
+              onVisibleChange={(visible) => setShowPopover(visible)}
               align={{
                 // @ts-ignore
                 offset: [3, 30],
