@@ -1,4 +1,4 @@
-import { getPixivNovelComments, pixivNovelNewComment } from '@/api';
+import { pixivNovelNewComment } from '@/api';
 import { closeModal, openModal } from '@/components/LinpxModal';
 import { Array2Map, INovelComment } from '@/types';
 import { stringHash } from '@/utils/util';
@@ -174,7 +174,7 @@ const NovelComment: React.FC<NovelCommentProps> = ({
       </div>
       <div className="h-12 mb-2" ref={endRef} />
       <div
-        className="py-3 pl-6 text-gray-400 absolute w-full bg-white transition-all duration-500"
+        className="py-3 pl-6 text-gray-400 fixed linpx-width bg-white transition-all duration-500"
         style={{ borderTop: BORDER, bottom: showInput ? 0 : -100 }}
         onClick={() =>
           openModal({

@@ -1,14 +1,17 @@
 import React from 'react';
 import { history } from 'umi';
 import classnames from 'classnames';
+import { INovelInfo } from '@/types';
 
 import { AfdianButton } from '@/pages/components/Afdian';
-import { INovelInfo } from '@/types';
+import { openModal } from '@/components/LinpxModal';
+import NovelShare from './Share';
 
 import SharePng from '@/assets/icon/share_big.png';
 import LikePng from '@/assets/icon/like_big.png';
 import UnlikePng from '@/assets/icon/unlike_big.png';
 import { BORDER } from '../..';
+
 
 interface LinkButtonProps {
   mainTitle: string;
@@ -113,10 +116,14 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
 
   const shareContent = (
     <div className="flex justify-center items-center flex-grow">
-      <img className="w-16 mr-2 h-16" src={SharePng} />
-      <div>
-        分享
-        <div className="text-sm font-normal text-center">(还没做好)</div>
+      <div
+        className="flex justify-center items-center"
+        onClick={() => openModal({ children: <NovelShare /> })}
+      >
+        <img className="w-16 mr-2 h-16" src={SharePng} />
+        <div>
+          分享
+        </div>
       </div>
     </div>
   );

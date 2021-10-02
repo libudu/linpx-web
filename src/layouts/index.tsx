@@ -49,10 +49,9 @@ export default function Layout({ children }: IRouteComponentProps) {
     // 内层居中的手机，白色
     // 内层滚动层
     <>
-      <div className="h-screen w-screen bg-gray-100 text-xl flex flex-shrink-0">
+      <div className="h-screen w-screen bg-gray-100 text-xl">
         <div
-          className="h-screen mx-auto bg-white relative flex-grow"
-          style={{ maxWidth: 448, minWidth: 300 }}
+          className="h-screen linpx-width bg-white relative"
         >
           <div className="h-screen w-full overflow-y-scroll overflow-x-hidden">
             {isDrawerPage ? (
