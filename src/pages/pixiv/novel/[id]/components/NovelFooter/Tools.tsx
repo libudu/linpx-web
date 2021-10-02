@@ -117,7 +117,9 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
     <div className="flex justify-center items-center flex-grow">
       <div
         className="flex justify-center items-center"
-        onClick={() => openModal({ children: <NovelShare /> })}
+        onClick={() =>
+          openModal({ children: <NovelShare novelInfo={novelInfo} /> })
+        }
       >
         <img className="w-16 mr-2 h-16" src={SharePng} />
         <div>分享</div>
