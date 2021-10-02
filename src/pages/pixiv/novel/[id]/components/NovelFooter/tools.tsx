@@ -8,7 +8,7 @@ import { INovelInfo } from '@/types';
 import SharePng from '@/assets/icon/share_big.png';
 import LikePng from '@/assets/icon/like_big.png';
 import UnlikePng from '@/assets/icon/unlike_big.png';
-import { BORDER } from '..';
+import { BORDER } from '../..';
 
 interface LinkButtonProps {
   mainTitle: string;

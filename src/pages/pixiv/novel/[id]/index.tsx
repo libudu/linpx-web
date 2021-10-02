@@ -14,12 +14,12 @@ import {
 import { linpxRequest } from '@/api/util/request';
 import { INovelAnalyse, INovelComment } from '@/types';
 
-import NovelIntro from './components/NovelIntro';
-import NovelNavbar from './components/NovelNavbar';
+import NovelIntro from './components/NovelHeader/Intro';
+import NovelNavbar from './components/NovelHeader/Navbar';
 import NovelContent from './components/NovelContent';
-import NovelFooter from './components/NovelFooter';
-import NovelComment from './components/NovelComment';
-import NovelAnalyse from './components/NovelAnalyse';
+import NovelFooter from './components/NovelFooter/Tools';
+import NovelComment from './components/NovelFooter/Comment';
+import NovelAnalyse from './components/NovelHeader/Analyse';
 
 export const BORDER = '1px solid #ccc';
 

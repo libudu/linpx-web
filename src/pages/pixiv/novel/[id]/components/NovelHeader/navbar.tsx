@@ -1,5 +1,5 @@
 import { Popover } from 'antd-mobile';
-import NovelMenu from './NovelMenu';
+import NovelMenu from './Menu';
 import { useState } from 'react';
 
 import { ContentNavbar, MenuIcon } from '@/components/Navbar';

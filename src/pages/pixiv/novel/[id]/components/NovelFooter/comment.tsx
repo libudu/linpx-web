@@ -7,7 +7,7 @@ import { Toast } from 'antd-mobile';
 import classNames from 'classnames';
 import { throttle } from 'lodash';
 import React, { useRef, FC, useEffect, useState, useCallback } from 'react';
-import { BORDER } from '..';
+import { BORDER } from '../..';
 
 const { TextArea } = Input;
 
