@@ -1,4 +1,4 @@
-import { history, KeepAlive } from 'umi';
+import { history } from 'umi';
 import {
   useAnalyseTag,
   useFavUserIds,

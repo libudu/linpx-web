@@ -5,7 +5,7 @@ import { copyTextAndToast } from '@/utils/clipboard';
 
 const linkTypeList = [
   {
-    name: 'QQ内点开',
+    name: 'QQ链接',
     link: (id: string) => `http://202.182.102.21/pn/${id}`,
   },
   {
@@ -46,9 +46,9 @@ const contentTypeList: {
 
 const ItemBox: React.FC<{ title: string }> = ({ title, children }) => {
   return (
-    <div className="px-4">
+    <div className="px-4 w-max">
       <div>{title}</div>
-      <div className="pl-4">{children}</div>
+      <div className="pl-4 w-max">{children}</div>
     </div>
   );
 };
@@ -70,9 +70,12 @@ const NovelShare: React.FC<{ novelInfo: INovelInfo }> = ({ novelInfo }) => {
       className="w-full h-full relative z-20 flex items-center"
       style={{ pointerEvents: 'none' }}
     >
-      <div className="text-lg w-full bg-white" style={{ pointerEvents: 'all' }}>
+      <div
+        className="text-lg w-full bg-white flex flex-col items-center"
+        style={{ pointerEvents: 'all' }}
+      >
         <div
-          className="text-center font-bold text-2xl p-2"
+          className="text-center w-full font-bold text-2xl p-2"
           style={{ borderBottom: '1px solid #bbb' }}
         >
           分享小说
@@ -102,6 +105,7 @@ const NovelShare: React.FC<{ novelInfo: INovelInfo }> = ({ novelInfo }) => {
             </Radio.Group>
           </ItemBox>
 
+          {/* TODO:链接类型说明 */}
           <ItemBox title="链接类型">
             <Radio.Group
               size="large"

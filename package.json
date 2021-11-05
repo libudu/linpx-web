@@ -34,8 +34,7 @@
     "nativeshare": "^2.1.5",
     "react-content-loader": "^6.0.3",
     "swr": "^0.5.6",
-    "umi": "3.5.17",
-    "umi-plugin-keep-alive": "^0.0.1-beta.29"
+    "umi": "3.5.17"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.11",
