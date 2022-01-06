@@ -5,16 +5,12 @@ import { copyTextAndToast } from '@/utils/clipboard';
 
 const linkTypeList = [
   {
-    name: 'QQ链接',
-    link: (id: string) => `http://202.182.102.21/pn/${id}`,
-  },
-  {
-    name: '游览器链接1',
-    link: (id: string) => `https://linpx.linpicio.com/pn/${id}`,
-  },
-  {
-    name: '游览器链接2',
+    name: '链接1',
     link: (id: string) => `http://furrynovel.xyz/pn/${id}`,
+  },
+  {
+    name: '链接2',
+    link: (id: string) => `https://linpx.linpicio.com/pn/${id}`,
   },
   {
     name: 'pixiv链接',
@@ -46,9 +42,9 @@ const contentTypeList: {
 
 const ItemBox: React.FC<{ title: string }> = ({ title, children }) => {
   return (
-    <div className="px-4 w-max">
+    <div className="px-5 w-full">
       <div>{title}</div>
-      <div className="pl-4 w-max">{children}</div>
+      <div className="pl-4 w-full">{children}</div>
     </div>
   );
 };
@@ -81,7 +77,7 @@ const NovelShare: React.FC<{ novelInfo: INovelInfo }> = ({ novelInfo }) => {
           分享小说
         </div>
 
-        <div className="py-3">
+        <div className="py-3 w-full">
           <ItemBox title="链接预览">
             <div
               className="text-sm pb-4"

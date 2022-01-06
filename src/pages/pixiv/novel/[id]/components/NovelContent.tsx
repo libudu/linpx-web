@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 import { proxyImg, t2s } from '@/utils/util';
 import { INovelInfo } from '@/types';
-import { useModel } from '@/.umi/plugin-model/useModel';
+import { useModel } from 'umi';
 import classNames from 'classnames';
 
 interface NovelContentProps {
