@@ -23,6 +23,8 @@
     "@ant-design/icons": "^4.5.0",
     "@ant-design/pro-layout": "^6.5.0",
     "@umijs/preset-react": "1.x",
+    "react": "17.x",
+    "react-dom": "17.x",
     "ahooks": "^2.10.11",
     "antd": "^4.14.0",
     "antd-mobile": "^2.3.4",
@@ -43,10 +45,11 @@
     "@umijs/test": "^3.3.9",
     "lint-staged": "^10.0.7",
     "prettier": "^2.2.0",
-    "react": "17.x",
-    "react-dom": "17.x",
     "typescript": "^4.1.2",
+    "tailwindcss": "^2.2.9",
     "umi-plugin-tailwindcss": "^3.0.3",
+    "autoprefixer": "^10.3.3",
+    "postcss": "^8.3.6",
     "yorkie": "^2.0.0"
   }
 }

@@ -1,5 +1,5 @@
 import { ContentNavbar } from '@/components/Navbar';
-import LinpicioConfuseImg from '@/assets/linpicio/confuse.jpg';
+import LinpicioConfuseImg from '@/assets/linpicio/Confuse.jpg';
 import HeaderLogoPNG from '@/assets/icon/logo.png';
 import { history } from 'umi';
 
