@@ -1,7 +1,7 @@
 import { InputItem, Toast } from 'antd-mobile';
 import { copyTextAndToast } from '@/utils/clipboard';
 import { useState } from 'react';
-import gtag from '@/utils/gtag';
+import { event } from '@/utils/event';
 
 const linkTypeInfo = [
   {
@@ -64,10 +64,7 @@ export default function TransLink() {
             className="flex justify-center items-center bg-yellow-400 text-white font-black"
             style={{ width: '30%' }}
             onClick={() => {
-              gtag('event', 'share', {
-                content_type: 'link',
-                content_id: copyText,
-              });
+              event({ category: 'share', action: 'link' });
               if (copyText) {
                 copyTextAndToast(copyText);
               } else {

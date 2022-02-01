@@ -23,8 +23,6 @@
     "@ant-design/icons": "^4.5.0",
     "@ant-design/pro-layout": "^6.5.0",
     "@umijs/preset-react": "1.x",
-    "react": "17.x",
-    "react-dom": "17.x",
     "ahooks": "^2.10.11",
     "antd": "^4.14.0",
     "antd-mobile": "^2.3.4",
@@ -34,7 +32,10 @@
     "global": "^4.4.0",
     "lodash": "^4.17.21",
     "nativeshare": "^2.1.5",
+    "react": "17.x",
     "react-content-loader": "^6.0.3",
+    "react-dom": "17.x",
+    "react-ga": "^3.3.0",
     "swr": "^0.5.6",
     "umi": "3.5.20"
   },
@@ -43,13 +44,13 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@umijs/test": "^3.3.9",
-    "lint-staged": "^10.0.7",
-    "prettier": "^2.2.0",
-    "typescript": "^4.1.2",
-    "tailwindcss": "^2.2.9",
-    "umi-plugin-tailwindcss": "^3.0.3",
     "autoprefixer": "^10.3.3",
+    "lint-staged": "^10.0.7",
     "postcss": "^8.3.6",
+    "prettier": "^2.2.0",
+    "tailwindcss": "^2.2.9",
+    "typescript": "^4.1.2",
+    "umi-plugin-tailwindcss": "^3.0.3",
     "yorkie": "^2.0.0"
   }
 }
