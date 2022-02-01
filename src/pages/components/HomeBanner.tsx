@@ -1,6 +1,9 @@
-import { getQQGroupShareLink } from '@/utils/util';
 import { Carousel } from 'antd';
 import MidAutumnImg from '@/assets/banner/midautumn.jpg';
+import DragonIslandImg from '@/assets/banner/dragonisland.webp';
+import DragonIsland1Img from '@/assets/banner/dragonisland1.webp';
+import DragonIsland2Img from '@/assets/banner/dragonisland2.webp';
+import { event } from '@/utils/event';
 
 const BannerBox: React.FC = ({ children }) => {
   return (
@@ -14,6 +17,26 @@ const BannerBox: React.FC = ({ children }) => {
 export default function HomeBanner() {
   return (
     <Carousel autoplay dots={false}>
+      <BannerBox>
+        <img
+          className="w-full h-full object-cover"
+          src={DragonIsland1Img}
+          onClick={() => {
+            event({ category: 'game', action: '0ld_steam' });
+            open('https://store.steampowered.com/app/1554470/_/', '_blank');
+          }}
+        />
+      </BannerBox>
+      <BannerBox>
+        <img
+          className="w-full h-full object-cover"
+          src={DragonIsland2Img}
+          onClick={() => {
+            event({ category: 'game', action: '0ld_afdian' });
+            open('https://afdian.net/@apoto5', '_blank');
+          }}
+        />
+      </BannerBox>
       <BannerBox>
         <img className="w-full h-full object-cover" src={MidAutumnImg} />
       </BannerBox>
