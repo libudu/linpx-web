@@ -19,6 +19,22 @@ interface CommentModalProps {
   onCommentSuccess: () => any;
 }
 
+const sendComment = throttle(
+  async (id: string, text: string, onCommentSuccess: () => any) => {
+    const res = await pixivNovelNewComment(id, text);
+    if (res.error) {
+      Toast.info('评论失败', 1.0, undefined, false);
+    } else {
+      Toast.info('评论成功', 1.0, undefined, false);
+      onCommentSuccess();
+      lastCommentText = '';
+      closeModal();
+    }
+  },
+  1000,
+  { trailing: false },
+);
+
 const CommentModal: FC<CommentModalProps> = ({ id, onCommentSuccess }) => {
   const [text, setText] = useState(lastCommentText);
   // 启动模态框时自动聚焦
@@ -51,24 +67,14 @@ const CommentModal: FC<CommentModalProps> = ({ id, onCommentSuccess }) => {
         </span>
         <span
           className="bg-yellow-500 py-1 px-2 rounded-md"
-          onClick={async () => {
-            const res = await pixivNovelNewComment(id, text);
-            if (res.error) {
-              Toast.info('评论失败', 1.0, undefined, false);
-            } else {
-              Toast.info('评论成功', 1.0, undefined, false);
-              onCommentSuccess();
-              lastCommentText = '';
-              closeModal();
-            }
-          }}
+          onClick={async () => sendComment(id, text, onCommentSuccess)}
         >
           评论
         </span>
       </div>
       <TextArea
         color="yellow"
-        autoSize={{ minRows: 2, maxRows: 4 }}
+        autoSize={{ minRows: 3, maxRows: 5 }}
         style={{ fontSize: 24 }}
         ref={ref}
         defaultValue={lastCommentText}
