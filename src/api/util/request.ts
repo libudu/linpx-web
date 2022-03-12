@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { Method } from 'axios';
 import { IMap } from '../../types';
 
 const isHttps = window.location.protocol === 'https:';
@@ -15,6 +15,7 @@ const requestCache: IMap<any> = {};
 export const linpxRequest = async <T = any>(
   path: string,
   useCache = true,
+  method: Method = 'GET',
 ): Promise<T> => {
   const cache = requestCache[path];
   if (cache && useCache) {
@@ -25,11 +26,27 @@ export const linpxRequest = async <T = any>(
     console.log('send request:', path);
     return axios({
       url: BASE_URL + path,
-      method: 'GET',
+      method: method,
     }).then((res) => {
       const data = res.data;
       resolve(data);
       requestCache[path] = data;
     });
   });
+};
+
+export const reqGet = (path: string) => {
+  return axios.get(BASE_URL + path).then((res) => res.data);
+};
+
+export const reqPost = (path: string, body: any) => {
+  return axios({
+    url: BASE_URL + path,
+    method: 'POST',
+    data: body,
+  }).then((res) => res.data);
+};
+
+export const reqDelete = (path: string) => {
+  return axios.delete(BASE_URL + path).then((res) => res.data);
 };

@@ -6,9 +6,11 @@ import { MountModal } from '@/components/LinpxModal';
 import { useRef, useEffect, useState } from 'react';
 import FirstTips from '@/pages/components/FirstTips';
 
+// 记录页面滚动位置
 const posMap: Record<string, number> = {};
 (window as any).posMap = posMap;
 
+// 初次使用弹出提示框，防爬虫
 const getJumpConfirm = () => {
   return Boolean(JSON.parse(localStorage.getItem('jumpConfirm') || 'false'));
 };
