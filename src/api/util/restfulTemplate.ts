@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { reqDelete, reqGet, reqPost } from './request';
 
 // 对象转查询字符串
@@ -27,33 +28,41 @@ interface IPageData<T> {
   page: number;
 }
 
-export class RestApiTemplate<T = any> {
-  path: string;
+interface IGetPageParams {
+  page?: number;
+  pageSize?: number;
+}
 
-  constructor(path: string) {
-    this.path = path;
-  }
-
-  // 分页查询
-  // 返回data是分页格式数据
-  getPage = ({
+export const makeRestApiTemplate = <T = any>(path: string) => {
+  const getPage = async ({
     page = 0,
     pageSize = 10,
-  }: {
-    page?: number;
-    pageSize?: number;
-  }): Promise<IPageData<T>> => {
-    const path = this.path + makeQueryParams({ page, pageSize });
-    return reqGet(path);
+  }: IGetPageParams): Promise<IPageData<T>> => {
+    const fullPath = path + makeQueryParams({ page, pageSize });
+    return reqGet(fullPath);
   };
 
-  // 单个提交
-  postOne = (data: Omit<T, 'id'>) => {
-    return reqPost(this.path, data);
+  const usePage = (params: IGetPageParams): IPageData<T> | null => {
+    const [data, setData] = useState<any>(null);
+    useEffect(() => {
+      getPage(params).then((res) => setData(res));
+      console.log(Object.values(params));
+    }, Object.values(params));
+    return data;
   };
 
-  // 单个删除
-  deleteOne = (id: number) => {
-    return reqDelete(this.path + makeQueryParams({ id }));
+  const postOne = async (data: Omit<T, 'id'>) => {
+    return reqPost(path, data);
   };
-}
+
+  const deleteOne = (id: number) => {
+    return reqDelete(path + makeQueryParams({ id }));
+  };
+
+  return {
+    getPage,
+    usePage,
+    postOne,
+    deleteOne,
+  };
+};

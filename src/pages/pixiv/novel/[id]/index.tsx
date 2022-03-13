@@ -6,7 +6,7 @@ import { ContentNavbar } from '@/components/Navbar';
 import {
   useFavUserById,
   usePixivNovel,
-  usePixivNovelRead,
+  readNovel,
   likeNovel,
   unlikeNovel,
   getPixivNovelComments,
@@ -36,17 +36,16 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
 
   // 加载及刷新评论数据
   const [comments, setComments] = useState<INovelComment[]>([]);
-  const refreshComments = () => {
-    return getPixivNovelComments(id).then((res) => {
-      setComments(res);
-    });
+  const refreshComments = async () => {
+    const comments = await getPixivNovelComments(id);
+    setComments(comments);
   };
 
   // 统计数据
-  usePixivNovelRead(id);
   const [like, setLike] = useState(false);
   const [novelAnalyse, setNovelAnalyse] = useState<INovelAnalyse | null>(null);
   useEffect(() => {
+    readNovel(id);
     refreshComments();
     linpxRequest(`/pixiv/novel/${id}/analyse`, false).then(
       (data: INovelAnalyse) => {

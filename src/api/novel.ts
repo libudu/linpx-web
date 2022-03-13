@@ -51,18 +51,16 @@ export const usePixivRecentNovels = (page: number = 1) => {
   return data;
 };
 
-export const usePixivNovelRead = (id: string) => {
-  useEffect(() => {
-    linpxRequest(`/pixiv/novel/${id}/click`, false);
-  }, []);
-};
-
 export const usePixivNovelAnalyse = (id: string) => {
   const { data } = useSWR<INovelAnalyse>(
     `/pixiv/novel/${id}/analyse`,
     (path: string) => linpxRequest(path, false),
   );
   return data;
+};
+
+export const readNovel = (id: string) => {
+  linpxRequest(`/pixiv/novel/${id}/click`, false);
 };
 
 export const likeNovel = (id: string) => {

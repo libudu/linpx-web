@@ -22,21 +22,18 @@ export const linpxRequest = async <T = any>(
     console.log('cache request:', path);
     return cache;
   }
-  return new Promise((resolve, reject) => {
-    console.log('send request:', path);
-    return axios({
-      url: BASE_URL + path,
-      method: method,
-    }).then((res) => {
-      const data = res.data;
-      resolve(data);
-      requestCache[path] = data;
-    });
+  console.log('send request:', path);
+  const res = await axios({
+    url: BASE_URL + path,
+    method: method,
   });
+  const data = res.data;
+  requestCache[path] = data;
+  return data;
 };
 
 export const reqGet = (path: string) => {
-  return axios.get(BASE_URL + path).then((res) => res.data);
+  return axios.get(BASE_URL + path).then((res) => res.data.data);
 };
 
 export const reqPost = (path: string, body: any) => {
@@ -48,5 +45,5 @@ export const reqPost = (path: string, body: any) => {
 };
 
 export const reqDelete = (path: string) => {
-  return axios.delete(BASE_URL + path).then((res) => res.data);
+  return axios.delete(BASE_URL + path).then((res) => res.data.data);
 };
