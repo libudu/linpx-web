@@ -31,7 +31,7 @@ export function isDev() {
 
 export function stringHash(str: string) {
   let hash = 5381,
-    i = str.length;
+    i = str?.length || 0;
   while (i) {
     hash = (hash * 33) ^ str.charCodeAt(--i);
   }

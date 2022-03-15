@@ -1,6 +1,10 @@
 import PageLayout from '@/components/PageLayout';
 import TopImg from '@/assets/icon/top.png';
 import { stringHash } from '@/utils/util';
+import { Pagination } from 'antd';
+import { postApi } from '@/api';
+import { history } from 'umi';
+import { useEffect, useState } from 'react';
 
 const topPostList = [
   {
@@ -14,26 +18,21 @@ const topPostList = [
   },
 ];
 
-const postList = [
-  {
-    ip: '103.142.140.83, 103.142.140.83',
-    _time: 1646334180,
-    title: '标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题标题',
-    text: '正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正文正',
-  },
-];
-
 // 按事件排序
 // 帖子分区
 // todo:后端限制，每分钟最多发2条新帖，每小时最多发5条，每天最多发10条帖子
 export default function () {
-  return (
-    <div>
-      <PageLayout title="最近帖子">
+  const [page, setPage] = useState(1);
+  const res = postApi.usePage({ page });
+  let children = null;
+  if (res) {
+    const { records: postList, pageSize, total } = res;
+    children = (
+      <>
         <div className="text-lg">
           {topPostList.map(({ title }, index) => (
             <div
-              className="flex mx-4 py-2"
+              className="flex px-4 py-2 hover:bg-gray-100 transition-all cursor-pointer"
               style={{
                 borderBottom:
                   index != topPostList.length - 1
@@ -52,18 +51,68 @@ export default function () {
             <div style={{ backgroundColor: '#eee', height: 18 }} />
           )}
         </div>
-        {postList.map(({ ip, title, text, _time }) => (
-          <div className="mx-4 py-2">
-            <div className="flex justify-between text-sm text-gray-500 mb-1">
-              <div>{stringHash(ip)}</div>
-              <div>{new Date(_time * 1000).toLocaleString()}</div>
-              <div style={{ width: '10%' }}></div>
+
+        <div
+          className="flex justify-between text-lg p-2 px-4"
+          style={{ borderBottom: '1px solid #eee' }}
+        >
+          <div>帖子总数：{total}</div>
+          <div>最新回复排序</div>
+        </div>
+
+        {
+          // 当前页帖子预览
+          postList.map(({ ip, title, content, _time, id }) => (
+            <div
+              className="px-4 py-2 hover:bg-gray-100 transition-all cursor-pointer"
+              style={{ borderBottom: '1px solid #eee' }}
+              onClick={() => {
+                history.push('/post/' + id);
+              }}
+            >
+              <div className="flex justify-between text-sm text-gray-500 mb-1">
+                <div>{stringHash(ip)}</div>
+                <div>{new Date(_time * 1000).toLocaleString()}</div>
+                <div style={{ width: '10%' }}></div>
+              </div>
+              <div className="u-line-1 font-bold">{title}</div>
+              <div className="u-line-2 text-base">{content}</div>
             </div>
-            <div className="u-line-1 font-bold">{title}</div>
-            <div className="u-line-2 text-base">{text}</div>
-          </div>
-        ))}
-      </PageLayout>
-    </div>
-  );
+          ))
+        }
+        {
+          // 两页以上显示分页器
+          total > pageSize && (
+            <div className="flex justify-center my-4">
+              <Pagination
+                pageSize={pageSize}
+                current={page}
+                total={total}
+                showSizeChanger={false}
+                onChange={(e) => {
+                  setPage(e);
+                }}
+              />
+            </div>
+          )
+        }
+        <div
+          className="absolute bg-yellow-500 rounded-full"
+          style={{
+            right: 18,
+            bottom: 40,
+            width: 80,
+            height: 80,
+            fontSize: 100,
+            textAlign: 'center',
+            lineHeight: '68px',
+          }}
+          onClick={() => history.push('/post/create')}
+        >
+          +
+        </div>
+      </>
+    );
+  }
+  return <PageLayout title="最近帖子">{children}</PageLayout>;
 }

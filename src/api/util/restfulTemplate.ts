@@ -46,22 +46,34 @@ export const makeRestApiTemplate = <T = any>(path: string) => {
     const [data, setData] = useState<any>(null);
     useEffect(() => {
       getPage(params).then((res) => setData(res));
-      console.log(Object.values(params));
     }, Object.values(params));
     return data;
   };
 
-  const postOne = async (data: Omit<T, 'id'>) => {
+  const getOne = (id: number | string): Promise<T> => {
+    return reqGet(path + '/' + id);
+  };
+
+  const useOne = (id: number | string): T | null => {
+    const [data, setData] = useState<any>(null);
+    useEffect(() => {
+      getOne(id).then((res) => setData(res));
+    }, [id]);
+    return data;
+  };
+
+  const postOne = async (data: any) => {
     return reqPost(path, data);
   };
 
-  const deleteOne = (id: number) => {
+  const deleteOne = (id: number | string) => {
     return reqDelete(path + makeQueryParams({ id }));
   };
 
   return {
     getPage,
     usePage,
+    useOne,
     postOne,
     deleteOne,
   };

@@ -73,7 +73,6 @@ const CommentModal: FC<CommentModalProps> = ({ id, onCommentSuccess }) => {
         </span>
       </div>
       <TextArea
-        color="yellow"
         autoSize={{ minRows: 3, maxRows: 5 }}
         style={{ fontSize: 24 }}
         ref={ref}

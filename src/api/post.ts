@@ -4,7 +4,7 @@ interface IPost {
   id: string;
   ip: string;
   title: string;
-  text: string;
+  content: string;
   refer:
     | null
     | {
