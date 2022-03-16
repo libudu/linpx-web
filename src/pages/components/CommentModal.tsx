@@ -7,10 +7,16 @@ let lastCommentText = '';
 
 // 评论模态框
 interface CommentModalProps {
+  lineSize?: [number, number];
+  submitText?: string;
   onSubmit: (content: string) => Promise<boolean>;
 }
 
-const CommentModal: FC<CommentModalProps> = ({ onSubmit }) => {
+const CommentModal: FC<CommentModalProps> = ({
+  lineSize = [3, 5],
+  submitText = '评论',
+  onSubmit,
+}) => {
   const [text, setText] = useState(lastCommentText);
   // 启动模态框时自动聚焦
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -53,11 +59,11 @@ const CommentModal: FC<CommentModalProps> = ({ onSubmit }) => {
             }
           }}
         >
-          评论
+          {submitText}
         </span>
       </div>
       <TextArea
-        autoSize={{ minRows: 3, maxRows: 5 }}
+        autoSize={{ minRows: lineSize[0], maxRows: lineSize[1] }}
         style={{ fontSize: 24 }}
         ref={ref}
         defaultValue={lastCommentText}

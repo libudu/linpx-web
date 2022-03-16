@@ -21,11 +21,12 @@ const makeQueryParams = (obj: Record<string, ParamType[] | ParamType>) => {
 };
 
 // 列表响应时，data的格式
-interface IPageData<T> {
-  records: T[];
-  pageSize: number;
-  total: number;
+export interface IPageData<T> {
   page: number;
+  total: number;
+  pageSize: number;
+  pageTotal: number;
+  records: T[];
 }
 
 interface IGetPageParams {
@@ -40,6 +41,10 @@ export const makeRestApiTemplate = <T = any>(path: string) => {
   }: IGetPageParams): Promise<IPageData<T>> => {
     const fullPath = path + makeQueryParams({ page, pageSize });
     return reqGet(fullPath);
+  };
+
+  const getIdList = async (ids: string[]) => {
+    return reqGet(path + '/ids' + makeQueryParams({ ids }));
   };
 
   const usePage = (params: IGetPageParams): IPageData<T> | null => {
@@ -72,6 +77,7 @@ export const makeRestApiTemplate = <T = any>(path: string) => {
 
   return {
     getPage,
+    getIdList,
     usePage,
     useOne,
     postOne,

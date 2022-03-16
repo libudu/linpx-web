@@ -1,10 +1,10 @@
 import PageLayout from '@/components/PageLayout';
 import TopImg from '@/assets/icon/top.png';
-import { stringHash } from '@/utils/util';
 import { Pagination } from 'antd';
 import { postApi } from '@/api';
 import { history } from 'umi';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import NameTime from './components/NameTime';
 
 const topPostList = [
   {
@@ -18,6 +18,29 @@ const topPostList = [
   },
 ];
 
+const TopPostElement = (
+  <div className="text-lg">
+    {topPostList.map(({ title }, index) => (
+      <div
+        className="flex px-4 py-2 hover:bg-gray-100 transition-all cursor-pointer"
+        style={{
+          borderBottom:
+            index != topPostList.length - 1 ? '1px solid #ddd' : undefined,
+        }}
+      >
+        <img
+          style={{ width: 22, height: 22, position: 'relative', top: 4 }}
+          src={TopImg}
+        />
+        <div>{title}</div>
+      </div>
+    ))}
+    {topPostList.length > 0 && (
+      <div style={{ backgroundColor: '#eee', height: 18 }} />
+    )}
+  </div>
+);
+
 // 按事件排序
 // 帖子分区
 // todo:后端限制，每分钟最多发2条新帖，每小时最多发5条，每天最多发10条帖子
@@ -26,31 +49,10 @@ export default function () {
   const res = postApi.usePage({ page });
   let children = null;
   if (res) {
-    const { records: postList, pageSize, total } = res;
+    const { records: postList, pageSize, pageTotal, total } = res;
     children = (
       <>
-        <div className="text-lg">
-          {topPostList.map(({ title }, index) => (
-            <div
-              className="flex px-4 py-2 hover:bg-gray-100 transition-all cursor-pointer"
-              style={{
-                borderBottom:
-                  index != topPostList.length - 1
-                    ? '1px solid #ddd'
-                    : undefined,
-              }}
-            >
-              <img
-                style={{ width: 22, height: 22, position: 'relative', top: 4 }}
-                src={TopImg}
-              />
-              <div>{title}</div>
-            </div>
-          ))}
-          {topPostList.length > 0 && (
-            <div style={{ backgroundColor: '#eee', height: 18 }} />
-          )}
-        </div>
+        {TopPostElement}
 
         <div
           className="flex justify-between text-lg p-2 px-4"
@@ -59,7 +61,6 @@ export default function () {
           <div>帖子总数：{total}</div>
           <div>最新回复排序</div>
         </div>
-
         {
           // 当前页帖子预览
           postList.map(({ ip, title, content, _time, id }) => (
@@ -70,11 +71,7 @@ export default function () {
                 history.push('/post/' + id);
               }}
             >
-              <div className="flex justify-between text-sm text-gray-500 mb-1">
-                <div>{stringHash(ip)}</div>
-                <div>{new Date(_time * 1000).toLocaleString()}</div>
-                <div style={{ width: '10%' }}></div>
-              </div>
+              <NameTime ip={ip} _time={_time} />
               <div className="u-line-1 font-bold">{title}</div>
               <div className="u-line-2 text-base">{content}</div>
             </div>
@@ -82,7 +79,7 @@ export default function () {
         }
         {
           // 两页以上显示分页器
-          total > pageSize && (
+          pageTotal > 1 && (
             <div className="flex justify-center my-4">
               <Pagination
                 pageSize={pageSize}
