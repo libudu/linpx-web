@@ -11,7 +11,7 @@ const NameTime: React.FC<{
   return (
     <div
       className={classNames(
-        'flex justify-between text-sm text-gray-500 mb-1',
+        'flex justify-between text-sm text-gray-500',
         className,
       )}
     >

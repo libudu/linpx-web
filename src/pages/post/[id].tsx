@@ -25,17 +25,23 @@ const Post: React.FC<{ match: IRouteProps }> = ({ match }) => {
     const { records, pageTotal, pageSize, total, page } = commentData;
     postCommentElement = (
       <div className="px-2">
-        {records.map(({ ip, content, _time }, index) => (
-          <div className="py-1" style={{ borderBottom: '1px solid #eee' }}>
-            <NameTime
-              className="text-base"
-              ip={ip}
-              _time={_time}
-              rightEle={(page - 1) * pageSize + index + 1 + 'F'}
-            />
-            {content}
+        {records.length ? (
+          records.map(({ ip, content, _time }, index) => (
+            <div className="py-1" style={{ borderBottom: '1px solid #eee' }}>
+              <NameTime
+                className="text-base"
+                ip={ip}
+                _time={_time}
+                rightEle={(page - 1) * pageSize + index + 1 + 'F'}
+              />
+              {content}
+            </div>
+          ))
+        ) : (
+          <div className="flex justify-center items-center h-20 text-gray-400">
+            快来添加第一条回复吧
           </div>
-        ))}
+        )}
         {pageTotal > 1 && (
           <div className="flex justify-center my-4">
             <Pagination

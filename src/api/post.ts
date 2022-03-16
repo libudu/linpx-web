@@ -7,6 +7,7 @@ interface IPost {
   ip: string;
   title: string;
   content: string;
+  commentCount: number;
   refer:
     | null
     | {

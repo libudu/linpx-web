@@ -63,7 +63,7 @@ export default function () {
         </div>
         {
           // 当前页帖子预览
-          postList.map(({ ip, title, content, _time, id }) => (
+          postList.map(({ ip, title, content, _time, id, commentCount }) => (
             <div
               className="px-4 py-2 hover:bg-gray-100 transition-all cursor-pointer"
               style={{ borderBottom: '1px solid #eee' }}
@@ -71,8 +71,12 @@ export default function () {
                 history.push('/post/' + id);
               }}
             >
-              <NameTime ip={ip} _time={_time} />
-              <div className="u-line-1 font-bold">{title}</div>
+              <NameTime
+                ip={ip}
+                _time={_time}
+                rightEle={'回复: ' + commentCount}
+              />
+              <div className="u-line-1 font-bold mt-0.5">{title}</div>
               <div className="u-line-2 text-base">{content}</div>
             </div>
           ))
