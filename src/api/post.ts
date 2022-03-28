@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import { reqGet } from './util/request';
 import { IPageData, makeRestApiTemplate } from './util/restfulTemplate';
 
-interface IPost {
+export interface IPost {
   id: string;
   ip: string;
   title: string;
@@ -12,11 +12,11 @@ interface IPost {
     | null
     | {
         type: 'novel';
-        id: string;
+        data: string;
       }
     | {
         type: 'post';
-        id: string;
+        data: string;
       };
   _time: number;
 }

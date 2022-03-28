@@ -8,7 +8,6 @@ import useSWR from 'swr';
 import cache from './util/cache';
 import { list2query, proxyImg } from '@/utils/util';
 import { linpxRequest } from './util/request';
-import { useEffect } from 'react';
 import { useLinpxSWR } from '.';
 
 export const usePixivNovel = (id: string) => {
