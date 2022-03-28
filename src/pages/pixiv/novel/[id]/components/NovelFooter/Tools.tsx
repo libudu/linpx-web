@@ -3,14 +3,13 @@ import { history } from 'umi';
 import classnames from 'classnames';
 import { INovelInfo } from '@/types';
 
-import { AfdianButton } from '@/pages/components/Afdian';
-
 import SharePng from '@/assets/icon/share_big.png';
 import LikePng from '@/assets/icon/like_big.png';
 import UnlikePng from '@/assets/icon/unlike_big.png';
-import DiscuessPng from '@/assets/icon/discuss.png';
+import DiscussPng from '@/assets/icon/discuss.png';
 import { BORDER } from '../..';
 import { shareNovel } from '@/utils/share';
+import { AfdianImg, openAfdianUrl } from '@/pages/components/Afdian';
 
 interface LinkButtonProps {
   mainTitle: string;
@@ -98,32 +97,87 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
   // 仅当系列存在且大于1篇时才显示系列上下篇
   const showSeries = series && (series.next || series.prev);
 
-  const likeContent = (
-    <div className="flex justify-center items-center flex-grow">
-      <div
-        className="flex justify-center items-center"
-        onClick={() => onClickLike(like)}
-      >
-        <img className="w-16 mr-2 h-16" src={like ? LikePng : UnlikePng} />
-        <div>
-          点赞
-          <div className="text-sm font-normal text-yellow-500">{likeCount}</div>
+  const makeIconTextElement = ({
+    img,
+    text,
+    isVertical,
+    onClick,
+  }: {
+    img: React.ReactChild;
+    text: React.ReactChild;
+    isVertical?: boolean;
+    onClick: () => void;
+  }) => {
+    return (
+      <div className="flex justify-center items-center flex-grow py-2">
+        <div
+          className={classnames('flex justify-center items-center', {
+            'flex-col': isVertical,
+          })}
+          onClick={onClick}
+        >
+          {typeof img == 'string' ? (
+            <img
+              className={`w-16 h-16 ${isVertical ? 'mb-2' : 'mr-2'}`}
+              src={img}
+            />
+          ) : (
+            img
+          )}
+          <div>{text}</div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
-  const shareContent = (
-    <div className="flex justify-center items-center flex-grow">
-      <div
-        className="flex justify-center items-center"
-        onClick={() => shareNovel(id)}
-      >
-        <img className="w-16 mr-2 h-16" src={SharePng} />
-        <div>分享</div>
+  const likeContent = makeIconTextElement({
+    img: like ? LikePng : UnlikePng,
+    text: (
+      <>
+        点赞
+        <div className="text-sm font-normal text-yellow-500">{likeCount}</div>
+      </>
+    ),
+    onClick: () => onClickLike(like),
+  });
+
+  const likeContentVertical = makeIconTextElement({
+    img: like ? LikePng : UnlikePng,
+    text: (
+      <>
+        点赞
+        <span className="ml-2 font-normal text-yellow-500">{likeCount}</span>
+      </>
+    ),
+    onClick: () => onClickLike(like),
+    isVertical: true,
+  });
+
+  const shareContent = makeIconTextElement({
+    img: SharePng,
+    text: '分享',
+    onClick: () => shareNovel(id),
+  });
+
+  const postContent = makeIconTextElement({
+    img: (
+      <div className="p-4 w-16 h-16 mr-2 bg-green-500 rounded-full flex justify-center items-center">
+        <img className="w-full h-full" src={DiscussPng} />
       </div>
-    </div>
-  );
+    ),
+    text: '发帖',
+    onClick: () => history.push(`/post/create?referType=novel&referData=${id}`),
+  });
+
+  const afdianContent = makeIconTextElement({
+    img: (
+      <div className="bg-purple-500 mr-2 rounded-full w-16 h-16 flex items-center justify-center">
+        <img className="w-8" src={AfdianImg} />
+      </div>
+    ),
+    text: '支持',
+    onClick: () => openAfdianUrl(userName, afdianUrl || ''),
+  });
 
   return (
     <div
@@ -141,38 +195,32 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
       >
         {afdianUrl ? (
           <>
-            <div className="w-1/2 py-6" style={{ borderRight: BORDER }}>
-              <AfdianButton url={afdianUrl} user={userName} />
+            <div className="w-1/2" style={{ borderRight: BORDER }}>
+              {shareContent}
+              <div className="w-full h-0" style={{ borderBottom: BORDER }} />
+              {afdianContent}
             </div>
             <div className="w-1/2 flex flex-col">
-              {shareContent}
+              {postContent}
               <div className="w-full h-0" style={{ borderBottom: BORDER }} />
               {likeContent}
             </div>
           </>
         ) : (
-          <div className="flex w-full h-24">
-            {shareContent}
-            <div className="w-0 h-full" style={{ borderRight: BORDER }} />
-            {likeContent}
-          </div>
+          <>
+            <div
+              className="w-1/2 flex items-center"
+              style={{ borderRight: BORDER }}
+            >
+              {likeContentVertical}
+            </div>
+            <div className="w-1/2 flex flex-col">
+              {shareContent}
+              <div className="w-full h-0" style={{ borderBottom: BORDER }} />
+              {postContent}
+            </div>
+          </>
         )}
-      </div>
-      <div
-        className="p-4 text-2xl font-black flex justify-center"
-        style={{ borderBottom: BORDER }}
-      >
-        <div
-          className="flex"
-          onClick={() =>
-            history.push(`/post/create?referType=novel&referData=${id}`)
-          }
-        >
-          <div className="p-4 w-16 h-16 bg-green-500 rounded-full flex justify-center items-center">
-            <img className="w-full h-full" src={DiscuessPng} />
-          </div>
-          <div className="flex items-center ml-4">发帖</div>
-        </div>
       </div>
       <div className="p-4 pt-2">
         {showSeries && series ? (

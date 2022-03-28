@@ -4,6 +4,8 @@ import classnames from 'classnames';
 import { Avatar } from 'antd';
 import { useFavUserById } from '@/api';
 
+export { AfdianImg };
+
 export const openAfdianUrl = (user: string, url: string) => {
   openInfoModal({
     title: '前往爱发电',
@@ -71,21 +73,6 @@ export const AfdianIcon: React.FC<AfdianIconProps> = ({ className, style }) => {
       style={style}
     >
       <img className="w-3" src={AfdianImg} />
-    </div>
-  );
-};
-
-export const AfdianButton: React.FC<AfdianButtonProps> = ({ url, user }) => {
-  return (
-    <div className="flex flex-col items-center">
-      <div
-        className="mb-4 bg-purple-500 rounded-full w-28 h-28 flex items-center justify-center"
-        onClick={() => openAfdianUrl(user, url)}
-      >
-        <img src={AfdianImg} />
-      </div>
-      <div className="mb-2 text-2xl font-black leading-5">支持作者</div>
-      <div className="text-purple-500 text-base font-normal">爱发电赞助</div>
     </div>
   );
 };
