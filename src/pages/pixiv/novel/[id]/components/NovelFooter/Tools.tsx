@@ -8,6 +8,7 @@ import { AfdianButton } from '@/pages/components/Afdian';
 import SharePng from '@/assets/icon/share_big.png';
 import LikePng from '@/assets/icon/like_big.png';
 import UnlikePng from '@/assets/icon/unlike_big.png';
+import DiscuessPng from '@/assets/icon/discuss.png';
 import { BORDER } from '../..';
 import { shareNovel } from '@/utils/share';
 
@@ -156,6 +157,22 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
             {likeContent}
           </div>
         )}
+      </div>
+      <div
+        className="p-4 text-2xl font-black flex justify-center"
+        style={{ borderBottom: BORDER }}
+      >
+        <div
+          className="flex"
+          onClick={() =>
+            history.push(`/post/create?referType=novel&referData=${id}`)
+          }
+        >
+          <div className="p-4 w-16 h-16 bg-green-500 rounded-full flex justify-center items-center">
+            <img className="w-full h-full" src={DiscuessPng} />
+          </div>
+          <div className="flex items-center ml-4">发帖</div>
+        </div>
       </div>
       <div className="p-4 pt-2">
         {showSeries && series ? (

@@ -39,9 +39,21 @@ export default function Layout({ children }: IRouteComponentProps) {
       // 上次位置存在则滚过去
       if (lastPos && history.action === 'POP') {
         // 夸克游览器上，不套setTimeout将无法滚动到位置
-        setTimeout(() => {
-          node.scrollTo({ top: lastPos });
-        }, 1);
+        let count = 0;
+        let timer = setInterval(() => {
+          // 可能之前的页面还没渲染出来
+          let totalHeight = 0;
+          [...node.children].forEach(
+            (ele) => (totalHeight += ele.clientHeight),
+          );
+          if (totalHeight < lastPos && count < 10) {
+            count += 1;
+            console.log('count', count);
+          } else {
+            clearInterval(timer);
+            node.scrollTo({ top: lastPos });
+          }
+        }, 50);
       }
       // 添加滚动监听
       const handler = (e: Event) => {

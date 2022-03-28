@@ -119,7 +119,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
     Number(!canLike && !like);
 
   return (
-    <div className="w-full h-full overflow-y-scroll" onScroll={scrollHandler}>
+    <div className="w-full" onScroll={scrollHandler}>
       <NovelNavbar showNavbar={showNavbar} novelInfo={novelInfo} />
       {novelInfo && (
         <div className="w-full">

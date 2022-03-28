@@ -109,6 +109,7 @@ const PostPreviewElement: React.FC<{ postList: IPost[] }> = ({ postList }) => {
           }
           return (
             <div
+              key={id}
               className="px-4 py-2 hover:bg-gray-100 transition-all cursor-pointer"
               style={{ borderBottom: '1px solid #ddd' }}
               onClick={() => {
