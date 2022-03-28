@@ -22,7 +22,7 @@ export interface IPost {
 }
 
 // 帖子的回复
-interface IPostComment {
+export interface IPostComment {
   id: string;
   ip: string;
   content: string;

@@ -6,6 +6,7 @@ import { history } from 'umi';
 import { useState } from 'react';
 import NameTime from './components/NameTime';
 import { Array2Map } from '@/types';
+import NovelRefer from './components/NovelRefer';
 
 const topPostList = [
   {
@@ -60,51 +61,9 @@ const PostPreviewElement: React.FC<{ postList: IPost[] }> = ({ postList }) => {
           let referElement = null;
           // 引用小说
           if (refer?.type == 'novel' && refer.data) {
-            const novelId = refer.data;
-            const novelInfo = novelInfoMap[novelId];
+            const novelInfo = novelInfoMap[refer.data];
             if (novelInfo) {
-              const {
-                title,
-                coverUrl,
-                length,
-                userName,
-                createDate,
-                tags,
-                id,
-              } = novelInfo;
-              referElement = (
-                <div
-                  className="rounded-md overflow-hidden flex hover:bg-gray-200"
-                  style={{ border: '1px solid #ddd', height: 70 }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    history.push(`/pixiv/novel/${id}`);
-                  }}
-                >
-                  <img
-                    className="object-cover rounded-sm"
-                    style={{ width: 50, height: 70 }}
-                    src={coverUrl}
-                  />
-                  <div className="h-full flex flex-col justify-around flex-grow pb-1">
-                    <div className="font-black u-line-1">{title}</div>
-                    <div className="text-xs">
-                      {userName}
-                      <span className="inline-block ml-2 font-normal text-gray-400">
-                        {length}字
-                      </span>
-                      <span className="inline-block ml-2 font-normal text-gray-400">
-                        {new Date(createDate).toLocaleDateString()}
-                      </span>
-                    </div>
-                    <div className="text-xs text-blue-400 u-line-1">
-                      {tags.map((tag) => (
-                        <span key={tag}>#{tag} </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              );
+              referElement = <NovelRefer {...novelInfo} />;
             }
           }
           return (
