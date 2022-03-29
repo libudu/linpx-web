@@ -46,51 +46,61 @@ const TopPostElement = (
 );
 
 // 普通帖子
-const PostPreviewElement: React.FC<{ postList: IPost[] }> = ({ postList }) => {
-  const referList = postList
-    .map(({ refer }) => refer)
-    .filter((refer) => refer && refer.type && refer.data);
-  const referNovelList = referList
-    .filter((refer) => refer?.type == 'novel')
-    .map((refer) => refer?.data) as string[];
-  const novelInfo = usePixivNovelProfiles(referNovelList);
-  const novelInfoMap = novelInfo ? Array2Map(novelInfo) : {};
-  return (
-    <>
-      {postList.map(
-        ({ ip, title, content, _time, id, commentCount, refer }) => {
-          let referElement = null;
-          // 引用小说
-          if (refer?.type == 'novel' && refer.data) {
-            const novelInfo = novelInfoMap[refer.data];
-            if (novelInfo) {
-              referElement = <NovelRefer {...novelInfo} />;
+const PostPreviewElement: React.FC<{ postList: IPost[]; sortType: ISortType }> =
+  ({ postList, sortType }) => {
+    const referList = postList
+      .map(({ refer }) => refer)
+      .filter((refer) => refer && refer.type && refer.data);
+    const referNovelList = referList
+      .filter((refer) => refer?.type == 'novel')
+      .map((refer) => refer?.data) as string[];
+    const novelInfo = usePixivNovelProfiles(referNovelList);
+    const novelInfoMap = novelInfo ? Array2Map(novelInfo) : {};
+    return (
+      <>
+        {postList.map(
+          ({
+            ip,
+            title,
+            content,
+            _time,
+            id,
+            commentCount,
+            refer,
+            createTime,
+          }) => {
+            let referElement = null;
+            // 引用小说
+            if (refer?.type == 'novel' && refer.data) {
+              const novelInfo = novelInfoMap[refer.data];
+              if (novelInfo) {
+                referElement = <NovelRefer {...novelInfo} />;
+              }
             }
-          }
-          return (
-            <div
-              key={id}
-              className="px-4 py-2 hover:bg-gray-100 transition-all cursor-pointer"
-              style={{ borderBottom: '1px solid #ddd' }}
-              onClick={() => {
-                history.push('/post/' + id);
-              }}
-            >
-              <NameTime
-                ip={ip}
-                _time={_time}
-                rightEle={'回复: ' + commentCount}
-              />
-              <div className="u-line-1 font-bold mt-0.5">{title}</div>
-              <div className="u-line-2 text-base">{content}</div>
-              {referElement}
-            </div>
-          );
-        },
-      )}
-    </>
-  );
-};
+            return (
+              <div
+                key={id}
+                className="px-4 py-2 hover:bg-gray-100 transition-all cursor-pointer"
+                style={{ borderBottom: '1px solid #ddd' }}
+                onClick={() => {
+                  history.push('/post/' + id);
+                }}
+              >
+                <NameTime
+                  ip={ip}
+                  _time={sortType == 'post' ? createTime : _time}
+                  rightEle={'回复: ' + commentCount}
+                />
+                <div className="u-line-1 font-bold mt-0.5">{title}</div>
+                <div className="u-line-2 text-base">{content}</div>
+                {referElement}
+              </div>
+            );
+          },
+        )}
+      </>
+    );
+  };
 
 // 按事件排序
 // 帖子分区
@@ -99,6 +109,8 @@ const sortTypeMap = {
   comment: '回复时间排序',
   post: '发帖时间排序',
 };
+
+type ISortType = keyof typeof sortTypeMap;
 
 export default function () {
   const [page, setPage] = useState(1);
@@ -145,7 +157,7 @@ export default function () {
           </div>
         </Dropdown>
       </div>
-      <PostPreviewElement postList={postList} />
+      <PostPreviewElement postList={postList} sortType={sortType} />
       {
         // 两页以上显示分页器
         pageTotal > 1 && (

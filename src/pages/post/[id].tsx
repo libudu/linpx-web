@@ -101,7 +101,7 @@ const Post: React.FC<{ match: IRouteProps }> = ({ match }) => {
       </PageLayout>
     );
   }
-  const { title, content, ip, _time } = res;
+  const { title, content, ip, createTime } = res;
   return (
     <PageLayout title="帖子详情">
       <div className="mb-16" ref={rootRef}>
@@ -109,7 +109,7 @@ const Post: React.FC<{ match: IRouteProps }> = ({ match }) => {
           <div className="text-3xl py-3 font-bold">{title}</div>
           <div className="flex justify-between text-base text-gray-500 mb-1">
             <div style={{ width: 70 }}>{stringHash(ip)}</div>
-            <div>{new Date(_time * 1000).toLocaleString()}</div>
+            <div>{new Date(createTime).toLocaleString().slice(2, -3)}</div>
             <div style={{ width: '10%' }}></div>
           </div>
           <div>{content}</div>
