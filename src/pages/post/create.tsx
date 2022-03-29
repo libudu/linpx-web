@@ -43,7 +43,7 @@ const NovelReferer: React.FC<{ novelId: string }> = ({ novelId }) => {
 
 const CreatePost: React.FC<IRouteComponentProps> = ({ location }) => {
   const [info, setInfo] = useState<any>({});
-  const { referType, referData } = location.query;
+  const { referType, referData, from } = location.query;
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   let referElement = null;
   if (referType == 'novel' && referData) {
@@ -60,7 +60,16 @@ const CreatePost: React.FC<IRouteComponentProps> = ({ location }) => {
       rightEle={
         <div
           className="text-2xl"
-          onClick={() => clickSumbit(info, () => setShowSuccessModal(true))}
+          onClick={() =>
+            clickSumbit(info, () => {
+              if (referType == 'novel') {
+                setShowSuccessModal(true);
+              } else {
+                history.goBack();
+                Toast.show('发布成功！');
+              }
+            })
+          }
         >
           发布
         </div>
@@ -85,7 +94,7 @@ const CreatePost: React.FC<IRouteComponentProps> = ({ location }) => {
         <Modal
           visible={showSuccessModal}
           transparent
-          title="发送成功"
+          title="发表成功！"
           footer={[
             {
               text: '返回小说',
