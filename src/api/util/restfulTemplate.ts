@@ -32,14 +32,17 @@ export interface IPageData<T> {
 interface IGetPageParams {
   page?: number;
   pageSize?: number;
+  [key: string]: any;
 }
 
 export const makeRestApiTemplate = <T = any>(path: string) => {
-  const getPage = async ({
-    page = 0,
-    pageSize = 10,
-  }: IGetPageParams): Promise<IPageData<T>> => {
-    const fullPath = path + makeQueryParams({ page, pageSize });
+  const getPage = async (params: IGetPageParams): Promise<IPageData<T>> => {
+    params = {
+      page: 0,
+      pageSize: 10,
+      ...params,
+    };
+    const fullPath = path + makeQueryParams(params);
     return reqGet(fullPath);
   };
 

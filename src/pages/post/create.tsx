@@ -1,15 +1,15 @@
 import { postApi, usePixivNovelProfiles } from '@/api';
 import PageLayout from '@/components/PageLayout';
 import { Input } from 'antd';
-import { Toast } from 'antd-mobile';
+import { Modal, Toast } from 'antd-mobile';
 import { throttle } from 'lodash';
 import { useState } from 'react';
-import { IRouteComponentProps } from 'umi';
+import { IRouteComponentProps, history } from 'umi';
 
 const { TextArea } = Input;
 
 const clickSumbit = throttle(
-  async (info: any) => {
+  async (info: any, onSuccess: () => void) => {
     if (!info.title) {
       Toast.show('标题不可为空');
       return;
@@ -21,10 +21,7 @@ const clickSumbit = throttle(
     await postApi.postOne({
       ...info,
     });
-    Toast.info('发送成功！');
-    setTimeout(() => {
-      history.back();
-    }, 1000);
+    onSuccess();
   },
   1000,
   { trailing: false },
@@ -47,6 +44,7 @@ const NovelReferer: React.FC<{ novelId: string }> = ({ novelId }) => {
 const CreatePost: React.FC<IRouteComponentProps> = ({ location }) => {
   const [info, setInfo] = useState<any>({});
   const { referType, referData } = location.query;
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   let referElement = null;
   if (referType == 'novel' && referData) {
     const novelId = String(referData);
@@ -60,7 +58,10 @@ const CreatePost: React.FC<IRouteComponentProps> = ({ location }) => {
     <PageLayout
       title="发布新帖"
       rightEle={
-        <div className="text-2xl" onClick={() => clickSumbit(info)}>
+        <div
+          className="text-2xl"
+          onClick={() => clickSumbit(info, () => setShowSuccessModal(true))}
+        >
           发布
         </div>
       }
@@ -80,6 +81,21 @@ const CreatePost: React.FC<IRouteComponentProps> = ({ location }) => {
           style={{ fontSize: 16 }}
           maxLength={100000}
           onChange={(e) => (info['content'] = e.target.value)}
+        />
+        <Modal
+          visible={showSuccessModal}
+          transparent
+          title="发送成功"
+          footer={[
+            {
+              text: '返回小说',
+              onPress: () => history.goBack(),
+            },
+            {
+              text: '查看帖子',
+              onPress: () => history.push('/post'),
+            },
+          ]}
         />
       </div>
     </PageLayout>

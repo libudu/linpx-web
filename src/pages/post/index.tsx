@@ -1,12 +1,13 @@
 import PageLayout from '@/components/PageLayout';
 import TopImg from '@/assets/icon/top.png';
-import { Pagination } from 'antd';
+import { Dropdown, Pagination } from 'antd';
 import { IPost, postApi, usePixivNovelProfiles } from '@/api';
 import { history } from 'umi';
 import { useState } from 'react';
 import NameTime from './components/NameTime';
 import { Array2Map } from '@/types';
 import NovelRefer from './components/NovelRefer';
+import { CaretDownOutlined } from '@ant-design/icons';
 
 const topPostList = [
   {
@@ -94,56 +95,88 @@ const PostPreviewElement: React.FC<{ postList: IPost[] }> = ({ postList }) => {
 // 按事件排序
 // 帖子分区
 // todo:后端限制，每分钟最多发2条新帖，每小时最多发5条，每天最多发10条帖子
+const sortTypeMap = {
+  comment: '回复时间排序',
+  post: '发帖时间排序',
+};
+
 export default function () {
   const [page, setPage] = useState(1);
-  const res = postApi.usePage({ page });
-  let children = null;
-  if (res) {
-    const { records: postList, pageSize, pageTotal, total } = res;
-    children = (
-      <>
-        {TopPostElement}
-        <div
-          className="flex justify-between text-lg p-2 px-4"
-          style={{ borderBottom: '1px solid #ddd' }}
-        >
-          <div>帖子总数：{total}</div>
-          <div>最新回复排序</div>
-        </div>
-        <PostPreviewElement postList={postList} />
-        {
-          // 两页以上显示分页器
-          pageTotal > 1 && (
-            <div className="flex justify-center my-4">
-              <Pagination
-                pageSize={pageSize}
-                current={page}
-                total={total}
-                showSizeChanger={false}
-                onChange={(e) => {
-                  setPage(e);
-                }}
-              />
-            </div>
-          )
-        }
-        <div
-          className="absolute bg-yellow-500 rounded-full"
-          style={{
-            right: 18,
-            bottom: 40,
-            width: 80,
-            height: 80,
-            fontSize: 100,
-            textAlign: 'center',
-            lineHeight: '68px',
-          }}
-          onClick={() => history.push('/post/create')}
-        >
-          +
-        </div>
-      </>
+  const [sortType, setSortType] = useState<keyof typeof sortTypeMap>('comment');
+  const res = postApi.usePage({ page, sort: sortType });
+
+  if (!res)
+    return (
+      <PageLayout title="最近帖子">
+        <></>
+      </PageLayout>
     );
-  }
-  return <PageLayout title="最近帖子">{children}</PageLayout>;
+
+  const { records: postList, pageSize, pageTotal, total } = res;
+
+  return (
+    <PageLayout title="最近帖子">
+      {TopPostElement}
+      <div
+        className="flex justify-between text-lg p-2 px-4"
+        style={{ borderBottom: '1px solid #ddd' }}
+      >
+        <div>帖子总数：{total}</div>
+        <Dropdown
+          placement="bottomCenter"
+          trigger={['click']}
+          overlay={
+            <div className="text-lg bg-gray-300 rounded-md py-1 overflow-hidden">
+              {Object.entries(sortTypeMap).map(([sortType, text]) => (
+                <div
+                  className="hover:bg-gray-400 px-2"
+                  key={sortType}
+                  onClick={() => setSortType(sortType as any)}
+                >
+                  {text}
+                </div>
+              ))}
+            </div>
+          }
+        >
+          <div>
+            {sortTypeMap[sortType]}
+            <CaretDownOutlined />
+          </div>
+        </Dropdown>
+      </div>
+      <PostPreviewElement postList={postList} />
+      {
+        // 两页以上显示分页器
+        pageTotal > 1 && (
+          <div className="flex justify-center my-4">
+            <Pagination
+              pageSize={pageSize}
+              current={page}
+              total={total}
+              showSizeChanger={false}
+              onChange={(e) => {
+                setPage(e);
+              }}
+            />
+          </div>
+        )
+      }
+      <div
+        className="absolute bg-yellow-500 rounded-full"
+        style={{
+          right: 18,
+          bottom: 40,
+          width: 80,
+          height: 80,
+          fontSize: 100,
+          textAlign: 'center',
+          lineHeight: '68px',
+        }}
+        onClick={() => history.push('/post/create')}
+      >
+        +
+      </div>
+    </PageLayout>
+  );
 }
