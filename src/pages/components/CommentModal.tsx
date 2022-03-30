@@ -36,6 +36,7 @@ const CommentModal: FC<CommentModalProps> = ({
     }, 200),
     [],
   );
+  // 提交防抖
   const onSubmitThrottle = useCallback(
     throttle((text: string) => onSubmit(text), 1000, { trailing: false }),
     [],

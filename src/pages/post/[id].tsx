@@ -3,11 +3,97 @@ import { closeModal, openModal } from '@/components/LinpxModal';
 import PageLayout from '@/components/PageLayout';
 import { Pagination } from 'antd';
 import { Toast } from 'antd-mobile';
-import React, { useRef, useState } from 'react';
+import { throttle } from 'lodash';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { IRouteProps } from 'umi';
-import CommentModal from '../components/CommentModal';
 import NameTime from './components/NameTime';
 import { NovelReferById } from './components/NovelRefer';
+
+interface ICommentModal {
+  show: boolean;
+  setShow: (state: boolean) => void;
+  postId: string;
+  onSubmitSuccess?: () => void;
+}
+
+// 最大评论字数
+const MAX_COMMENT_LENGTH = 10000;
+
+const CommentModal: React.FC<ICommentModal> = ({
+  show,
+  setShow,
+  postId,
+  onSubmitSuccess,
+}) => {
+  const [data, setData] = useState({ text: '' });
+  const ref = useRef<HTMLTextAreaElement>(null);
+  // 自动聚焦输入框
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.focus();
+    }
+  }, [ref.current]);
+  // 提交防抖
+  const submitComment = useCallback(
+    throttle(
+      async () => {
+        if (data.text.length > MAX_COMMENT_LENGTH) {
+          Toast.info('字数过多超过10000字，提交失败！');
+          return;
+        }
+        const res = await postCommentApi.postOne({
+          postId,
+          content: data.text,
+        });
+        if (res.error) {
+          Toast.info('评论失败', 1.0, undefined, false);
+        } else {
+          Toast.info('评论成功', 1.0, undefined, false);
+          setShow(false);
+          onSubmitSuccess && onSubmitSuccess();
+        }
+      },
+      1000,
+      { trailing: false },
+    ),
+    [],
+  );
+  if (!show) return <></>;
+  return (
+    <div
+      className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-20 z-20"
+      onClick={() => setShow(false)}
+    >
+      <div
+        className="w-full absolute bottom-0 h-72 lp-bgcolor px-4 py-5"
+        style={{ boxShadow: '0 -2px 4px -1px #aaa' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="relative h-48">
+          <div
+            className="absolute rounded-xl top-0 left-0 w-full h-full pointer-events-none"
+            style={{ boxShadow: '0 0 4px #aaa inset' }}
+          />
+          <textarea
+            ref={ref}
+            defaultValue={data.text}
+            className="w-full border-0 z-30 p-1.5 resize-none"
+            style={{ height: '100%' }}
+            onChange={(e: any) => (data.text = e.target.value)}
+          />
+        </div>
+        <div className="flex mt-3 flex-row-reverse">
+          <div
+            className="px-6 py-1 text-lg bg-linpx-orange rounded-full"
+            onClick={submitComment}
+          >
+            发帖
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const PostComment: React.FC<{
   id: string;
@@ -19,14 +105,15 @@ const PostComment: React.FC<{
     page: commentPage,
     pageSize: 10,
   });
+  const [showCommentModal, setShowCommentModal] = useState(false);
   // 评论数据
   if (!commentData) return <></>;
   const { records, pageTotal, pageSize, total, page } = commentData;
   return (
-    <div className="px-2">
+    <div>
       {records.length ? (
         records.map(({ ip, content, _time }, index) => (
-          <div className="py-1" style={{ borderBottom: '1px solid #eee' }}>
+          <div className="py-1 px-2" style={{ borderBottom: '1px solid #eee' }}>
             <NameTime
               className="text-base"
               ip={ip}
@@ -58,34 +145,18 @@ const PostComment: React.FC<{
       <div
         className="w-full py-3 pl-6 absolute bottom-0 text-gray-400 bg-white"
         style={{ borderTop: '1px solid #ccc' }}
-        onClick={() =>
-          openModal({
-            children: (
-              <CommentModal
-                submitText="回复"
-                onSubmit={async (content) => {
-                  const res = await postCommentApi.postOne({
-                    postId: id,
-                    content,
-                  });
-                  if (res.error) {
-                    Toast.info('评论失败', 1.0, undefined, false);
-                    return false;
-                  } else {
-                    Toast.info('评论成功', 1.0, undefined, false);
-                    closeModal();
-                    revalidate();
-                    // endRef.current?.scrollIntoView({ behavior: 'smooth' });
-                    return true;
-                  }
-                }}
-              />
-            ),
-          })
-        }
+        onClick={() => setShowCommentModal(true)}
       >
         回复帖子
       </div>
+      <CommentModal
+        show={showCommentModal}
+        setShow={setShowCommentModal}
+        postId={id}
+        onSubmitSuccess={() => {
+          revalidate();
+        }}
+      />
     </div>
   );
 };

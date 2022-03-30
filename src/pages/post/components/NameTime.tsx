@@ -15,7 +15,9 @@ const NameTime: React.FC<{
         className,
       )}
     >
-      <div style={{ width: '17%' }}>{stringHash(ip)}</div>
+      <div className="text-black" style={{ width: '17%' }}>
+        {stringHash(ip)}
+      </div>
       <div style={{ width: '63%' }}>
         {new Date(_time).toLocaleString().slice(2, -3)}
       </div>
