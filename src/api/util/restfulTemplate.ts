@@ -46,8 +46,16 @@ export const makeRestApiTemplate = <T = any>(path: string) => {
     return reqGet(fullPath);
   };
 
-  const getIdList = async (ids: string[]) => {
+  const getIdList = async (ids: string[]): Promise<Record<string, T>> => {
     return reqGet(path + '/ids' + makeQueryParams({ ids }));
+  };
+
+  const useIdList = (ids: string[]) => {
+    const [data, setData] = useState<Record<string, T> | null>(null);
+    useEffect(() => {
+      getIdList(ids).then((res) => setData(res));
+    }, [ids.join('-')]);
+    return data;
   };
 
   const usePage = (params: IGetPageParams): IPageData<T> | null => {
@@ -80,8 +88,9 @@ export const makeRestApiTemplate = <T = any>(path: string) => {
 
   return {
     getPage,
-    getIdList,
     usePage,
+    getIdList,
+    useIdList,
     useOne,
     postOne,
     deleteOne,

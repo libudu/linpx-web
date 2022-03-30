@@ -29,6 +29,7 @@ export interface IPostComment {
   content: string;
   postId: string;
   reply: string | null;
+  floor: number;
   _time: number;
 }
 
@@ -40,7 +41,7 @@ const postCommentTemplate = makeRestApiTemplate<IPostComment>('/post/comment');
 
 export const postCommentApi = {
   postOne: postCommentTemplate.postOne,
-  getIdList: postCommentTemplate.getIdList,
+  useIdList: postCommentTemplate.useIdList,
   useByPostId: (props: { postId: string; page: number; pageSize: number }) => {
     const { postId, page, pageSize } = props;
     const { data, revalidate } = useSWR<IPageData<IPostComment>>(

@@ -11,11 +11,11 @@ const NameTime: React.FC<{
   return (
     <div
       className={classNames(
-        'flex justify-between text-base text-gray-400',
+        'flex justify-between text-sm text-gray-400',
         className,
       )}
     >
-      <div className="text-black whitespace-nowrap" style={{ width: '72px' }}>
+      <div className="whitespace-nowrap" style={{ width: '72px' }}>
         {stringHash(ip)}
       </div>
       <div className="flex-grow">

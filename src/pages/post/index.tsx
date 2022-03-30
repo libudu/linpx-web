@@ -96,9 +96,9 @@ const PostPreviewElement: React.FC<{
                 _time={timeType == 'post' ? createTime : _time}
                 rightEle={'回复: ' + commentCount}
               />
-              <div className="u-line-1 font-bold mt-0.5">{title}</div>
+              <div className="u-line-1 text-xl font-bold mt-0.5">{title}</div>
               <div className="u-line-2 text-base">{content}</div>
-              {referElement}
+              {referElement && <div className="mt-1">{referElement}</div>}
             </div>
           );
         },

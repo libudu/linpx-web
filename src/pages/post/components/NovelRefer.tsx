@@ -19,15 +19,15 @@ const NovelRefer: React.FC<INovelProfile> = ({
 }) => {
   return (
     <div
-      className="rounded-md overflow-hidden flex lp-bgcolor mt-2 mx-4 p-1.5"
-      style={{ border: '1px solid #ddd', boxShadow: '0 0 4px #aaa' }}
+      className="rounded-md overflow-hidden flex lp-bgcolor mx-4 p-1.5"
+      style={{ boxShadow: '0 0 4px #aaa' }}
       onClick={(e) => {
         e.stopPropagation();
         history.push(`/pixiv/novel/${id}`);
       }}
     >
       <img
-        className="object-cover rounded-sm"
+        className="object-cover rounded-sm flex-shrink-0"
         style={{ width: 50, height: 70, boxShadow: '0 0 4px #888' }}
         src={coverUrl}
       />
@@ -35,7 +35,7 @@ const NovelRefer: React.FC<INovelProfile> = ({
         className="h-full px-2 flex flex-col justify-around flex-grow pb-1"
         style={{ height: 70 }}
       >
-        <div className="font-black u-line-1">{title}</div>
+        <div className="font-black text-lg u-line-1">{title}</div>
         <div className="text-xs">
           {userName}
           <span className="inline-block ml-2 font-normal text-gray-400">
