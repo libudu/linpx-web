@@ -109,7 +109,7 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
     onClick: () => void;
   }) => {
     return (
-      <div className="flex justify-center items-center flex-grow py-2">
+      <div className="flex justify-center items-center flex-grow py-4">
         <div
           className={classnames('flex justify-center items-center', {
             'flex-col': isVertical,
@@ -135,7 +135,9 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
     text: (
       <>
         点赞
-        <div className="text-sm font-normal text-yellow-500">{likeCount}</div>
+        <div className="text-sm font-normal leading-none text-yellow-500">
+          {likeCount}
+        </div>
       </>
     ),
     onClick: () => onClickLike(like),
@@ -160,11 +162,7 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
   });
 
   const postContent = makeIconTextElement({
-    img: (
-      <div className="p-4 w-16 h-16 mr-2 bg-green-500 rounded-full flex justify-center items-center">
-        <img className="w-full h-full" src={DiscussPng} />
-      </div>
-    ),
+    img: DiscussPng,
     text: '发帖',
     onClick: () => history.push(`/post/create?referType=novel&referData=${id}`),
   });
@@ -175,7 +173,14 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
         <img className="w-8" src={AfdianImg} />
       </div>
     ),
-    text: '支持',
+    text: (
+      <>
+        支持
+        <div className="text-purple-500 text-base font-normal leading-none">
+          爱发电
+        </div>
+      </>
+    ),
     onClick: () => openAfdianUrl(userName, afdianUrl || ''),
   });
 
@@ -196,14 +201,14 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
         {afdianUrl ? (
           <>
             <div className="w-1/2" style={{ borderRight: BORDER }}>
-              {shareContent}
+              {likeContent}
               <div className="w-full h-0" style={{ borderBottom: BORDER }} />
-              {afdianContent}
+              {shareContent}
             </div>
             <div className="w-1/2 flex flex-col">
-              {postContent}
+              {afdianContent}
               <div className="w-full h-0" style={{ borderBottom: BORDER }} />
-              {likeContent}
+              {postContent}
             </div>
           </>
         ) : (
