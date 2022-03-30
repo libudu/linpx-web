@@ -133,7 +133,7 @@ const SortTypeDropdown: React.FC<{
         >
           {Object.entries(sortTypeMap).map(([sortType, text]) => (
             <div
-              className="hover:bg-yellow-500 hover:bg-opacity-30 px-4"
+              className="hover:bg-yellow-500 hover:bg-opacity-30 px-4 py-0.5"
               style={{ borderBottom: '1px solid #eee' }}
               key={sortType}
               onClick={() => setSortType(sortType as any)}
@@ -167,7 +167,7 @@ export default function () {
   const { records: postList, pageSize, pageTotal, total } = res;
 
   return (
-    <PageLayout title="最近帖子">
+    <PageLayout title="最近帖子" rightEle={<></>}>
       {TopPostElement}
       <div
         className="flex justify-between text-lg p-2 px-4"

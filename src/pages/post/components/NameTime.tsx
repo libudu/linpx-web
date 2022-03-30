@@ -15,15 +15,13 @@ const NameTime: React.FC<{
         className,
       )}
     >
-      <div className="text-black" style={{ width: '17%' }}>
+      <div className="text-black whitespace-nowrap" style={{ width: '72px' }}>
         {stringHash(ip)}
       </div>
-      <div style={{ width: '63%' }}>
+      <div className="flex-grow">
         {new Date(_time).toLocaleString().slice(2, -3)}
       </div>
-      <div className="text-right mr-0.5" style={{ width: '20%' }}>
-        {rightEle}
-      </div>
+      <div className="text-right mr-0.5">{rightEle}</div>
     </div>
   );
 };
