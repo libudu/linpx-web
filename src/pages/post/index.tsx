@@ -8,6 +8,7 @@ import NameTime from './components/NameTime';
 import { Array2Map } from '@/types';
 import NovelRefer from './components/NovelRefer';
 import { CaretDownOutlined } from '@ant-design/icons';
+import LinpxNewImg from '@/assets/icon/linpx_new.png';
 
 const topPostList = [
   {
@@ -174,21 +175,12 @@ export default function () {
           </div>
         )
       }
-      <div
-        className="absolute bg-yellow-500 rounded-full"
-        style={{
-          right: 18,
-          bottom: 40,
-          width: 80,
-          height: 80,
-          fontSize: 100,
-          textAlign: 'center',
-          lineHeight: '68px',
-        }}
+      <img
+        className="absolute w-20 h-20 rounded-full"
+        style={{ right: 18, bottom: 30 }}
+        src={LinpxNewImg}
         onClick={() => history.push('/post/create')}
-      >
-        +
-      </div>
+      />
     </PageLayout>
   );
 }

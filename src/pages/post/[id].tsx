@@ -1,13 +1,13 @@
 import { postApi, postCommentApi } from '@/api';
 import { closeModal, openModal } from '@/components/LinpxModal';
 import PageLayout from '@/components/PageLayout';
-import { stringHash } from '@/utils/util';
 import { Pagination } from 'antd';
 import { Toast } from 'antd-mobile';
 import React, { useRef, useState } from 'react';
 import { IRouteProps } from 'umi';
 import CommentModal from '../components/CommentModal';
 import NameTime from './components/NameTime';
+import { NovelReferById } from './components/NovelRefer';
 
 const PostComment: React.FC<{
   id: string;
@@ -33,7 +33,7 @@ const PostComment: React.FC<{
               _time={_time}
               rightEle={(page - 1) * pageSize + index + 1 + 'F'}
             />
-            {content}
+            <div className="py-1">{content}</div>
           </div>
         ))
       ) : (
@@ -101,18 +101,19 @@ const Post: React.FC<{ match: IRouteProps }> = ({ match }) => {
       </PageLayout>
     );
   }
-  const { title, content, ip, createTime } = res;
+  const { title, content, ip, createTime, refer } = res;
+  let suffixElement = null;
+  if (refer?.type == 'novel') {
+    suffixElement = <NovelReferById id={refer.data} />;
+  }
   return (
     <PageLayout title="帖子详情">
       <div className="mb-16" ref={rootRef}>
         <div className="px-2 mb-4">
           <div className="text-3xl py-3 font-bold">{title}</div>
-          <div className="flex justify-between text-base text-gray-500 mb-1">
-            <div style={{ width: 70 }}>{stringHash(ip)}</div>
-            <div>{new Date(createTime).toLocaleString().slice(2, -3)}</div>
-            <div style={{ width: '10%' }}></div>
-          </div>
+          <NameTime ip={ip} _time={createTime} />
           <div>{content}</div>
+          {suffixElement}
         </div>
         <div className="bg-gray-100" style={{ height: 10 }}></div>
         <PostComment id={id} rootRef={rootRef} />

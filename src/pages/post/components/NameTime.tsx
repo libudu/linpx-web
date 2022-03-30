@@ -11,15 +11,15 @@ const NameTime: React.FC<{
   return (
     <div
       className={classNames(
-        'flex justify-between text-sm text-gray-500',
+        'flex justify-between text-base text-gray-400',
         className,
       )}
     >
-      <div style={{ width: '20%' }}>{stringHash(ip)}</div>
-      <div className="text-center" style={{ width: '60%' }}>
+      <div style={{ width: '17%' }}>{stringHash(ip)}</div>
+      <div style={{ width: '63%' }}>
         {new Date(_time).toLocaleString().slice(2, -3)}
       </div>
-      <div className="text-right" style={{ width: '20%' }}>
+      <div className="text-right mr-0.5" style={{ width: '20%' }}>
         {rightEle}
       </div>
     </div>
