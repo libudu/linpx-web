@@ -9,6 +9,7 @@ export interface IPost {
   content: string;
   commentCount: number;
   createTime: number;
+  tags: string[];
   refer:
     | null
     | {
@@ -35,6 +36,10 @@ export interface IPostComment {
 
 export const postApi = {
   ...makeRestApiTemplate<IPost>('/post'),
+  usePostTags: () => {
+    const { data } = useSWR<{ tag: string }[]>('/post/tags', reqGet);
+    return data;
+  },
 };
 
 const postCommentTemplate = makeRestApiTemplate<IPostComment>('/post/comment');

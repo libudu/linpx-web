@@ -31,8 +31,7 @@ const TopPostElement = (
       <div
         className="flex px-4 py-2 hover:bg-gray-100 transition-all cursor-pointer"
         style={{
-          borderBottom:
-            index != topPostList.length - 1 ? '1px solid #ddd' : undefined,
+          borderBottom: '1px solid #ddd',
         }}
       >
         <img
@@ -42,9 +41,6 @@ const TopPostElement = (
         <div>{title}</div>
       </div>
     ))}
-    {topPostList.length > 0 && (
-      <div style={{ backgroundColor: '#eee', height: 18 }} />
-    )}
   </div>
 );
 
@@ -73,6 +69,7 @@ const PostPreviewElement: React.FC<{
           commentCount,
           refer,
           createTime,
+          tags,
         }) => {
           let referElement = null;
           // 引用小说
@@ -96,7 +93,14 @@ const PostPreviewElement: React.FC<{
                 _time={timeType == 'post' ? createTime : _time}
                 rightEle={'回复: ' + commentCount}
               />
-              <div className="u-line-1 text-xl font-bold mt-0.5">{title}</div>
+              <div className="u-line-1 text-xl font-bold mt-0.5">
+                {tags && (
+                  <span className="text-yellow-500 mr-2">
+                    #{tags.join(' #')}
+                  </span>
+                )}
+                {title}
+              </div>
               <div className="u-line-2 text-base">{content}</div>
               {referElement && <div className="mt-1">{referElement}</div>}
             </div>
@@ -155,7 +159,9 @@ const SortTypeDropdown: React.FC<{
 export default function () {
   const [page, setPage] = useState(1);
   const [sortType, setSortType] = useState<keyof typeof sortTypeMap>('comment');
-  const res = postApi.usePage({ page, sort: sortType });
+  const tags = postApi.usePostTags();
+  const [selectTags, setSelectTags] = useState<string[]>([]);
+  const res = postApi.usePage({ page, sort: sortType, tags });
 
   if (!res)
     return (
@@ -169,6 +175,7 @@ export default function () {
   return (
     <PageLayout title="最近帖子" rightEle={<></>}>
       {TopPostElement}
+      <div>{tags?.map((tag) => tag.tag).join(' ')}</div>
       <div
         className="flex justify-between text-lg p-2 px-4"
         style={{ borderBottom: '1px solid #ddd' }}

@@ -41,10 +41,16 @@ const NovelReferer: React.FC<{ novelId: string }> = ({ novelId }) => {
   );
 };
 
+const NO_TAG_TEXT = '无标签';
+const DIY_TAG_TEXT = '自定义';
+
 const CreatePost: React.FC<IRouteComponentProps> = ({ location }) => {
   const [info, setInfo] = useState<any>({});
-  const { referType, referData, from } = location.query;
+  const [tagText, setTagText] = useState(NO_TAG_TEXT);
+  const postTags = postApi.usePostTags();
+  const { referType, referData } = location.query;
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+
   let referElement = null;
   if (referType == 'novel' && referData) {
     const novelId = String(referData);
@@ -54,6 +60,7 @@ const CreatePost: React.FC<IRouteComponentProps> = ({ location }) => {
     };
     referElement = <NovelReferer novelId={novelId} />;
   }
+
   return (
     <PageLayout
       title="发布新帖"
@@ -76,6 +83,61 @@ const CreatePost: React.FC<IRouteComponentProps> = ({ location }) => {
       }
     >
       <div className="h-full flex flex-col">
+        <div className="px-2">
+          <div>帖子标签：{tagText}</div>
+          <div className="flex flex-wrap">
+            {postTags &&
+              [...postTags, { tag: NO_TAG_TEXT }, { tag: DIY_TAG_TEXT }].map(
+                ({ tag }) => (
+                  <div
+                    key={tag}
+                    className="px-2 py-0.5 rounded-md text-sm mr-2 mb-1"
+                    style={{ border: '1px solid rgb(245, 158, 11)' }}
+                    onClick={() => {
+                      // 选择无标签
+                      if (tag == NO_TAG_TEXT) {
+                        setTagText('无');
+                        info.tag = undefined;
+                        return;
+                      }
+                      // 自定义标签
+                      if (tag == DIY_TAG_TEXT) {
+                        Modal.prompt(
+                          '自定义标签',
+                          '请输入自定义标签，长度6字及以下',
+                          [
+                            {
+                              text: '取消',
+                            },
+                            {
+                              text: '确定',
+                              onPress: (value) =>
+                                new Promise((resolve, reject) => {
+                                  if (value.length > 6) {
+                                    Toast.info('标签过长！');
+                                    reject();
+                                  } else {
+                                    info.tag = value;
+                                    setTagText(info.tag);
+                                    resolve(1);
+                                  }
+                                }),
+                            },
+                          ],
+                        );
+                        return;
+                      }
+                      // 普通标签
+                      setTagText(tag);
+                      info.tag = tag;
+                    }}
+                  >
+                    {tag}
+                  </div>
+                ),
+              )}
+          </div>
+        </div>
         <TextArea
           placeholder="请输入标题"
           style={{ fontSize: 20, fontWeight: 'bold' }}

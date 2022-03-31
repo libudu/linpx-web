@@ -47,6 +47,7 @@ export const makeRestApiTemplate = <T = any>(path: string) => {
   };
 
   const getIdList = async (ids: string[]): Promise<Record<string, T>> => {
+    if (ids.length == 0) return {};
     return reqGet(path + '/ids' + makeQueryParams({ ids }));
   };
 

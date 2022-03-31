@@ -35,7 +35,6 @@ const PostComment: React.FC<{
     .map((comment) => comment.reply)
     .filter((i) => i) as string[];
   const replyCommentMap = postCommentApi.useIdList(replyCommentIds);
-  console.log(replyCommentMap);
   return (
     <>
       {commentList.length ? (
@@ -151,7 +150,7 @@ const Post: React.FC<{ match: IRouteProps }> = ({ match }) => {
       </PageLayout>
     );
   }
-  const { title, content, ip, createTime, refer } = res;
+  const { title, content, ip, createTime, refer, tags } = res;
   let suffixElement = null;
   if (refer?.type == 'novel') {
     suffixElement = <NovelReferById id={refer.data} />;
@@ -160,7 +159,12 @@ const Post: React.FC<{ match: IRouteProps }> = ({ match }) => {
     <PageLayout title="帖子详情" rightEle={<></>}>
       <div className="mb-16 text-base" ref={rootRef}>
         <div className="px-3 mb-3">
-          <div className="text-2xl pt-2 pb-1 font-bold">{title}</div>
+          <div className="text-2xl pt-2 pb-1 font-bold">
+            {tags && (
+              <span className="text-yellow-500 mr-2">#{tags.join(' #')}</span>
+            )}
+            {title}
+          </div>
           <NameTime ip={ip} _time={createTime} />
           <div className="mt-1">{content}</div>
           {suffixElement && <div className="mt-4">{suffixElement}</div>}
