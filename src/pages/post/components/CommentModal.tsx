@@ -37,6 +37,10 @@ const CommentModal: React.FC<ICommentModal> = ({
   const submitComment = useCallback(
     throttle(
       async () => {
+        if (data.text.length == 0) {
+          Toast.info('回复内容不可为空！');
+          return;
+        }
         if (data.text.length > MAX_COMMENT_LENGTH) {
           Toast.info('字数过多超过10000字，提交失败！');
           return;

@@ -54,6 +54,7 @@ body {
   background-image: @linpx-color;
 }
 
+// 去掉所有滚动栏
 ::-webkit-scrollbar {
   overflow-x: hidden;
   overflow-y: hidden;
@@ -120,4 +121,17 @@ body {
   text-overflow: ellipsis;
   display: -webkit-box; // 弹性伸缩盒
   -webkit-box-orient: vertical; // 设置伸缩盒子元素排列方式
+}
+
+// 覆盖antd Input的sb样式
+.cover-antd-input {
+  font-size: 20px !important;
+  font-weight: bold;
+  .ant-input-prefix {
+    margin-right: 10px;
+  }
+  .ant-input {
+    font-size: 20px;
+    font-weight: bold;
+  }
 }

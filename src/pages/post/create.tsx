@@ -46,7 +46,7 @@ const DIY_TAG_TEXT = '自定义';
 
 const CreatePost: React.FC<IRouteComponentProps> = ({ location }) => {
   const [info, setInfo] = useState<any>({});
-  const [tagText, setTagText] = useState(NO_TAG_TEXT);
+  const [tagText, setTagText] = useState('');
   const postTags = postApi.usePostTags();
   const { referType, referData } = location.query;
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -84,7 +84,7 @@ const CreatePost: React.FC<IRouteComponentProps> = ({ location }) => {
     >
       <div className="h-full flex flex-col">
         <div className="px-2">
-          <div>帖子标签：{tagText}</div>
+          <div>帖子标签：</div>
           <div className="flex flex-wrap">
             {postTags &&
               [...postTags, { tag: NO_TAG_TEXT }, { tag: DIY_TAG_TEXT }].map(
@@ -96,7 +96,7 @@ const CreatePost: React.FC<IRouteComponentProps> = ({ location }) => {
                     onClick={() => {
                       // 选择无标签
                       if (tag == NO_TAG_TEXT) {
-                        setTagText('无');
+                        setTagText('');
                         info.tag = undefined;
                         return;
                       }
@@ -138,10 +138,10 @@ const CreatePost: React.FC<IRouteComponentProps> = ({ location }) => {
               )}
           </div>
         </div>
-        <TextArea
+        <Input
           placeholder="请输入标题"
-          style={{ fontSize: 20, fontWeight: 'bold' }}
-          autoSize={{ minRows: 1, maxRows: 1 }}
+          prefix={tagText && '#' + tagText}
+          className="cover-antd-input"
           maxLength={100}
           onChange={(e) => (info['title'] = e.target.value)}
         />
