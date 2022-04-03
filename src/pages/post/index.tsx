@@ -2,19 +2,14 @@ import { useRef, useState } from 'react';
 import { history } from 'umi';
 import { Dropdown, Pagination } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
-// @ts-ignore
-import useScrollOnDrag from 'react-scroll-ondrag';
 
-import { IPost, postApi, usePixivNovelProfiles } from '@/api';
-import { Array2Map } from '@/types';
+import { postApi } from '@/api';
 import PageLayout from '@/components/PageLayout';
-import NameTime from './components/NameTime';
-import NovelRefer from './components/NovelRefer';
 
 import LinpxNewImg from '@/assets/icon/linpx_new.png';
 import TopImg from '@/assets/icon/top.png';
-import SortImg from '@/assets/icon/sort.png';
-import classNames from 'classnames';
+import PostPreview from './components/PostPreview';
+import TagSelect from './components/TagSelect';
 
 const topPostList = [
   {
@@ -47,73 +42,6 @@ const TopPostElement = (
     ))}
   </div>
 );
-
-// 普通帖子
-const PostPreviewElement: React.FC<{
-  postList: IPost[];
-  timeType: 'post' | 'comment';
-}> = ({ postList, timeType }) => {
-  const referList = postList
-    .map(({ refer }) => refer)
-    .filter((refer) => refer && refer.type && refer.data);
-  const referNovelList = referList
-    .filter((refer) => refer?.type == 'novel')
-    .map((refer) => refer?.data) as string[];
-  const novelInfo = usePixivNovelProfiles(referNovelList);
-  const novelInfoMap = novelInfo ? Array2Map(novelInfo) : {};
-  return (
-    <>
-      {postList.map(
-        ({
-          ip,
-          title,
-          content,
-          _time,
-          id,
-          commentCount,
-          refer,
-          createTime,
-          tags,
-        }) => {
-          let referElement = null;
-          // 引用小说
-          if (refer?.type == 'novel' && refer.data) {
-            const novelInfo = novelInfoMap[refer.data];
-            if (novelInfo) {
-              referElement = <NovelRefer {...novelInfo} />;
-            }
-          }
-          return (
-            <div
-              key={id}
-              className="px-4 py-2 hover:bg-gray-100 transition-all cursor-pointer"
-              style={{ borderBottom: '1px solid #ddd' }}
-              onClick={() => {
-                history.push('/post/' + id);
-              }}
-            >
-              <NameTime
-                ip={ip}
-                _time={timeType == 'post' ? createTime : _time}
-                rightEle={'回复: ' + commentCount}
-              />
-              <div className="u-line-1 text-xl font-bold mt-0.5">
-                {tags?.length > 0 && (
-                  <span className="text-yellow-500 mr-2">
-                    #{tags.join(' #')}
-                  </span>
-                )}
-                {title}
-              </div>
-              <div className="u-line-2 text-base">{content}</div>
-              {referElement && <div className="mt-1">{referElement}</div>}
-            </div>
-          );
-        },
-      )}
-    </>
-  );
-};
 
 // 按事件排序
 // 帖子分区
@@ -165,17 +93,12 @@ export default function () {
   // 排序分类
   const [sortType, setSortType] = useState<keyof typeof sortTypeMap>('comment');
   // 标签与选择标签
-  const tags = postApi.usePostTags();
-  const tagList = tags?.map((tag) => tag.tag) || [];
   const [selectTags, setSelectTags] = useState<Record<string, true>>({});
   // 请求帖子资源
   const res = postApi.usePage(
     { page, sort: sortType, tags: Object.keys(selectTags) },
     [page, sortType, Object.keys(selectTags).join('-')],
   );
-  // 桌面端drag scroll
-  const ref = useRef();
-  const { events } = useScrollOnDrag(ref);
 
   if (!res)
     return (
@@ -189,35 +112,7 @@ export default function () {
   return (
     <PageLayout title="最近帖子" rightEle={<></>}>
       {TopPostElement}
-      <div
-        className="flex flex-nowrap overflow-x-scroll bg-gray-300 py-1.5 px-4 items-center select-none"
-        ref={ref}
-        {...events}
-      >
-        <img className="w-7 h-7 mr-2" src={SortImg} />
-        {[...tagList, '其他', '无标签'].map((tag) => {
-          const isSelect = selectTags[tag];
-          return (
-            <div
-              key={tag}
-              className={classNames(
-                'text-base rounded-full bg-yellow-500 px-2.5 py-1 mr-2 whitespace-nowrap',
-                { 'bg-opacity-40': !isSelect },
-              )}
-              onClick={() => {
-                if (isSelect) {
-                  delete selectTags[tag];
-                  setSelectTags({ ...selectTags });
-                } else {
-                  setSelectTags({ ...selectTags, [tag]: true });
-                }
-              }}
-            >
-              {tag == '其他' || tag == '无标签' ? tag : `#${tag}`}
-            </div>
-          );
-        })}
-      </div>
+      <TagSelect selectTags={selectTags} setSelectTags={setSelectTags} />
       <div
         className="flex justify-between text-lg p-2 px-4"
         style={{ borderBottom: '1px solid #ddd' }}
@@ -225,7 +120,7 @@ export default function () {
         <div>帖子总数：{total}</div>
         <SortTypeDropdown sortType={sortType} setSortType={setSortType} />
       </div>
-      <PostPreviewElement
+      <PostPreview
         postList={postList}
         timeType={sortType == 'post' ? 'post' : 'comment'}
       />
