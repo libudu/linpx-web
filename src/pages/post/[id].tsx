@@ -160,7 +160,7 @@ const Post: React.FC<{ match: IRouteProps }> = ({ match }) => {
       <div className="mb-16 text-base" ref={rootRef}>
         <div className="px-3 mb-3">
           <div className="text-2xl pt-2 pb-1 font-bold">
-            {tags && (
+            {tags?.length > 0 && (
               <span className="text-yellow-500 mr-2">#{tags.join(' #')}</span>
             )}
             {title}

@@ -59,11 +59,14 @@ export const makeRestApiTemplate = <T = any>(path: string) => {
     return data;
   };
 
-  const usePage = (params: IGetPageParams): IPageData<T> | null => {
+  const usePage = (
+    params: IGetPageParams,
+    dep?: (string | number)[],
+  ): IPageData<T> | null => {
     const [data, setData] = useState<any>(null);
     useEffect(() => {
       getPage(params).then((res) => setData(res));
-    }, Object.values(params));
+    }, dep || Object.values(params));
     return data;
   };
 

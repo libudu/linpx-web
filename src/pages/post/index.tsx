@@ -11,6 +11,8 @@ import NovelRefer from './components/NovelRefer';
 
 import LinpxNewImg from '@/assets/icon/linpx_new.png';
 import TopImg from '@/assets/icon/top.png';
+import SortImg from '@/assets/icon/sort.png';
+import classNames from 'classnames';
 
 const topPostList = [
   {
@@ -94,7 +96,7 @@ const PostPreviewElement: React.FC<{
                 rightEle={'回复: ' + commentCount}
               />
               <div className="u-line-1 text-xl font-bold mt-0.5">
-                {tags && (
+                {tags?.length > 0 && (
                   <span className="text-yellow-500 mr-2">
                     #{tags.join(' #')}
                   </span>
@@ -160,8 +162,12 @@ export default function () {
   const [page, setPage] = useState(1);
   const [sortType, setSortType] = useState<keyof typeof sortTypeMap>('comment');
   const tags = postApi.usePostTags();
-  const [selectTags, setSelectTags] = useState<string[]>([]);
-  const res = postApi.usePage({ page, sort: sortType, tags });
+  const tagList = tags?.map((tag) => tag.tag) || [];
+  const [selectTags, setSelectTags] = useState<Record<string, true>>({});
+  const res = postApi.usePage(
+    { page, sort: sortType, tags: Object.keys(selectTags) },
+    [page, sortType, Object.keys(selectTags).join('-')],
+  );
 
   if (!res)
     return (
@@ -175,7 +181,31 @@ export default function () {
   return (
     <PageLayout title="最近帖子" rightEle={<></>}>
       {TopPostElement}
-      <div>{tags?.map((tag) => tag.tag).join(' ')}</div>
+      <div className="flex flex-nowrap overflow-x-scroll bg-gray-300 py-1.5 px-4 items-center select-none">
+        <img className="w-7 h-7 mr-2" src={SortImg} />
+        {[...tagList, '其他', '无标签'].map((tag) => {
+          const isSelect = selectTags[tag];
+          return (
+            <div
+              key={tag}
+              className={classNames(
+                'text-base rounded-full bg-yellow-500 px-2.5 py-1 mr-2 whitespace-nowrap',
+                { 'bg-opacity-40': !isSelect },
+              )}
+              onClick={() => {
+                if (isSelect) {
+                  delete selectTags[tag];
+                  setSelectTags({ ...selectTags });
+                } else {
+                  setSelectTags({ ...selectTags, [tag]: true });
+                }
+              }}
+            >
+              {tag == '其他' || tag == '无标签' ? tag : `#${tag}`}
+            </div>
+          );
+        })}
+      </div>
       <div
         className="flex justify-between text-lg p-2 px-4"
         style={{ borderBottom: '1px solid #ddd' }}
