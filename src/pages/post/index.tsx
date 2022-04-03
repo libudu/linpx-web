@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { history } from 'umi';
 import { Dropdown, Pagination } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
+// @ts-ignore
+import useScrollOnDrag from 'react-scroll-ondrag';
 
 import { IPost, postApi, usePixivNovelProfiles } from '@/api';
 import { Array2Map } from '@/types';
@@ -160,14 +162,20 @@ const SortTypeDropdown: React.FC<{
 
 export default function () {
   const [page, setPage] = useState(1);
+  // 排序分类
   const [sortType, setSortType] = useState<keyof typeof sortTypeMap>('comment');
+  // 标签与选择标签
   const tags = postApi.usePostTags();
   const tagList = tags?.map((tag) => tag.tag) || [];
   const [selectTags, setSelectTags] = useState<Record<string, true>>({});
+  // 请求帖子资源
   const res = postApi.usePage(
     { page, sort: sortType, tags: Object.keys(selectTags) },
     [page, sortType, Object.keys(selectTags).join('-')],
   );
+  // 桌面端drag scroll
+  const ref = useRef();
+  const { events } = useScrollOnDrag(ref);
 
   if (!res)
     return (
@@ -181,7 +189,11 @@ export default function () {
   return (
     <PageLayout title="最近帖子" rightEle={<></>}>
       {TopPostElement}
-      <div className="flex flex-nowrap overflow-x-scroll bg-gray-300 py-1.5 px-4 items-center select-none">
+      <div
+        className="flex flex-nowrap overflow-x-scroll bg-gray-300 py-1.5 px-4 items-center select-none"
+        ref={ref}
+        {...events}
+      >
         <img className="w-7 h-7 mr-2" src={SortImg} />
         {[...tagList, '其他', '无标签'].map((tag) => {
           const isSelect = selectTags[tag];
@@ -235,7 +247,7 @@ export default function () {
       }
       <img
         className="absolute w-20 h-20 rounded-full"
-        style={{ right: 18, bottom: 30 }}
+        style={{ right: 18, bottom: '10%' }}
         src={LinpxNewImg}
         onClick={() => history.push('/post/create')}
       />
