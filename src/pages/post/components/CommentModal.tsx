@@ -4,6 +4,8 @@ import { throttle } from 'lodash';
 
 import { postCommentApi } from '@/api';
 import { IPostComment } from '@/api/post';
+import PostCommentRefer from './PostCommentRefer';
+import classNames from 'classnames';
 
 interface ICommentModal {
   show: boolean;
@@ -75,19 +77,29 @@ const CommentModal: React.FC<ICommentModal> = ({
         style={{ boxShadow: '0 -2px 4px -1px #aaa' }}
         onClick={(e) => e.stopPropagation()}
       >
-        {replyComment && '回复：' + replyComment.id}
-        <div className="relative h-48">
+        <div className={classNames('relative', replyComment ? 'h-64' : 'h-48')}>
           <div
             className="absolute rounded-xl top-0 left-0 w-full h-full pointer-events-none"
             style={{ boxShadow: '0 0 4px #aaa inset' }}
           />
-          <textarea
-            ref={ref}
-            defaultValue={data.text}
-            className="w-full border-0 z-30 p-1.5 resize-none"
-            style={{ height: '100%' }}
-            onChange={(e: any) => (data.text = e.target.value)}
-          />
+          <div className="h-full flex flex-col z-30 bg-white">
+            {replyComment && (
+              <PostCommentRefer
+                {...replyComment}
+                style={{
+                  backgroundColor: 'white',
+                  margin: '12px 10px 0px 10px',
+                  zIndex: 10,
+                }}
+              />
+            )}
+            <textarea
+              ref={ref}
+              defaultValue={data.text}
+              className="w-full border-0 p-2 resize-none flex-grow"
+              onChange={(e: any) => (data.text = e.target.value)}
+            />
+          </div>
         </div>
         <div className="flex mt-3 flex-row-reverse">
           <div

@@ -9,23 +9,7 @@ import PageLayout from '@/components/PageLayout';
 import NameTime from './components/NameTime';
 import { NovelReferById } from './components/NovelRefer';
 import CommentModal from './components/CommentModal';
-
-const PostCommentRefer: React.FC<IPostComment> = ({
-  ip,
-  _time,
-  content,
-  floor,
-}) => {
-  return (
-    <div
-      className="mx-4 rounded-md px-2 py-1 mt-2 mb-0.5 lp-bgcolor"
-      style={{ boxShadow: '0 0 4px #aaa' }}
-    >
-      <NameTime ip={ip} _time={_time} rightEle={floor + 'F'} />
-      <div>{content}</div>
-    </div>
-  );
-};
+import PostCommentRefer from './components/PostCommentRefer';
 
 const PostComment: React.FC<{
   commentList: IPostComment[];
