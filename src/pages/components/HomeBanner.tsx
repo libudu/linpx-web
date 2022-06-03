@@ -41,8 +41,9 @@ export default function HomeBanner() {
         <img className="w-full h-full object-cover" src={MidAutumnImg} />
       </BannerBox>
       <BannerBox>
-        <div>快做完了！</div>
-        <div className="text-xs opacity-30">骗你的，还有很多没做</div>
+        <div>新功能还没动！</div>
+        <div>开摆了两个月！</div>
+        <div className="text-xs opacity-30">接下来会继续摆（雾</div>
       </BannerBox>
       <BannerBox>
         <div

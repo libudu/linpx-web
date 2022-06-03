@@ -102,7 +102,7 @@ const LinpxTagContent: React.FC = () => {
           <div className="text-base">
             <div>所有推荐作者的tag统计</div>
             <div>可以按tag快速检索想看的小说</div>
-            <div>手动更新，存在一定延迟</div>
+            <div>8点自动更新，存在一定延迟</div>
           </div>
         }
       />
