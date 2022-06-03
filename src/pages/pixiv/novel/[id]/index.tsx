@@ -20,6 +20,7 @@ import NovelContent from './components/NovelContent';
 import NovelFooter from './components/NovelFooter/Tools';
 import NovelComment from './components/NovelFooter/Comment';
 import NovelAnalyse from './components/NovelHeader/Analyse';
+import { useRecordLastScroll } from '@/layouts';
 
 export const BORDER = '1px solid #ccc';
 
@@ -105,8 +106,16 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   // 底部工具栏引用
   const footerRef = useRef<HTMLDivElement>(null);
 
+  // 记忆位置
+  const ref = useRef<HTMLDivElement>(null);
+  useRecordLastScroll(ref);
+
   if (!novelInfo || !novelAnalyse) {
-    return <ContentNavbar>小说详情</ContentNavbar>;
+    return (
+      <div className="w-full h-full overflow-y-scroll" ref={ref}>
+        <ContentNavbar>小说详情</ContentNavbar>
+      </div>
+    );
   }
   const { content, images } = novelInfo;
   const { readCount, likeCount, canLike } = novelAnalyse;
@@ -119,7 +128,11 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
     Number(!canLike && !like);
 
   return (
-    <div className="w-full" onScroll={scrollHandler}>
+    <div
+      className="w-full h-full overflow-y-scroll"
+      onScroll={scrollHandler}
+      ref={ref}
+    >
       <NovelNavbar showNavbar={showNavbar} novelInfo={novelInfo} />
       {novelInfo && (
         <div className="w-full">

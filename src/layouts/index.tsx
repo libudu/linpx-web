@@ -3,7 +3,7 @@ import DrawerLayout, { getDrawerItem } from './DrawerLayout';
 import { InfoModal } from '@/pages/components/Modal';
 import { enterNewPath } from '@/utils/history';
 import { MountModal } from '@/components/LinpxModal';
-import { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, RefObject } from 'react';
 import FirstTips from '@/pages/components/FirstTips';
 
 // 记录页面滚动位置
@@ -16,6 +16,43 @@ const getJumpConfirm = () => {
 };
 const setJumpConfirm = (state: boolean) => {
   localStorage.setItem('jumpConfirm', JSON.stringify(state));
+};
+
+export const useRecordLastScroll = (ref: RefObject<any>, deps: any[] = []) => {
+  useEffect(() => {
+    const node = ref.current;
+    if (node) {
+      const path = history.location.pathname;
+      const lastPos = posMap[path];
+      // 上次位置存在则滚过去
+      if (lastPos && history.action === 'POP') {
+        // 夸克游览器上，不套setTimeout将无法滚动到位置
+        let count = 0;
+        let timer = setInterval(() => {
+          // 可能之前的页面还没渲染出来
+          let totalHeight = 0;
+          [...node.children].forEach(
+            (ele) => (totalHeight += ele.clientHeight),
+          );
+          // 最多等待500ms页面加载出来
+          if (totalHeight < lastPos && count < 10) {
+            count += 1;
+          } else {
+            clearInterval(timer);
+            node.scrollTo({ top: lastPos });
+          }
+        }, 50);
+      }
+      // 添加滚动监听
+      const handler = (e: Event) => {
+        // 上面组件里获取到的path会有延迟
+        const path = history.location.pathname;
+        posMap[path] = node.scrollTop;
+      };
+      node.addEventListener('scroll', handler);
+      return () => node.removeEventListener('scroll', handler);
+    }
+  }, deps);
 };
 
 export default function Layout({ children }: IRouteComponentProps) {
@@ -32,39 +69,7 @@ export default function Layout({ children }: IRouteComponentProps) {
     </div>
   );
 
-  useEffect(() => {
-    const node = ref.current;
-    const lastPos = posMap[path];
-    if (node) {
-      // 上次位置存在则滚过去
-      if (lastPos && history.action === 'POP') {
-        // 夸克游览器上，不套setTimeout将无法滚动到位置
-        let count = 0;
-        let timer = setInterval(() => {
-          // 可能之前的页面还没渲染出来
-          let totalHeight = 0;
-          [...node.children].forEach(
-            (ele) => (totalHeight += ele.clientHeight),
-          );
-          if (totalHeight < lastPos && count < 10) {
-            count += 1;
-            console.log('count', count);
-          } else {
-            clearInterval(timer);
-            node.scrollTo({ top: lastPos });
-          }
-        }, 50);
-      }
-      // 添加滚动监听
-      const handler = (e: Event) => {
-        // 上面组件里获取到的path会有延迟
-        const path = history.location.pathname;
-        posMap[path] = node.scrollTop;
-      };
-      node.addEventListener('scroll', handler);
-      return () => node.removeEventListener('scroll', handler);
-    }
-  }, [children]);
+  useRecordLastScroll(ref, [children]);
 
   // 第一次访问进行安全提示，避免狗腾讯的爬虫封禁
   const jumpConfirm = getJumpConfirm();
