@@ -208,7 +208,7 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
             <div className="w-1/2 flex flex-col">
               {afdianContent}
               <div className="w-full h-0" style={{ borderBottom: BORDER }} />
-              {postContent}
+              {/* {postContent} */}
             </div>
           </>
         ) : (
@@ -222,7 +222,7 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
             <div className="w-1/2 flex flex-col">
               {shareContent}
               <div className="w-full h-0" style={{ borderBottom: BORDER }} />
-              {postContent}
+              {/* {postContent} */}
             </div>
           </>
         )}
