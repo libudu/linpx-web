@@ -2,6 +2,7 @@ import './global.less';
 import { isDev } from './utils/util';
 import PixivUser from '@/pages/pixiv/user/[id]';
 import PixivNovel from '@/pages/pixiv/novel/[id]';
+import '@/pages/linpx/index.tsx';
 
 import ReactGA from 'react-ga4';
 ReactGA.initialize('G-32PRGS7SPZ');
