@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import LinpxNovel, { IShowChoice, IShowText } from './LinpxNovel';
+import React, { useEffect, useRef, useState } from 'react';
+import { useAnimeListRef } from './anime';
+import LinpxNovel, { IShowChoice } from './LinpxNovel';
 
 const exampleText = `提示：故事将从“开始”标签开始，在其之前的文本将会被跳过
 【开始】
@@ -20,22 +21,13 @@ const exampleText = `提示：故事将从“开始”标签开始，在其之�
 
 【标签 选择放弃】
 你被敌人杀死了，是否重新开始
-【选项】重新开始【跳转标签 战斗开始】
-【选项】结束`;
+【选项】重新选择【跳转标签 重新选择】
+【选项】结束
+【结束】
 
-let waitUserChooseResolve: (index: number) => any = null as any;
-const waitUserChoose = async () => {
-  return new Promise<number>((resolve) => (waitUserChooseResolve = resolve));
-};
-
-const showChoice: IShowChoice = async (choiceList) => {
-  choiceList.forEach((choice, index) => {
-    console.log(`选项${index}：${choice}`);
-  });
-  return await waitUserChoose();
-};
-
-(window as any).choose = (index: number) => waitUserChooseResolve(index);
+【标签 重新选择】
+【清空】
+【跳转标签 战斗开始】`;
 
 export default function () {
   const [textList, setTextList] = useState<string[]>([]);
@@ -66,30 +58,55 @@ export default function () {
         );
         return chosenIndex;
       },
+      clearText: async () => {
+        // 清空选项和文字记录
+        setTextList([]);
+        setChoiceList(null);
+      },
     });
     novelInstance.start();
   }, []);
+
   return (
     <div className="whitespace-pre-wrap">
-      {textList.map((text) => (
-        <div>{text}</div>
+      {textList.map((text, index) => (
+        <BottomFadeIn key={index}>{text}</BottomFadeIn>
       ))}
       {choiceList && (
-        <div className="flex justify-around">
-          {choiceList.map((text, index) => (
-            <div
-              className="bg-gray-600 text-white rounded-lg py-2 px-4 my-2"
-              onClick={() => {
-                const choiceResolve = ref.current?.refChoiceResolve;
-                choiceResolve && choiceResolve(index);
-                setChoiceList(null);
-              }}
-            >
-              {text}
-            </div>
-          ))}
-        </div>
+        <BottomFadeIn>
+          <div className="flex justify-around">
+            {choiceList.map((text, index) => (
+              <div
+                key={index}
+                className="bg-gray-600 text-white rounded-lg py-2 px-4 my-2"
+                onClick={() => {
+                  const choiceResolve = ref.current?.refChoiceResolve;
+                  choiceResolve && choiceResolve(index);
+                  setChoiceList(null);
+                }}
+              >
+                {text}
+              </div>
+            ))}
+          </div>
+        </BottomFadeIn>
       )}
     </div>
   );
 }
+
+const BottomFadeIn: React.FC = ({ children }) => {
+  const ref = useAnimeListRef([
+    {
+      opacity: [0, 1.0],
+      translateY: [20, 0],
+      duration: 500,
+      easing: 'easeInQuad',
+    },
+  ]);
+  return (
+    <div className="opacity-0" ref={ref}>
+      {children}
+    </div>
+  );
+};

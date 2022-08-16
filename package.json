@@ -22,8 +22,10 @@
   "dependencies": {
     "@ant-design/icons": "^4.5.0",
     "@ant-design/pro-layout": "^6.5.0",
+    "@types/animejs": "^3.1.5",
     "@umijs/preset-react": "1.x",
     "ahooks": "^2.10.11",
+    "animejs": "^3.2.1",
     "antd": "^4.14.0",
     "antd-mobile": "^2.3.4",
     "axios": "^0.21.1",

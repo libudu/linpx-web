@@ -1,24 +1,46 @@
+/** todo:
+ * 开启、关闭节点。
+ * 开启/关闭文本显示过渡（默认开启）
+ * 开启/关闭结束的分割线和重新开始按钮（默认开启）
+ *
+ * 在线编辑和预览
+ * 编辑时预检查：总共有哪些标签、跳转的标签是否都存在且合法
+ * 分享功能：生成可以分享给朋友的链接
+ *
+ * linpx首页引导，用户可以点入linpx-word所有可玩文本的页面，并且提供样例和模板可以自己创作
+ *
+ * 优先级低：普通文本中的【加粗】、【斜体】、【发光】、【抖动】标签
+ **/
+
+// 文本节点
 export type TextNode = {
   type: 'text';
   text: string;
 };
 
-// 开始结束节点
-export type StartNode = { type: 'start' };
-const parseStartNode = (line: string): StartNode | null => {
-  if (line.startsWith('【开始】')) {
-    return { type: 'start' };
-  }
-  return null;
+// 快速构造无参节点的解析器
+const makeNoArgNodeParser = <T extends string>(
+  keyWord: string,
+  typeName: T,
+): ((line: string) => { type: T } | null) => {
+  return (line: string) => {
+    if (line.startsWith(`【${keyWord}】`)) {
+      return { type: typeName };
+    }
+    return null;
+  };
 };
 
+// 清空节点
+export type ClearNode = { type: 'clear' };
+const parseClearNode = makeNoArgNodeParser('清空', 'clear');
+
+// 开始结束节点
+export type StartNode = { type: 'start' };
+const parseStartNode = makeNoArgNodeParser('开始', 'start');
+
 export type EndNode = { type: 'end' };
-const parseEndNode = (line: string): EndNode | null => {
-  if (line.startsWith('【结束】')) {
-    return { type: 'end' };
-  }
-  return null;
-};
+const parseEndNode = makeNoArgNodeParser('结束', 'end');
 
 // 标签节点
 export type LabelNode = {
@@ -96,7 +118,8 @@ export type FuncNode =
   | LabelNode
   | JumpLabelNode
   | StartNode
-  | EndNode;
+  | EndNode
+  | ClearNode;
 export type NodeType = TextNode | FuncNode;
 
 const nodeParserList = [
@@ -105,6 +128,7 @@ const nodeParserList = [
   parseLabelNode,
   parseJumpLabelNode,
   parseChoiceNode,
+  parseClearNode,
 ];
 
 export const parseText = (text: string) => {

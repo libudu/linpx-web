@@ -20,6 +20,7 @@ export default class LinpxNovel {
   // 外部传入的回调函数
   showChoice: IShowChoice;
   showText: IShowText;
+  clearText: () => void;
 
   // 运行时变量
   choiceStack: ChoiceNode[] = [];
@@ -28,8 +29,8 @@ export default class LinpxNovel {
   nodeHandlerMap: Record<NodeType['type'], NodeHandler | null> = {
     text: async (node: TextNode) => await this.showText(node.text),
     start: null,
-    label: null,
     end: async () => (this.nodeIndex = this.nodeList.length),
+    label: null,
     jumpLabel: async (node: JumpLabelNode) => this.jumpToLabel(node.labelName),
     choice: async (node: ChoiceNode) => {
       // 探测下一个节点是不是选项，是则添加到栈，不是则将栈中所有选项作为选项组显示
@@ -38,7 +39,6 @@ export default class LinpxNovel {
       if (!nextNode || nextNode.type != 'choice') {
         const choiceList = this.choiceStack.map((i) => i.text);
         const chosenIndex = await this.showChoice(choiceList);
-        console.log('chosenIndex', chosenIndex);
         // 选择了某个选项，如果该选项有跳转则跳转到对应位置
         const { onClickNode } = this.choiceStack[chosenIndex];
         // 完成了选择，清空选项组
@@ -48,19 +48,23 @@ export default class LinpxNovel {
         }
       }
     },
+    clear: async () => this.clearText(),
   };
 
   constructor({
     text,
     showText,
     showChoice,
+    clearText,
   }: {
     text: string;
     showText: IShowText;
     showChoice: IShowChoice;
+    clearText: () => void;
   }) {
     this.showText = showText;
     this.showChoice = showChoice;
+    this.clearText = clearText;
     // 解析节点，从开始标签开始
     const nodeList = parseText(text);
     const startIndex = nodeList.findIndex((node) => node.type == 'start');
