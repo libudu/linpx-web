@@ -36,9 +36,9 @@ export default class LinpxNovel {
       this.choiceStack.push(node);
       const nextNode = this.nodeList[this.nodeIndex + 1];
       if (!nextNode || nextNode.type != 'choice') {
-        const chosenIndex = await this.showChoice(
-          this.choiceStack.map((i) => i.text),
-        );
+        const choiceList = this.choiceStack.map((i) => i.text);
+        const chosenIndex = await this.showChoice(choiceList);
+        console.log('chosenIndex', chosenIndex);
         // 选择了某个选项，如果该选项有跳转则跳转到对应位置
         const { onClickNode } = this.choiceStack[chosenIndex];
         // 完成了选择，清空选项组
