@@ -72,6 +72,7 @@ export default class LinpxNovel {
       nodeList.splice(0, startIndex + 1);
     }
     this.nodeList = nodeList;
+    console.log('nodeList', nodeList);
     // 构造标签字典
     const labelNodeList = nodeList.filter(
       (node) => node.type == 'label',
