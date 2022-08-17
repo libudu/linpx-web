@@ -1,11 +1,11 @@
-import { IRouteProps } from 'umi';
+import { IRouteComponentProps } from 'umi';
 import { ContentNavbar } from '@/components/Navbar';
 import { useAnalyseTag } from '@/api';
 import NovelCardList from '@/components/NovelCardList';
 import PageLayout from '@/components/PageLayout';
 
-export default function PixivTag(props: IRouteProps) {
-  const { tag: tagName } = props.match.params;
+export default function PixivTag({ location }: IRouteComponentProps) {
+  const tagName = location.query['tagName'];
   const title = `全站tag - ${tagName}`;
   document.title = title;
 

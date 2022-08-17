@@ -1,4 +1,5 @@
 import PageLayout from '@/components/PageLayout';
+import { IRouteComponentProps } from 'umi';
 import LinpxNovelWidget from '../components/LinpxNovelWidget';
 
 const exampleText = `提示：故事将从“开始”标签开始，在其之前的文本将会被跳过
@@ -28,9 +29,9 @@ const exampleText = `提示：故事将从“开始”标签开始，在其之�
 【清空】
 【跳转标签 战斗开始】`;
 
-export default function () {
+export default function ({ location }: IRouteComponentProps) {
   return (
-    <PageLayout title={new URL(location.href).searchParams.get('title') || ''}>
+    <PageLayout title={(location.query['title'] as string) || ''}>
       <LinpxNovelWidget text={exampleText} />
     </PageLayout>
   );

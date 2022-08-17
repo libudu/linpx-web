@@ -10,7 +10,7 @@ function PixivAllTags() {
     <div className="m-2">
       <TagBoxList
         tagList={tagListData}
-        onClickTag={(tagName) => history.push(`/pixiv/tag/${tagName}`)}
+        onClickTag={(tagName) => history.push(`/pixiv/tag?tagName=${tagName}`)}
       />
     </div>
   );

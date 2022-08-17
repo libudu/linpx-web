@@ -37,7 +37,7 @@ const introLinpxNovelText = `【标签 开始】
 【跳转标签 开始】
 `;
 
-type IFileInfo = {
+export type IFileInfo = {
   id: string;
   title: string;
   time: string;
@@ -49,6 +49,7 @@ const jumpEditPage = (fileId: string) => {
 };
 
 export default function ({ history }: React.PropsWithChildren<any>) {
+  const [fileInfoRefresh, setFileInfoRefresh] = useState(0);
   const [fileInfoList, setFileInfoList] = useState<IFileInfo[]>([]);
   useEffect(() => {
     const fileNameList = fileApi.getFileList();
@@ -59,7 +60,7 @@ export default function ({ history }: React.PropsWithChildren<any>) {
       // 解析file数据，提取标题和时间信息
     });
     setFileInfoList(fileInfoList);
-  }, []);
+  }, [fileInfoRefresh]);
 
   const createFileAndEdit = ({
     title,
@@ -90,7 +91,7 @@ export default function ({ history }: React.PropsWithChildren<any>) {
         ].map((title, index) => (
           <div
             key={index}
-            className="u-line-1"
+            className="u-line-1 bg-gray-200 my-2 rounded-lg px-2 py-1"
             onClick={() => history.push(`/linpx/example?title=${title}`)}
           >
             {title}
@@ -121,14 +122,24 @@ export default function ({ history }: React.PropsWithChildren<any>) {
         </div>
         <div>
           {fileInfoList.map(({ title, time, id }) => (
-            <div
-              key={time}
-              className="flex px-4 py-1"
-              onClick={() => jumpEditPage(id)}
-            >
-              <div className="u-line-1 flex-grow">{title}</div>
-              <span className="text-base leading-8 text-gray-400 whitespace-nowrap">
-                {time}
+            <div key={time} className="flex px-2 py-1">
+              <div className="flex flex-grow" onClick={() => jumpEditPage(id)}>
+                <div className="u-line-1 flex-grow">{title}</div>
+                <span className="text-base leading-8 text-gray-400 whitespace-nowrap">
+                  {time.slice(2)}
+                </span>
+              </div>
+              <span
+                className="w-12 text-right flex-shrink-0"
+                onClick={() => {
+                  const result = confirm(`确认删除【${title}】吗？`);
+                  if (result) {
+                    fileApi.deleteFile(id);
+                    setFileInfoRefresh(fileInfoRefresh + 1);
+                  }
+                }}
+              >
+                删除
               </span>
             </div>
           ))}
@@ -140,7 +151,7 @@ export default function ({ history }: React.PropsWithChildren<any>) {
             Linpx-Word是一个增量的，声明式的，用于为小说添加简单动效、选项分支和流程控制的文本格式。
           </div>
           <div>
-            在已有的小说文本中添加一些简单的、中文的标签即可实现上述效果。整体类似于低配中文版的inky。
+            在已有的小说文本中添加一些简单的、中文的标签即可实现上述效果。整体类似于简易中文版的inky。
           </div>
           <div>下面是一个简单示例：</div>
           <div className="bg-gray-300 rounded-lg px-2 py-1 h-72 overflow-scroll mt-1">
