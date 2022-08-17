@@ -131,7 +131,7 @@ const nodeParserList = [
   parseClearNode,
 ];
 
-export const parseText = (text: string) => {
+export const parseText = (text: string, mergeNearTextNode = false) => {
   const textList = text.split('\n');
   const nodeList: NodeType[] = [];
   const textStack: string[] = [];
@@ -161,6 +161,10 @@ export const parseText = (text: string) => {
     }
     // 是普通文本
     textStack.push(rowLine);
+    // 如果不用合并每一段文本，那每次添加后立刻生成一个文本节点
+    if (!mergeNearTextNode) {
+      makeTextNodeFromTextStack();
+    }
   });
   // 最后的文本
   makeTextNodeFromTextStack();

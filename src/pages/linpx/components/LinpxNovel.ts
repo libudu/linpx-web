@@ -1,3 +1,4 @@
+import { ITextInfo } from './LinpxNovelWidget';
 import {
   ChoiceNode,
   JumpLabelNode,
@@ -8,7 +9,7 @@ import {
 } from './nodeParser';
 
 export type IShowChoice = (choiceList: string[]) => Promise<number>;
-export type IShowText = (text: string) => Promise<void>;
+export type IShowText = (textInfo: ITextInfo) => Promise<void>;
 
 type NodeHandler = (node: any) => Promise<any>;
 
@@ -27,7 +28,7 @@ export default class LinpxNovel {
   nodeIndex = 0;
 
   nodeHandlerMap: Record<NodeType['type'], NodeHandler | null> = {
-    text: async (node: TextNode) => await this.showText(node.text),
+    text: async (node: TextNode) => await this.showText({ text: node.text }),
     start: null,
     end: async () => (this.nodeIndex = this.nodeList.length),
     label: null,
@@ -96,6 +97,10 @@ export default class LinpxNovel {
   };
 
   start = async () => {
+    // 初始化置空
+    this.choiceStack = [];
+    this.nodeIndex = 0;
+    // 开始执行
     for (
       this.nodeIndex = 0;
       this.nodeIndex < this.nodeList.length;
@@ -111,6 +116,12 @@ export default class LinpxNovel {
         await handler(node);
       }
     }
-    await this.showText('-----结束-----');
+    await this.showText({
+      text: '----------------------- 结 束 -----------------------',
+      style: { textAlign: 'center' },
+    });
+    await this.showChoice(['重新开始']);
+    this.clearText();
+    this.start();
   };
 }

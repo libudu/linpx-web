@@ -1,18 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useAnimeListRef } from '../anime';
-import LinpxNovel from '../LinpxNovel';
+import { useAnimeListRef } from './anime';
+import LinpxNovel from './LinpxNovel';
+
+export type ITextInfo = {
+  text: string;
+  style?: React.CSSProperties;
+};
 
 export default function ({ text }: { text: string }) {
-  const [textList, setTextList] = useState<string[]>([]);
+  const [textInfoList, setTextInfoList] = useState<ITextInfo[]>([]);
   const [choiceList, setChoiceList] = useState<string[] | null>(null);
 
   // 避免useEffect闭包陷阱
   const ref = useRef<{
-    refTextList: string[];
+    refTextList: ITextInfo[];
     refChoiceResolve: ((value: number) => void) | undefined;
   }>();
   ref.current = {
-    refTextList: textList,
+    refTextList: textInfoList,
     refChoiceResolve: ref.current?.refChoiceResolve,
   };
 
@@ -20,9 +25,9 @@ export default function ({ text }: { text: string }) {
     const novelInstance = new LinpxNovel({
       text,
       showText: async (text) => {
-        const refTextList = ref.current?.refTextList as string[];
-        setTextList([...refTextList, text]);
-        await new Promise((resolve) => setTimeout(() => resolve(null), 500));
+        const refTextList = ref.current?.refTextList as ITextInfo[];
+        setTextInfoList([...refTextList, text]);
+        await new Promise((resolve) => setTimeout(() => resolve(null), 400));
       },
       showChoice: async (choiceList) => {
         setChoiceList(choiceList);
@@ -33,7 +38,7 @@ export default function ({ text }: { text: string }) {
       },
       clearText: async () => {
         // 清空选项和文字记录
-        setTextList([]);
+        setTextInfoList([]);
         setChoiceList(null);
       },
     });
@@ -42,8 +47,10 @@ export default function ({ text }: { text: string }) {
 
   return (
     <div className="whitespace-pre-wrap">
-      {textList.map((text, index) => (
-        <BottomFadeIn key={index}>{text}</BottomFadeIn>
+      {textInfoList.map(({ text, style }, index) => (
+        <BottomFadeIn key={index}>
+          <div style={style}>{text}</div>
+        </BottomFadeIn>
       ))}
       {choiceList && (
         <BottomFadeIn>
@@ -73,7 +80,7 @@ const BottomFadeIn: React.FC = ({ children }) => {
     {
       opacity: [0, 1.0],
       translateY: [10, 0],
-      duration: 500,
+      duration: 400,
       easing: 'easeInQuad',
     },
   ]);

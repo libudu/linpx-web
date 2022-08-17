@@ -53,7 +53,7 @@ export function ContentBox({
   return (
     <div
       className={classnames(
-        'lp-shadow lp-bgcolor flex overflow-x-scroll show-scrollbar',
+        'lp-shadow lp-bgcolor flex overflow-x-scroll',
         className,
       )}
       style={{ minHeight: '6rem' }}
