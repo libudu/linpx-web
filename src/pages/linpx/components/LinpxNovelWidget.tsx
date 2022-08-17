@@ -46,7 +46,7 @@ export default function ({ text }: { text: string }) {
   }, []);
 
   return (
-    <div className="whitespace-pre-wrap">
+    <div className="text-lg whitespace-pre-wrap">
       {textInfoList.map(({ text, style }, index) => (
         <BottomFadeIn key={index}>
           <div style={style}>{text}</div>

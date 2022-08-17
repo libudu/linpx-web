@@ -1,3 +1,4 @@
+import PageLayout from '@/components/PageLayout';
 import LinpxNovelWidget from '../components/LinpxNovelWidget';
 
 const exampleText = `提示：故事将从“开始”标签开始，在其之前的文本将会被跳过
@@ -28,5 +29,9 @@ const exampleText = `提示：故事将从“开始”标签开始，在其之�
 【跳转标签 战斗开始】`;
 
 export default function () {
-  return <LinpxNovelWidget text={exampleText} />;
+  return (
+    <PageLayout title={new URL(location.href).searchParams.get('title') || ''}>
+      <LinpxNovelWidget text={exampleText} />
+    </PageLayout>
+  );
 }
