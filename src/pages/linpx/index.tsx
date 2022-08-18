@@ -5,6 +5,24 @@
  * 3、编辑页面有一个输入框或者编辑器那种，可以
  */
 
+/** todo:
+ * 开启、关闭节点。
+ * 开启/关闭 文本显示过渡（默认开启）
+ * 开启/关闭 结束的分割线和重新开始按钮（默认开启）
+ * 开启/关闭 逐段点击（默认关闭）
+ * 开启/关闭 合并相邻文本段（默认关闭）
+ *
+ * 在线编辑和预览
+ * 编辑时预检查：总共有哪些标签、跳转的标签是否都存在且合法
+ * 分享功能：生成可以分享给朋友的链接
+ *
+ * linpx首页引导，用户可以点入linpx-word所有可玩文本的页面，并且提供样例和模板可以自己创作
+ *
+ * 设置
+ *
+ * 优先级低：普通文本中的【加粗】、【斜体】、【发光】、【抖动】标签
+ **/
+
 import PageLayout from '@/components/PageLayout';
 import React, { useEffect, useState } from 'react';
 import { fileApi } from './components/fileSystem';

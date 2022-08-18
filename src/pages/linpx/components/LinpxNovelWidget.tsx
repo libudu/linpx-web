@@ -7,6 +7,7 @@ export type ITextInfo = {
   style?: React.CSSProperties;
 };
 
+// todo: 销毁时似乎存在内存泄漏？novelInstance中的内容依旧运行着，只是提供的UI回调都失效了
 export default function ({ text }: { text: string }) {
   const [textInfoList, setTextInfoList] = useState<ITextInfo[]>([]);
   const [choiceList, setChoiceList] = useState<string[] | null>(null);

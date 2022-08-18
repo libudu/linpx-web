@@ -2,21 +2,26 @@ import PageLayout from '@/components/PageLayout';
 import { Input } from 'antd';
 import { debounce } from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
-import { IRouteComponentProps } from 'umi';
+import { history, IRouteComponentProps } from 'umi';
 import { IFileInfo } from '.';
 import CodeEditor from './components/editor';
 import { fileApi } from './components/fileSystem';
+import { Toast } from 'antd-mobile';
 
-export default function ({ location }: IRouteComponentProps) {
-  const [saved, setSaved] = useState(true);
-
+export const useFileInfo = (fileId: string) => {
   const [fileInfo, setFileInfo] = useState<IFileInfo>();
   useEffect(() => {
-    const fileId = location.query['file'] as string;
     if (!fileId) return;
     const fileInfo: IFileInfo = JSON.parse(fileApi.readFile(fileId));
     setFileInfo(fileInfo);
   }, []);
+  return fileInfo;
+};
+
+export default function ({ location }: IRouteComponentProps) {
+  const [saved, setSaved] = useState(true);
+
+  const fileInfo = useFileInfo(location.query['file'] as string);
 
   // 有内容发生变化
   const onFileInfoChange = (key: 'title' | 'text', value: string) => {
@@ -46,7 +51,7 @@ export default function ({ location }: IRouteComponentProps) {
 
   if (!fileInfo) return null;
   return (
-    <PageLayout title="编辑交互小说">
+    <PageLayout title="编辑交互小说" rightEle={<div />}>
       <div className="flex flex-col h-full">
         <div className="flex">
           <Input
@@ -71,9 +76,27 @@ export default function ({ location }: IRouteComponentProps) {
             setText={(value) => onFileInfoChange('text', value)}
           />
         </div>
-        <div>
-          <div>验证</div>
-          <div>预览</div>
+        <div
+          className="flex justify-between text-3xl text-center"
+          style={{ borderTop: '2px solid #eee' }}
+        >
+          <div
+            className="flex-grow py-2"
+            onClick={() => {
+              if (saved) {
+                history.push(`/linpx/run?file=${fileInfo.id}`);
+              }
+            }}
+          >
+            预览
+          </div>
+          <div className="w-0.5 h-full bg-gray-200" />
+          <div
+            className="flex-grow py-2 bg-gray-200"
+            onClick={() => Toast.info('开发中...', 1)}
+          >
+            发布
+          </div>
         </div>
       </div>
     </PageLayout>

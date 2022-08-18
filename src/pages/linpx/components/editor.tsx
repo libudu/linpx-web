@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { UnControlled as CodeMirror } from 'react-codemirror2';
 
 import 'codemirror/lib/codemirror.css';
@@ -12,6 +12,7 @@ const CodeEditor: React.FC<{
   setText: (text: string) => void;
   readOnly?: boolean;
 }> = ({ initText, setText, readOnly = false }) => {
+  const [innerInitText] = useState(initText);
   return (
     <CodeMirror
       className="w-full h-full text-sm"
@@ -27,7 +28,7 @@ const CodeEditor: React.FC<{
         styleActiveLine: true,
         gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
       }}
-      value={initText}
+      value={innerInitText}
       onChange={(_, __, value) => {
         setText(value);
       }}
