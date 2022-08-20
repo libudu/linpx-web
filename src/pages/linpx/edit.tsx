@@ -7,6 +7,7 @@ import { IFileInfo } from '.';
 import CodeEditor from './components/editor';
 import { fileApi } from './components/fileSystem';
 import { Toast } from 'antd-mobile';
+import { copyTextAndToast } from '@/utils/clipboard';
 
 export const useFileInfo = (fileId: string) => {
   const [fileInfo, setFileInfo] = useState<IFileInfo>();
@@ -69,6 +70,18 @@ export default function ({ location }: IRouteComponentProps) {
           >
             已保存
           </div>
+        </div>
+        <div
+          className="text-sm text-gray-500"
+          style={{ padding: '0 6px 0 10px' }}
+        >
+          提示：文本仅临时存储在当前网址的本地缓存中，为避免数据遗失请及时备份。
+          <span
+            className="underline text-blue-500"
+            onClick={() => copyTextAndToast(fileInfo.text, '复制成功！')}
+          >
+            全部复制
+          </span>
         </div>
         <div className="flex-grow">
           <CodeEditor

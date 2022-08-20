@@ -96,10 +96,14 @@ export default class LinpxNovel {
     }
   };
 
+  // 会产生阻塞效果的节点
+  blockNodeType: NodeType['type'][] = ['text', 'choice'];
   start = async () => {
     // 初始化置空
     this.choiceStack = [];
     this.nodeIndex = 0;
+    // 连续的非阻塞节点的数量
+    let notBlockCount = 0;
     // 开始执行
     for (
       this.nodeIndex = 0;
@@ -114,6 +118,19 @@ export default class LinpxNovel {
       const handler = this.nodeHandlerMap[node.type];
       if (handler) {
         await handler(node);
+        // 是阻塞节点则计数清零，否则递增
+        if (this.blockNodeType.includes(node.type)) {
+          notBlockCount = 0;
+        } else {
+          notBlockCount++;
+        }
+        // 连续碰到100个非阻塞节点，报错
+        if (notBlockCount > 200) {
+          alert(
+            '连续碰到超过200个非阻塞节点，请告知作者检查文本是否存在死循环！',
+          );
+          return;
+        }
       }
     }
     await this.showText({
