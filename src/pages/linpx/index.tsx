@@ -65,6 +65,12 @@ export type IFileInfo = {
   text: string;
 };
 
+export interface IFileDetail extends IFileInfo {
+  postTime: string;
+  author: string;
+  password: string;
+}
+
 const jumpEditPage = (fileId: string) => {
   history.push(`/linpx/edit?file=${fileId}`);
 };
@@ -90,7 +96,7 @@ export default function ({ history }: React.PropsWithChildren<any>) {
     title: string;
     text: string;
   }) => {
-    const fileId = fileApi.newFile(uid(16));
+    const fileId = fileApi.newFile(uid(8));
     const fileInfo = {
       id: fileId,
       title,
@@ -113,7 +119,7 @@ export default function ({ history }: React.PropsWithChildren<any>) {
           <div
             key={index}
             className="u-line-1 bg-gray-200 my-2 rounded-lg px-2 py-1"
-            onClick={() => history.push(`/linpx/example?title=${title}`)}
+            onClick={() => history.push(`/linpx/run?file=example`)}
           >
             {title}
           </div>
