@@ -32,7 +32,7 @@ const exampleText = `提示：故事将从“开始”标签开始，在其之�
 
 export default function ({ location }: IRouteComponentProps) {
   const fileId = location.query['file'] as string;
-  let fileInfo = useFileInfo(fileId);
+  let { fileInfo } = useFileInfo(fileId);
   if (fileId === 'example') {
     fileInfo = {
       id: 'example',
