@@ -9,6 +9,7 @@ import { fileApi } from './components/fileSystem';
 import { openModal } from '@/components/LinpxModal';
 import CopySpan from '../components/CopySpan';
 import PostModal from './components/PostModal';
+import { getLinpxNovelShareInfo } from './components';
 
 export const useFileInfo = (fileId: string) => {
   const [fileInfo, setFileInfo] = useState<IFileInfo>();
@@ -60,7 +61,9 @@ export default function ({ location }: IRouteComponentProps) {
     [],
   );
 
-  if (!fileInfo) return null;
+  if (!fileInfo) {
+    return null;
+  }
   return (
     <PageLayout title="编辑交互小说" rightEle={<div />}>
       <div className="flex flex-col h-full">
@@ -85,8 +88,18 @@ export default function ({ location }: IRouteComponentProps) {
           className="text-sm text-gray-500"
           style={{ padding: '0 6px 0 10px' }}
         >
-          提示：文本仅临时存储在当前网址的本地缓存中，为避免数据遗失请及时备份。
-          <CopySpan text={fileInfo.text}>全部复制</CopySpan>
+          <div className="my-1">
+            提示：文本仅临时存储在当前网址的本地缓存中，为避免数据遗失请及时备份。
+            <CopySpan text={fileInfo.text}>全部复制</CopySpan>
+          </div>
+          {fileInfo.release && (
+            <div className="my-1">
+              该作品已发布，点击
+              <CopySpan text={getLinpxNovelShareInfo(fileInfo.id).url}>
+                复制分享链接
+              </CopySpan>
+            </div>
+          )}
         </div>
         <div className="flex-grow">
           <CodeEditor

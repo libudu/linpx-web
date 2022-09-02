@@ -8,6 +8,7 @@ import { Toast } from 'antd-mobile';
 import CopySpan from '@/pages/components/CopySpan';
 import { useFileInfo } from '../edit';
 import { linpxNovelApi } from '@/api/linpx';
+import { getLinpxNovelShareInfo } from '.';
 
 const PostModal = ({
   fileInfo,
@@ -62,6 +63,7 @@ const PostModal = ({
               if (!fileDetail.author) return Toast.fail('请输入作者', 1);
               if (!fileDetail.password) return Toast.fail('请输入编辑密码', 1);
               // 新数据写入并刷新
+              fileDetail.release = true;
               fileApi.writeFile(fileDetail.id, JSON.stringify(fileDetail));
               setFileDetail({ ...fileDetail });
               // 发送请求
@@ -96,8 +98,7 @@ const PostSuccessModal = ({ fileId }: { fileId: string }) => {
   const { fileInfo: fileDetail } = useFileInfo(fileId) as any;
   if (!fileDetail) return <div />;
   const { id, title, author, password } = fileDetail;
-  const path = '/linpx/share/' + id;
-  const url = location.origin + path;
+  const { url, path } = getLinpxNovelShareInfo(id);
   return (
     <div className="w-full h-full flex justify-center items-center">
       <div className="bg-white rounded-md w-full z-20 px-3 py-4">

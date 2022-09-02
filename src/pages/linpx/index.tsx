@@ -63,6 +63,7 @@ export type IFileInfo = {
   title: string;
   time: string;
   text: string;
+  release?: boolean;
 };
 
 export interface IFileDetail extends IFileInfo {
@@ -148,12 +149,15 @@ export default function ({ history }: React.PropsWithChildren<any>) {
           </div>
         </div>
         <div>
-          {fileInfoList.map(({ title, time, id }) => (
+          {fileInfoList.map(({ title, time, id, release }) => (
             <div key={time} className="flex px-2 py-1">
               <div className="flex flex-grow" onClick={() => jumpEditPage(id)}>
-                <div className="u-line-1 flex-grow">{title}</div>
-                <span className="text-base leading-8 text-gray-400 whitespace-nowrap">
-                  {time.slice(2)}
+                <div className="u-line-1 flex-grow">
+                  {release && '*'}
+                  {title}
+                </div>
+                <span className="text-sm leading-8 text-gray-400 whitespace-nowrap">
+                  {time.slice(2, -3)}
                 </span>
               </div>
               <span
