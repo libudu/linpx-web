@@ -1,4 +1,4 @@
-import { ITextInfo } from './LinpxNovelWidget';
+import { ITextInfo } from '../components/LinpxNovelWidget';
 import {
   ChoiceNode,
   JumpLabelNode,

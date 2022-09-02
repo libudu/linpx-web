@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useAnimeListRef } from './anime';
-import LinpxNovel from './LinpxNovel';
+import { useAnimeListRef } from '../utils/anime';
+import LinpxNovel from '../utils/LinpxNovel';
 
 export type ITextInfo = {
   text: string;

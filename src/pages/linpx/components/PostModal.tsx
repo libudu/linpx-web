@@ -2,13 +2,13 @@ import { Input } from 'antd';
 import { useState } from 'react';
 import { history } from 'umi';
 import { IFileDetail, IFileInfo } from '..';
-import { fileApi } from './fileSystem';
+import { fileApi } from '../utils/fileSystem';
 import { closeModal, openModal } from '@/components/LinpxModal';
 import { Toast } from 'antd-mobile';
 import CopySpan from '@/pages/components/CopySpan';
 import { useFileInfo } from '../edit';
 import { linpxNovelApi } from '@/api/linpx';
-import { getLinpxNovelShareInfo } from '.';
+import { getLinpxNovelShareInfo } from '../utils';
 
 const PostModal = ({
   fileInfo,

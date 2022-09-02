@@ -5,11 +5,11 @@ import { useCallback, useEffect, useState } from 'react';
 import { history, IRouteComponentProps } from 'umi';
 import { IFileInfo } from '.';
 import CodeEditor from './components/editor';
-import { fileApi } from './components/fileSystem';
+import { fileApi } from './utils/fileSystem';
 import { openModal } from '@/components/LinpxModal';
 import CopySpan from '../components/CopySpan';
 import PostModal from './components/PostModal';
-import { getLinpxNovelShareInfo } from './components';
+import { getLinpxNovelShareInfo } from './utils';
 
 export const useFileInfo = (fileId: string) => {
   const [fileInfo, setFileInfo] = useState<IFileInfo>();
