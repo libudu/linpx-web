@@ -1,7 +1,7 @@
 import PageLayout from '@/components/PageLayout';
 import { IRouteComponentProps } from 'umi';
-import LinpxNovelWidget from './components/LinpxNovelWidget';
-import { useFileInfo } from './edit';
+import LinpxNovelWidget from '../components/LinpxNovelWidget';
+import { useFileInfo } from '../edit';
 
 const exampleText = `提示：故事将从“开始”标签开始，在其之前的文本将会被跳过
 【开始】
@@ -30,10 +30,10 @@ const exampleText = `提示：故事将从“开始”标签开始，在其之�
 【清空】
 【跳转标签 战斗开始】`;
 
-export default function ({ location }: IRouteComponentProps) {
-  const fileId = location.query['file'] as string;
-  let { fileInfo } = useFileInfo(fileId);
-  if (fileId === 'example') {
+export default function ({ match }: IRouteComponentProps) {
+  const { id } = match.params as any;
+  let { fileInfo } = useFileInfo(id);
+  if (id === 'example') {
     fileInfo = {
       id: 'example',
       title: '示例',

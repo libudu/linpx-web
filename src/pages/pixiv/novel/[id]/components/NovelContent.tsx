@@ -13,7 +13,6 @@ const NovelContent: React.FC<NovelContentProps> = ({ text, images }) => {
   // 繁简转换
   const testText = text.slice(0, 50);
   if (testText !== t2s(testText)) {
-    console.log('正文自动繁体转换');
     text = t2s(text);
   }
   // 去除[newpage]

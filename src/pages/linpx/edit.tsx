@@ -64,6 +64,7 @@ export default function ({ location }: IRouteComponentProps) {
   if (!fileInfo) {
     return null;
   }
+  const { release, title, id, text } = fileInfo;
   return (
     <PageLayout title="编辑交互小说" rightEle={<div />}>
       <div className="flex flex-col h-full">
@@ -72,7 +73,7 @@ export default function ({ location }: IRouteComponentProps) {
             placeholder="请输入标题"
             className="cover-antd-input"
             maxLength={100}
-            defaultValue={fileInfo?.title}
+            defaultValue={title}
             onChange={(e) =>
               onFileInfoChange('title', e.target.value as string)
             }
@@ -90,12 +91,12 @@ export default function ({ location }: IRouteComponentProps) {
         >
           <div className="my-1">
             提示：文本仅临时存储在当前网址的本地缓存中，为避免数据遗失请及时备份。
-            <CopySpan text={fileInfo.text}>全部复制</CopySpan>
+            <CopySpan text={text}>全部复制</CopySpan>
           </div>
-          {fileInfo.release && (
+          {release && (
             <div className="my-1">
               该作品已发布，点击
-              <CopySpan text={getLinpxNovelShareInfo(fileInfo.id).url}>
+              <CopySpan text={getLinpxNovelShareInfo(id).url}>
                 复制分享链接
               </CopySpan>
             </div>
@@ -103,7 +104,7 @@ export default function ({ location }: IRouteComponentProps) {
         </div>
         <div className="flex-grow">
           <CodeEditor
-            initText={fileInfo.text || '请输入正文'}
+            initText={text || '请输入正文'}
             setText={(value) => onFileInfoChange('text', value)}
           />
         </div>
@@ -115,7 +116,7 @@ export default function ({ location }: IRouteComponentProps) {
             className="flex-grow py-2"
             onClick={() => {
               if (saved) {
-                history.push(`/linpx/run?file=${fileInfo.id}`);
+                history.push(`/linpx/run/${id}`);
               }
             }}
           >

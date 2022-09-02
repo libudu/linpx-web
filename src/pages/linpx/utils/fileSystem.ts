@@ -10,7 +10,7 @@ getFileSystem(
   },
   (e, fileSystem) => {
     if (e) {
-      console.log(e);
+      console.log('文件系统初始化错误：', e);
     }
     if (fileSystem) {
       fs = fileSystem;

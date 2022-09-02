@@ -32,7 +32,6 @@ export default function MyActionSheet(actions: IAction[] = defaultActions) {
       maskClosable: true,
     },
     (buttonIndex: any) => {
-      console.log(buttonIndex);
       actions[buttonIndex].action();
     },
   );
