@@ -5,13 +5,13 @@ export type TextNode = {
 };
 
 // 快速构造无参节点的解析器
-const makeNoArgNodeParser = <T extends string>(
+const makeNoArgNodeParser = <T extends { type: string }>(
   keyWord: string,
-  typeName: T,
-): ((line: string) => { type: T } | null) => {
+  typeName: T['type'],
+): ((line: string) => T | null) => {
   return (line: string) => {
     if (line.startsWith(`【${keyWord}】`)) {
-      return { type: typeName };
+      return { type: typeName } as any;
     }
     return null;
   };
@@ -19,48 +19,70 @@ const makeNoArgNodeParser = <T extends string>(
 
 // 清空节点
 export type ClearNode = { type: 'clear' };
-const parseClearNode = makeNoArgNodeParser('清空', 'clear');
+const parseClearNode = makeNoArgNodeParser<ClearNode>('清空', 'clear');
 
-// 开始结束节点
+// 开始、结束节点
 export type StartNode = { type: 'start' };
-const parseStartNode = makeNoArgNodeParser('开始', 'start');
+const parseStartNode = makeNoArgNodeParser<StartNode>('开始', 'start');
 
 export type EndNode = { type: 'end' };
-const parseEndNode = makeNoArgNodeParser('结束', 'end');
+const parseEndNode = makeNoArgNodeParser<EndNode>('结束', 'end');
+
+// 快速构造一个参数节点的解析器
+const makeOneArgNodeParser = <T extends { type: string }>(
+  keyWord: string,
+  typeName: T['type'],
+  argName: string,
+): ((line: string) => T | null) => {
+  return (line: string) => {
+    const reg = new RegExp(`^【${keyWord} (.*)】`);
+    const result = line.match(reg);
+    if (result) {
+      return {
+        type: typeName,
+        [argName]: result[1],
+      } as any;
+    }
+    return null;
+  };
+};
 
 // 标签节点
 export type LabelNode = {
   type: 'label';
   labelName: string;
 };
-
-const parseLabelNode = (line: string): LabelNode | null => {
-  const result = line.match(/^【标签 (.*)】/);
-  if (result) {
-    return {
-      type: 'label',
-      labelName: result[1],
-    };
-  }
-  return null;
-};
+const parseLabelNode = makeOneArgNodeParser<LabelNode>(
+  '标签',
+  'label',
+  'labelName',
+);
 
 // 跳转标签节点
 export type JumpLabelNode = {
   type: 'jumpLabel';
   labelName: string;
 };
+const parseJumpLabelNode = makeOneArgNodeParser<JumpLabelNode>(
+  '跳转标签',
+  'jumpLabel',
+  'labelName',
+);
 
-const parseJumpLabelNode = (line: string): JumpLabelNode | null => {
-  const result = line.match(/^【跳转标签 (.*)】/);
-  if (result) {
-    return {
-      type: 'jumpLabel',
-      labelName: result[1],
-    };
-  }
-  return null;
-};
+// 开启、关闭节点
+export type OpenSettingNode = { type: 'openSetting'; settingName: string };
+const parseOpenSettingNode = makeOneArgNodeParser<OpenSettingNode>(
+  '开启',
+  'openSetting',
+  'settingName',
+);
+
+export type CloseSettingNode = { type: 'closeSetting'; settingName: string };
+const parseCloseSettingNode = makeOneArgNodeParser<CloseSettingNode>(
+  '关闭',
+  'closeSetting',
+  'settingName',
+);
 
 // 选项节点
 export type ChoiceNode = {
@@ -99,24 +121,41 @@ const parseChoiceNode = (line: string): ChoiceNode | null => {
   return null;
 };
 
-export type FuncNode =
-  | ChoiceNode
-  | LabelNode
-  | JumpLabelNode
-  | StartNode
-  | EndNode
-  | ClearNode;
-export type NodeType = TextNode | FuncNode;
-
 const nodeParserList = [
+  // 无参节点
   parseStartNode,
   parseEndNode,
+  parseClearNode,
+  // 单参节点
   parseLabelNode,
   parseJumpLabelNode,
+  parseOpenSettingNode,
+  parseCloseSettingNode,
+  // 多项节点
   parseChoiceNode,
-  parseClearNode,
 ];
 
+// 列表转联合
+type NodeTypeUnion = typeof nodeParserList extends Array<infer Item>
+  ? Item
+  : never;
+// 联合转每项函数的返回值，也就是功能节点的类型
+type FuncNode = Exclude<
+  NodeTypeUnion extends (line: string) => infer R ? R : never,
+  null
+>;
+export type NodeType = TextNode | FuncNode;
+
+// 构造type键到NodeType的字典
+type ActionSelector<
+  T extends NodeType['type'],
+  U extends { type: NodeType['type'] },
+> = U extends { type: T } ? U : never;
+export type NodeTypeMap = {
+  [T in NodeType['type']]: ActionSelector<T, NodeType>;
+};
+
+// 解析文本为节点列表
 export const parseText = (text: string, mergeNearTextNode = false) => {
   const textList = text.split('\n');
   const nodeList: NodeType[] = [];

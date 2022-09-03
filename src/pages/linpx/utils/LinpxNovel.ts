@@ -1,17 +1,14 @@
 import { ITextInfo } from '../components/LinpxNovelWidget';
 import {
   ChoiceNode,
-  JumpLabelNode,
   LabelNode,
   NodeType,
+  NodeTypeMap,
   parseText,
-  TextNode,
 } from './nodeParser';
 
 export type IShowChoice = (choiceList: string[]) => Promise<number>;
 export type IShowText = (textInfo: ITextInfo) => Promise<void>;
-
-type NodeHandler = (node: any) => Promise<any>;
 
 export default class LinpxNovel {
   // 节点解析相关
@@ -27,13 +24,16 @@ export default class LinpxNovel {
   choiceStack: ChoiceNode[] = [];
   nodeIndex = 0;
 
-  nodeHandlerMap: Record<NodeType['type'], NodeHandler | null> = {
-    text: async (node: TextNode) => await this.showText({ text: node.text }),
+  // 节点处理器：type为键，值是节点的处理函数，该函数传入该类型的节点
+  nodeHandlerMap: {
+    [T in NodeType['type']]: ((node: NodeTypeMap[T]) => any) | null;
+  } = {
+    text: async (node) => await this.showText({ text: node.text }),
     start: null,
     end: async () => (this.nodeIndex = this.nodeList.length),
     label: null,
-    jumpLabel: async (node: JumpLabelNode) => this.jumpToLabel(node.labelName),
-    choice: async (node: ChoiceNode) => {
+    jumpLabel: async (node) => this.jumpToLabel(node.labelName),
+    choice: async (node) => {
       // 探测下一个节点是不是选项，是则添加到栈，不是则将栈中所有选项作为选项组显示
       this.choiceStack.push(node);
       const nextNode = this.nodeList[this.nodeIndex + 1];
@@ -50,6 +50,8 @@ export default class LinpxNovel {
       }
     },
     clear: async () => this.clearText(),
+    openSetting: async (node) => console.log(node.settingName),
+    closeSetting: async (node) => console.log(node.settingName),
   };
 
   constructor({
@@ -66,7 +68,7 @@ export default class LinpxNovel {
     this.showText = showText;
     this.showChoice = showChoice;
     this.clearText = clearText;
-    // 解析节点，从开始标签开始
+    // 解析节点，从【开始】节点开始
     const nodeList = parseText(text);
     const startIndex = nodeList.findIndex((node) => node.type == 'start');
     if (startIndex != -1) {
@@ -116,7 +118,7 @@ export default class LinpxNovel {
       }
       const handler = this.nodeHandlerMap[node.type];
       if (handler) {
-        await handler(node);
+        await handler(node as any);
         // 是阻塞节点则计数清零，否则递增
         if (this.blockNodeType.includes(node.type)) {
           notBlockCount = 0;
