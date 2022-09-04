@@ -1,3 +1,5 @@
+import { NovelSettingType } from './LinpxNovel';
+
 // 文本节点
 export type TextNode = {
   type: 'text';
@@ -40,7 +42,7 @@ const makeOneArgNodeParser = <T extends { type: string }>(
     if (result) {
       return {
         type: typeName,
-        [argName]: result[1],
+        [argName]: result[1].trim(),
       } as any;
     }
     return null;
@@ -70,14 +72,20 @@ const parseJumpLabelNode = makeOneArgNodeParser<JumpLabelNode>(
 );
 
 // 开启、关闭节点
-export type OpenSettingNode = { type: 'openSetting'; settingName: string };
+export type OpenSettingNode = {
+  type: 'openSetting';
+  settingName: NovelSettingType;
+};
 const parseOpenSettingNode = makeOneArgNodeParser<OpenSettingNode>(
   '开启',
   'openSetting',
   'settingName',
 );
 
-export type CloseSettingNode = { type: 'closeSetting'; settingName: string };
+export type CloseSettingNode = {
+  type: 'closeSetting';
+  settingName: NovelSettingType;
+};
 const parseCloseSettingNode = makeOneArgNodeParser<CloseSettingNode>(
   '关闭',
   'closeSetting',

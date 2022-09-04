@@ -5,10 +5,12 @@ import {
   NodeType,
   NodeTypeMap,
   parseText,
+  TextNode,
 } from './nodeParser';
 
 export type IShowChoice = (choiceList: string[]) => Promise<number>;
 export type IShowText = (textInfo: ITextInfo) => Promise<void>;
+export type NovelSettingType = keyof LinpxNovel['settingState'];
 
 export default class LinpxNovel {
   // 节点解析相关
@@ -23,10 +25,19 @@ export default class LinpxNovel {
   // 运行时变量
   choiceStack: ChoiceNode[] = [];
   nodeIndex = 0;
+  notBlockCount = 0;
+  settingState = {
+    结尾按钮: true, // 结尾是否显示分割线和重新开始按钮
+    合并相邻文本: false, // 相邻的文本节点合并为一个节点
+  };
+
+  // 配置信息
+  // 会产生阻塞效果的节点
+  blockNodeType: NodeType['type'][] = ['text', 'choice'];
 
   // 节点处理器：type为键，值是节点的处理函数，该函数传入该类型的节点
   nodeHandlerMap: {
-    [T in NodeType['type']]: ((node: NodeTypeMap[T]) => any) | null;
+    [T in NodeType['type']]: ((node: NodeTypeMap[T]) => Promise<any>) | null;
   } = {
     text: async (node) => await this.showText({ text: node.text }),
     start: null,
@@ -50,8 +61,12 @@ export default class LinpxNovel {
       }
     },
     clear: async () => this.clearText(),
-    openSetting: async (node) => console.log(node.settingName),
-    closeSetting: async (node) => console.log(node.settingName),
+    openSetting: async ({ settingName }) =>
+      this.settingState[settingName] !== undefined &&
+      (this.settingState[settingName] = true),
+    closeSetting: async ({ settingName }) =>
+      this.settingState[settingName] !== undefined &&
+      (this.settingState[settingName] = false),
   };
 
   constructor({
@@ -80,6 +95,7 @@ export default class LinpxNovel {
       (node) => node.type == 'label',
     ) as LabelNode[];
     labelNodeList.forEach((labelNode) => {
+      // 编译时错误：标签名重复
       if (this.labelNameMap[labelNode.labelName]) {
         console.error('标签名重复！');
       } else {
@@ -90,6 +106,7 @@ export default class LinpxNovel {
 
   jumpToLabel = (targetLabelName: string) => {
     const targetLabel = this.labelNameMap[targetLabelName];
+    // 运行时错误：跳转目标不存在，因为有检查所以应该不会出现这个错误
     if (!targetLabel) {
       console.error(`跳转的目标标签${targetLabelName}不存在`);
     } else {
@@ -97,14 +114,12 @@ export default class LinpxNovel {
     }
   };
 
-  // 会产生阻塞效果的节点
-  blockNodeType: NodeType['type'][] = ['text', 'choice'];
   start = async () => {
     // 初始化置空
     this.choiceStack = [];
     this.nodeIndex = 0;
-    // 连续的非阻塞节点的数量
-    let notBlockCount = 0;
+    this.notBlockCount = 0;
+    let lastTextNode: TextNode | null = null;
     // 开始执行
     for (
       this.nodeIndex = 0;
@@ -116,30 +131,69 @@ export default class LinpxNovel {
       if (!node) {
         break;
       }
+      // 检查节点是否处于循环
+      const isInLoop = this.checkNodeInLoop(node);
+      if (isInLoop) return;
+      // 执行节点的处理函数
       const handler = this.nodeHandlerMap[node.type];
       if (handler) {
-        await handler(node as any);
-        // 是阻塞节点则计数清零，否则递增
-        if (this.blockNodeType.includes(node.type)) {
-          notBlockCount = 0;
-        } else {
-          notBlockCount++;
+        // 合并相邻文本
+        if (this.settingState['合并相邻文本']) {
+          // 碰到文本节点不执行而是累积，到下一个非文本节点再一次执行
+          if (node.type === 'text') {
+            if (lastTextNode === null) {
+              // 不能直接引用，避免多次start时污染节点
+              lastTextNode = { ...node };
+            } else {
+              lastTextNode.text += node.text;
+            }
+          }
+          // 处理上一个没处理的文本节点
+          else {
+            if (lastTextNode !== null) {
+              const handler = this.nodeHandlerMap.text;
+              await handler?.(lastTextNode);
+              lastTextNode = null;
+            }
+            await handler(node as any);
+          }
         }
-        // 连续碰到100个非阻塞节点，报错
-        if (notBlockCount > 200) {
-          alert(
-            '连续碰到超过200个非阻塞节点，请告知作者检查文本是否存在死循环！',
-          );
-          return;
+        // 不合并，每个节点逐个执行
+        else {
+          await handler(node as any);
         }
       }
     }
-    await this.showText({
-      text: '----------------------- 结 束 -----------------------',
-      style: { textAlign: 'center' },
-    });
-    await this.showChoice(['重新开始']);
-    this.clearText();
-    this.start();
+    // 小说结束
+    this.novelEnd();
+  };
+
+  checkNodeInLoop = (node: NodeType) => {
+    // 合并文本节点不会死循环，所以这里不会有影响
+    // 是阻塞节点则计数清零，否则递增
+    if (this.blockNodeType.includes(node.type)) {
+      this.notBlockCount = 0;
+    } else {
+      this.notBlockCount++;
+    }
+    // 连续碰到100个非阻塞节点，报错
+    if (this.notBlockCount > 200) {
+      alert('连续碰到超过200个非阻塞节点，请告知作者检查文本是否存在死循环！');
+      return true;
+    }
+    return false;
+  };
+
+  novelEnd = async () => {
+    // 结尾分割线和按钮
+    if (this.settingState['结尾按钮']) {
+      await this.showText({
+        text: '----------------------- 结 束 -----------------------',
+        style: { textAlign: 'center' },
+      });
+      await this.showChoice(['重新开始']);
+      this.clearText();
+      this.start();
+    }
   };
 }
