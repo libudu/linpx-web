@@ -127,6 +127,10 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
     Number(canLike && like) -
     Number(!canLike && !like);
 
+  const desc = novelInfo.desc.toLowerCase();
+  const isLinpxNovel =
+    desc.includes('【linpx-novel】') || desc.includes('【linpxnovel】');
+
   return (
     <div
       className="w-full h-full overflow-y-scroll"
@@ -135,7 +139,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
     >
       <NovelNavbar showNavbar={showNavbar} novelInfo={novelInfo} />
       {novelInfo && (
-        <div className="w-full">
+        <>
           <NovelIntro {...novelInfo} {...novelAnalyse} />
           <NovelAnalyse
             like={like}
@@ -147,23 +151,31 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
               footerRef.current?.scrollIntoView();
             }}
           />
-          <NovelContent text={content} images={images} />
-          <NovelFooter
-            footerRef={footerRef}
-            afdianUrl={afdianUrl}
-            novelInfo={novelInfo}
-            like={like}
-            likeCount={totalLikeCount}
-            onClickLike={onClickLike}
+          <NovelContent
+            isLinpxNovel={isLinpxNovel}
+            text={content}
+            images={images}
           />
-          <NovelComment
-            id={id}
-            commentRef={commentRef}
-            showInput={showInput}
-            comments={comments}
-            onCommentSuccess={() => refreshComments()}
-          />
-        </div>
+          {!isLinpxNovel && (
+            <>
+              <NovelFooter
+                footerRef={footerRef}
+                afdianUrl={afdianUrl}
+                novelInfo={novelInfo}
+                like={like}
+                likeCount={totalLikeCount}
+                onClickLike={onClickLike}
+              />
+              <NovelComment
+                id={id}
+                commentRef={commentRef}
+                showInput={showInput}
+                comments={comments}
+                onCommentSuccess={() => refreshComments()}
+              />
+            </>
+          )}
+        </>
       )}
     </div>
   );

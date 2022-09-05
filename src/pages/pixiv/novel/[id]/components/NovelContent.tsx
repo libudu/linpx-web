@@ -3,17 +3,26 @@ import { proxyImg, t2s } from '@/utils/util';
 import { INovelInfo } from '@/types';
 import { useModel } from 'umi';
 import classNames from 'classnames';
+import LinpxNovelWidget from '@/pages/linpx/components/LinpxNovelWidget';
 
 interface NovelContentProps {
   text: string;
   images: INovelInfo['images'] | undefined;
+  isLinpxNovel?: boolean;
 }
 
-const NovelContent: React.FC<NovelContentProps> = ({ text, images }) => {
+const NovelContent: React.FC<NovelContentProps> = ({
+  text,
+  images,
+  isLinpxNovel,
+}) => {
   // 繁简转换
   const testText = text.slice(0, 50);
   if (testText !== t2s(testText)) {
     text = t2s(text);
+  }
+  if (isLinpxNovel) {
+    return <LinpxNovelWidget text={text} />;
   }
   // 去除[newpage]
   text = text.replaceAll('[newpage]', '');
@@ -53,7 +62,6 @@ export default (props: NovelContentProps) => {
         novelStyles.fontSizeClass,
       )}
       style={{
-        pointerEvents: 'none',
         background: novelStyles.bgColor,
         color: novelStyles.color,
         fontFamily: novelStyles.fontFamily,
