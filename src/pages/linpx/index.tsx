@@ -13,7 +13,7 @@
  *
  * 【编辑器】
  * 编辑时预检查：跳转的标签是否都存在（已完成）
- * 如果有标签、跳转标签直接构成的循环怎么办？同一个节点遍历了1000次后自动提示错误。（已完成）
+ * 编辑时着色：对功能标签采用视觉和普通文本不一样的表现
  *
  * 【特殊效果（优先级低）】
  * 普通文本中的【加粗】、【斜体】、【发光】、【抖动】标签
@@ -60,10 +60,10 @@ export default function ({ history }: React.PropsWithChildren<any>) {
         <div className="font-bold text-2xl mt-4">我也试试</div>
         <HomeManager />
 
-        <div className="font-bold text-2xl mt-4">Linpx-Word简介</div>
+        <div className="font-bold text-2xl mt-4">Linpx-Novel简介</div>
         <HomeIntro />
 
-        <div className="font-bold text-2xl mt-4">Linpx-Word教程（待完善）</div>
+        <div className="font-bold text-2xl mt-4">Linpx-Novel教程（待完善）</div>
         <div>
           <div>【标签】、【跳转标签 标签名】</div>
           <div>【选项】</div>
@@ -72,6 +72,7 @@ export default function ({ history }: React.PropsWithChildren<any>) {
           <div>【开始 设置名】、【关闭 设置名】</div>
           <div>【关闭 结尾按钮】</div>
           <div>【开启 合并相邻文本】</div>
+          <div>死循环检测</div>
         </div>
       </div>
     </PageLayout>

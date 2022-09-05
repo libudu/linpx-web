@@ -41,7 +41,7 @@ export default function ({ match }: IRouteComponentProps) {
     };
   }
   return (
-    <PageLayout title={fileInfo?.title || ''}>
+    <PageLayout title={fileInfo?.title || ''} rightEle={<div></div>}>
       {fileInfo && <LinpxNovelWidget text={fileInfo.text} />}
     </PageLayout>
   );

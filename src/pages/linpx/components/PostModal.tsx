@@ -144,7 +144,6 @@ const PostSuccessModal = ({ fileId }: { fileId: string }) => {
             className="text-2xl font-bold text-center bg-linpx rounded-full px-8 py-1"
             onClick={() => {
               closeModal();
-              history.push('/linpx');
             }}
           >
             返回

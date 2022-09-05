@@ -29,7 +29,7 @@ const HomeIntro: React.FC = () => {
   return (
     <div className="text-base">
       <div>
-        Linpx-Word是一个增量的，声明式的，用于为小说添加简单动效、选项分支和流程控制的文本格式。
+        Linpx-Novel是一个增量的，声明式的，用于为小说添加简单动效、选项分支和流程控制的文本格式。
       </div>
       <div>
         在已有的小说文本中添加一些简单的、中文的标签即可实现上述效果。整体类似于简易中文版的inky。
