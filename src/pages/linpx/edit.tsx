@@ -10,6 +10,8 @@ import { openModal } from '@/components/LinpxModal';
 import CopySpan from '../components/CopySpan';
 import PostModal from './components/PostModal';
 import { getLinpxNovelShareInfo } from './utils';
+import LinpxNovel from './utils/LinpxNovel';
+import ErrorModal from './components/ErrorModal';
 
 export const useFileInfo = (fileId: string) => {
   const [fileInfo, setFileInfo] = useState<IFileInfo>();
@@ -26,6 +28,17 @@ export const useFileInfo = (fileId: string) => {
     fileInfo,
     refreshFileInfo: () => setIndex(index + 1),
   };
+};
+
+const checkTextNoError = (text: string) => {
+  const errorInfoList = LinpxNovel.checkText(text);
+  if (errorInfoList.length) {
+    openModal({
+      children: <ErrorModal errorInfoList={errorInfoList} />,
+    });
+    return false;
+  }
+  return true;
 };
 
 export default function ({ location }: IRouteComponentProps) {
@@ -115,7 +128,8 @@ export default function ({ location }: IRouteComponentProps) {
           <div
             className="flex-grow py-2"
             onClick={() => {
-              if (saved) {
+              const noError = checkTextNoError(text);
+              if (noError && saved) {
                 history.push(`/linpx/run/${id}`);
               }
             }}
@@ -125,16 +139,19 @@ export default function ({ location }: IRouteComponentProps) {
           <div className="w-0.5 h-full bg-gray-200" />
           <div
             className="flex-grow py-2 bg-gray-200"
-            onClick={() =>
-              openModal({
-                children: (
-                  <PostModal
-                    fileInfo={fileInfo}
-                    onClose={() => refreshFileInfo()}
-                  />
-                ),
-              })
-            }
+            onClick={() => {
+              const noError = checkTextNoError(text);
+              if (noError) {
+                openModal({
+                  children: (
+                    <PostModal
+                      fileInfo={fileInfo}
+                      onClose={() => refreshFileInfo()}
+                    />
+                  ),
+                });
+              }
+            }}
           >
             发布
           </div>

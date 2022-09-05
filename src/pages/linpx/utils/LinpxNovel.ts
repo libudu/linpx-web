@@ -1,4 +1,5 @@
 import { ITextInfo } from '../components/LinpxNovelWidget';
+import { checkNodeList } from './nodeListChecker';
 import {
   ChoiceNode,
   LabelNode,
@@ -26,10 +27,11 @@ export default class LinpxNovel {
   choiceStack: ChoiceNode[] = [];
   nodeIndex = 0;
   notBlockCount = 0;
-  settingState = {
+  static settingState = {
     结尾按钮: true, // 结尾是否显示分割线和重新开始按钮
     合并相邻文本: false, // 相邻的文本节点合并为一个节点
   };
+  settingState = { ...LinpxNovel.settingState };
 
   // 配置信息
   // 会产生阻塞效果的节点
@@ -69,6 +71,11 @@ export default class LinpxNovel {
       (this.settingState[settingName] = false),
   };
 
+  static checkText = (text: string) => {
+    const nodeList = parseText(text);
+    return checkNodeList(nodeList);
+  };
+
   constructor({
     text,
     showText,
@@ -106,10 +113,7 @@ export default class LinpxNovel {
 
   jumpToLabel = (targetLabelName: string) => {
     const targetLabel = this.labelNameMap[targetLabelName];
-    // 运行时错误：跳转目标不存在，因为有检查所以应该不会出现这个错误
-    if (!targetLabel) {
-      console.error(`跳转的目标标签${targetLabelName}不存在`);
-    } else {
+    if (targetLabel) {
       this.nodeIndex = this.nodeList.indexOf(targetLabel);
     }
   };
