@@ -1,3 +1,4 @@
+import { renderImageText } from '@/pages/pixiv/novel/[id]/components/NovelContent';
 import React, { useEffect, useRef, useState } from 'react';
 import { useAnimeListRef } from '../utils/anime';
 import LinpxNovel from '../utils/LinpxNovel';
@@ -50,7 +51,12 @@ export default function ({ text }: { text: string }) {
     <div className="text-lg whitespace-pre-wrap">
       {textInfoList.map(({ text, style }, index) => (
         <BottomFadeIn key={index}>
-          <div style={style}>{text}</div>
+          <div style={style}>
+            {
+              // 渲染可能存在的pixiv图片
+              text.includes('[uploadedimage:') ? renderImageText(text) : text
+            }
+          </div>
         </BottomFadeIn>
       ))}
       {choiceList && (
