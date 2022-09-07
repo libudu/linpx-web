@@ -61,7 +61,10 @@ export default function ({
         // 过渡显示文本
         const refTextList = ref.current?.refTextList as ITextInfo[];
         setTextInfoList([...refTextList, text]);
-        await new Promise((resolve) => setTimeout(() => resolve(null), 400));
+        const isBlank = text.text === '\n';
+        await new Promise((resolve) =>
+          setTimeout(() => resolve(null), isBlank ? 100 : 400),
+        );
       },
       showChoice: async (choiceList) => {
         setChoiceList(choiceList);
