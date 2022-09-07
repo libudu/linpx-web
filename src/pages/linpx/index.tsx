@@ -1,19 +1,20 @@
 /** todo:
+ * 读者：可游玩的作品、小说列表中交互小说的视觉提示、交互小说的单独展示
+ * 作者：介绍教程、编辑器功能
  *
  * 【节点功能相关】
- * 开启、关闭节点。
  * 开启/关闭 逐段点击（默认关闭）
  * 即将滚动到底部后才开始过渡显示后续文本内容，避免玩家看着上面，底下自动全显示了（默认开启）
+ * 文字特效：普通文本中的【加粗】、【斜体】、【发光】、【抖动】标签
  *
  * 【开放性与运营】
  * 首页功能引导
- * 作者名称字段
  *
- * 【编辑器】
+ * 【编辑器功能】
  * 编辑时着色：对功能标签采用视觉和普通文本不一样的表现
  *
- * 【特殊效果（优先级低）】
- * 【开启 文字特效】普通文本中的【加粗】、【斜体】、【发光】、【抖动】标签
+ * 【后台】
+ * 查看所有已发布作品的页面，方便管理
  **/
 
 import PageLayout from '@/components/PageLayout';
@@ -37,9 +38,9 @@ export interface IFileDetail extends IFileInfo {
 
 export default function ({ history }: React.PropsWithChildren<any>) {
   return (
-    <PageLayout title="交互小说">
-      <div className="px-4 py-2">
-        <div className="font-bold text-2xl">最近作品</div>
+    <PageLayout title="交互小说" rightEle={<div />}>
+      <div className="px-4">
+        {/* <div className="font-bold text-2xl">最近作品</div>
         {[
           '测试1',
           '测试2（内容一样，凑数的）',
@@ -52,24 +53,37 @@ export default function ({ history }: React.PropsWithChildren<any>) {
           >
             {title}
           </div>
-        ))}
+        ))} */}
+
+        <div className="font-bold text-2xl my-1">Linpx-Novel简介</div>
+        <HomeIntro />
 
         <div className="font-bold text-2xl mt-4">我也试试</div>
         <HomeManager />
 
-        <div className="font-bold text-2xl mt-4">Linpx-Novel简介</div>
-        <HomeIntro />
-
         <div className="font-bold text-2xl mt-4">Linpx-Novel教程（待完善）</div>
         <div>
-          <div>【标签】、【跳转标签 标签名】</div>
-          <div>【选项】</div>
-          <div>【开始】、【结束】</div>
-          <div>【清空】</div>
+          <div className="text-xl mt-2">分支跳转</div>
+          <div className="text-lg">
+            <div>·声明标签：【标签 标签名】</div>
+            <div className="pl-4">
+              声明一个标签，可以通过跳转标签跳转到该位置
+            </div>
+            <div>·跳转标签：【跳转标签 标签名】</div>
+            <div className="pl-4">跳转到一个声明了的标签</div>
+          </div>
+
+          <div className="text-xl mt-2">声明选项</div>
+          <div>【选项】选项文本</div>
+
+          <div>功能设置</div>
           <div>【开始 设置名】、【关闭 设置名】</div>
           <div>【关闭 结尾按钮】</div>
           <div>【开启 合并相邻文本】</div>
-          <div>死循环检测</div>
+
+          <div>其他项</div>
+          <div>【开始】、【结束】</div>
+          <div>【清空】</div>
         </div>
       </div>
     </PageLayout>

@@ -140,32 +140,30 @@ export default class LinpxNovel {
       if (isInLoop) return;
       // 执行节点的处理函数
       const handler = this.nodeHandlerMap[node.type];
-      if (handler) {
-        // 合并相邻文本
-        if (this.settingState['合并相邻文本']) {
-          // 碰到文本节点不执行而是累积，到下一个非文本节点再一次执行
-          if (node.type === 'text') {
-            if (lastTextNode === null) {
-              // 不能直接引用，避免多次start时污染节点
-              lastTextNode = { ...node };
-            } else {
-              lastTextNode.text += node.text;
-            }
-          }
-          // 处理上一个没处理的文本节点
-          else {
-            if (lastTextNode !== null) {
-              const handler = this.nodeHandlerMap.text;
-              await handler?.(lastTextNode);
-              lastTextNode = null;
-            }
-            await handler(node as any);
+      // 合并相邻文本
+      if (this.settingState['合并相邻文本']) {
+        // 碰到文本节点不执行而是累积，到下一个非文本节点再一次执行
+        if (node.type === 'text') {
+          if (lastTextNode === null) {
+            // 不能直接引用，避免多次start时污染节点
+            lastTextNode = { ...node };
+          } else {
+            lastTextNode.text += node.text;
           }
         }
-        // 不合并，每个节点逐个执行
+        // 处理上一个没处理的文本节点
         else {
-          await handler(node as any);
+          if (lastTextNode !== null) {
+            const handler = this.nodeHandlerMap.text;
+            await handler?.(lastTextNode);
+            lastTextNode = null;
+          }
+          handler && (await handler(node as any));
         }
+      }
+      // 不合并，每个节点逐个执行
+      else {
+        handler && (await handler(node as any));
       }
     }
     // 小说结束
