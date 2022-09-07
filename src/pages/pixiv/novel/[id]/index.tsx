@@ -155,6 +155,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
             isLinpxNovel={isLinpxNovel}
             text={content}
             images={images}
+            containerRef={ref}
           />
           {!isLinpxNovel && (
             <>

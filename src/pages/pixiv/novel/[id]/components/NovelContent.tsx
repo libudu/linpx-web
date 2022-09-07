@@ -9,6 +9,7 @@ interface NovelContentProps {
   text: string;
   images: INovelInfo['images'] | undefined;
   isLinpxNovel?: boolean;
+  containerRef?: React.RefObject<HTMLDivElement>;
 }
 
 let novelContentImageInfo: NovelContentProps['images'];
@@ -43,6 +44,7 @@ const NovelContent: React.FC<NovelContentProps> = ({
   text,
   images,
   isLinpxNovel,
+  containerRef,
 }) => {
   novelContentImageInfo = images;
   // 繁简转换
@@ -53,7 +55,7 @@ const NovelContent: React.FC<NovelContentProps> = ({
   // 去除[newpage]
   text = text.replaceAll('[newpage]', '');
   if (isLinpxNovel) {
-    return <LinpxNovelWidget text={text} />;
+    return <LinpxNovelWidget containerRef={containerRef} text={text} />;
   }
   // 渲染pixiv图片
   if (images) {

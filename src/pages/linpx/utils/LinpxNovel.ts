@@ -30,6 +30,7 @@ export default class LinpxNovel {
   static settingState = {
     结尾按钮: true, // 结尾是否显示分割线和重新开始按钮
     合并相邻文本: false, // 相邻的文本节点合并为一个节点
+    等待滚动: true, // 是否等待用户滚动到底部后才过渡显示后续文本
   };
   settingState = { ...LinpxNovel.settingState };
 
@@ -124,6 +125,7 @@ export default class LinpxNovel {
     this.nodeIndex = 0;
     this.notBlockCount = 0;
     let lastTextNode: TextNode | null = null;
+    this.settingState = { ...LinpxNovel.settingState };
     // 开始执行
     for (
       this.nodeIndex = 0;
