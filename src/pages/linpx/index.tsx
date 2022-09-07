@@ -80,6 +80,7 @@ export default function ({ history }: React.PropsWithChildren<any>) {
           <div>【开始 设置名】、【关闭 设置名】</div>
           <div>【关闭 结尾按钮】</div>
           <div>【开启 合并相邻文本】</div>
+          <div>【关闭 等待滚动】</div>
 
           <div>其他项</div>
           <div>【开始】、【结束】</div>

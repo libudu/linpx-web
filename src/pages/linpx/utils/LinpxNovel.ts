@@ -152,6 +152,11 @@ export default class LinpxNovel {
           } else {
             lastTextNode.text += node.text;
           }
+          // 如果到了最后一个节点，那全部显示
+          if (this.nodeIndex === this.nodeList.length - 1) {
+            await this.nodeHandlerMap['text']?.(lastTextNode);
+            lastTextNode = null;
+          }
         }
         // 处理上一个没处理的文本节点
         else {
