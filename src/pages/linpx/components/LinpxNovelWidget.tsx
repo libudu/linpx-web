@@ -11,7 +11,7 @@ export type ITextInfo = {
 // 显示区域的底部边距，用户滑到底部时的冗余空白区域
 const PaddingBottom = 200;
 // 触达底部的预留判断距离，数值越大空得越多，不可超过PaddingBottom
-const ReachBottomDistance = 20;
+const ReachBottomDistance = 0;
 
 // todo: 销毁时似乎存在内存泄漏？novelInstance中的内容依旧运行着，只是提供的UI回调都失效了
 export default function ({

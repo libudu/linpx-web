@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import { proxyImg, t2s } from '@/utils/util';
 import { INovelInfo } from '@/types';
 import { useModel } from 'umi';
@@ -40,12 +40,43 @@ export const renderImageText = (text: string) => {
   return childrenList;
 };
 
+// 图片预加载
+const usePreloadImages = (imageUrlList: string[]) => {
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => {
+    let finishCount = 0;
+    imageUrlList.forEach((url) => {
+      const img = new Image();
+      img.onload = () => {
+        finishCount += 1;
+        if (finishCount === imageUrlList.length) setLoaded(true);
+      };
+      img.onerror = () => {
+        finishCount += 1;
+        if (finishCount === imageUrlList.length) setLoaded(true);
+      };
+      img.src = url;
+    });
+    // 最迟3秒钟内显示
+    setTimeout(() => {
+      if (finishCount !== imageUrlList.length) {
+        setLoaded(true);
+      }
+    }, 3000);
+  }, []);
+  return loaded;
+};
+
 const NovelContent: React.FC<NovelContentProps> = ({
   text,
   images,
   isLinpxNovel,
   containerRef,
 }) => {
+  const imgLoaded = usePreloadImages(
+    Object.values(images || []).map((img) => proxyImg(img.preview)),
+  );
+  if (!imgLoaded) return <div></div>;
   novelContentImageInfo = images;
   // 繁简转换
   const testText = text.slice(0, 50);
