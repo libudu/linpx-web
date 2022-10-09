@@ -108,7 +108,7 @@ const LinpxTagContent: React.FC = () => {
       />
       <TagBoxList
         tagList={tagListData}
-        onClickTag={(tagName) => history.push(`/pixiv/tag/${tagName}`)}
+        onClickTag={(tagName) => history.push(`/pixiv/tag?tagName=${tagName}`)}
       />
     </>
   );
