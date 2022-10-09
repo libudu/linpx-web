@@ -6,7 +6,7 @@ import NovelCardSkeleton from '@/skeleton/NovelCardSkeleton';
 
 // 每页十个，由后端接口限定
 const pageSize = 10;
-const TotalPage = 100;
+const TotalPage = 200;
 
 function RecentNovels() {
   document.title = 'Linpx - 最近小说';

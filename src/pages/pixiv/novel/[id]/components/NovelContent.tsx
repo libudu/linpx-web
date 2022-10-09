@@ -45,6 +45,9 @@ const usePreloadImages = (imageUrlList: string[]) => {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
     let finishCount = 0;
+    if (imageUrlList.length == 0) {
+      return setLoaded(true);
+    }
     imageUrlList.forEach((url) => {
       const img = new Image();
       img.onload = () => {
