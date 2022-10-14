@@ -143,9 +143,9 @@ export default ({ id, hideMenu, containerRef }: INovelMenu) => {
       <Line />
       <Item>
         <div>自动滚动</div>
-        <div onClick={() => autoScroll(1)}>慢</div>
-        <div onClick={() => autoScroll(2)}>中</div>
-        <div onClick={() => autoScroll(3)}>快</div>
+        <div onClick={() => autoScroll(0.8)}>慢</div>
+        <div onClick={() => autoScroll(1.2)}>中</div>
+        <div onClick={() => autoScroll(1.8)}>快</div>
       </Item>
       <Line />
       <Item>

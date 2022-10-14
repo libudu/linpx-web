@@ -137,6 +137,7 @@ function DrawerSidebar({ onDrawerClose }: { onDrawerClose: any }) {
           <div>设计：apoto5</div>
           <div>协助：V.C</div>
           <div>顾问：空狼</div>
+          <div>版本：221</div>
         </div>
         <img src={LinpicioLogoImg} className="w-24 absolute top-4 right-4" />
       </div>
