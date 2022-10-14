@@ -45,16 +45,34 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   // 统计数据
   const [like, setLike] = useState(false);
   const [novelAnalyse, setNovelAnalyse] = useState<INovelAnalyse | null>(null);
+
+  // 底部工具栏引用，点击评论图标后滚动到底部
+  const footerRef = useRef<HTMLDivElement>(null);
+
+  // 记忆上次游览位置
+  const ref = useRef<HTMLDivElement>(null);
+  useRecordLastScroll(ref);
+
+  // 初始化
   useEffect(() => {
+    // 阅读数增加
     readNovel(id);
+    // 获取评论
     refreshComments();
+    // 请求小说分析数据
     linpxRequest(`/pixiv/novel/${id}/analyse`, false).then(
       (data: INovelAnalyse) => {
         setNovelAnalyse(data);
         setLike(!data.canLike);
       },
     );
+    // 初始化自动滚动接口
+    const ele = ref.current;
+    if (ele) {
+      ele.scrollTop += 10;
+    }
   }, []);
+
   // 点击喜欢/取消喜欢
   const onClickLike = useCallback(
     throttle(
@@ -73,7 +91,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
     [],
   );
 
-  // 监听滚动
+  // 监听滚动，滚动会影响顶部导航栏和底部评论输入框
   const commentRef = useRef<HTMLDivElement>(null);
   const [showInput, setShowInput] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
@@ -103,13 +121,6 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
     [],
   );
 
-  // 底部工具栏引用
-  const footerRef = useRef<HTMLDivElement>(null);
-
-  // 记忆位置
-  const ref = useRef<HTMLDivElement>(null);
-  useRecordLastScroll(ref);
-
   if (!novelInfo || !novelAnalyse) {
     return (
       <div className="w-full h-full overflow-y-scroll" ref={ref}>
@@ -127,6 +138,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
     Number(canLike && like) -
     Number(!canLike && !like);
 
+  // 判断是否是linpx-novel
   const desc = novelInfo.desc.toLowerCase();
   const isLinpxNovel =
     desc.includes('【linpx-novel】') || desc.includes('【linpxnovel】');
@@ -137,7 +149,11 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
       onScroll={scrollHandler}
       ref={ref}
     >
-      <NovelNavbar showNavbar={showNavbar} novelInfo={novelInfo} />
+      <NovelNavbar
+        showNavbar={showNavbar}
+        novelInfo={novelInfo}
+        containerRef={ref}
+      />
       {novelInfo && (
         <>
           <NovelIntro {...novelInfo} {...novelAnalyse} />

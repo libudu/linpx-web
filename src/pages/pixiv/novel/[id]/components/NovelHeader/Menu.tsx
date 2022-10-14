@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC, RefObject } from 'react';
 import classNames from 'classnames';
 import Tag from '@/components/Tag';
 import { setNovelStyles } from '@/models/styles';
@@ -64,12 +64,53 @@ const FontFamilyPicker: FC<{
   );
 };
 
-interface INovelMenu {
+export interface INovelMenu {
   id: string;
   hideMenu: () => void;
+  containerRef: RefObject<HTMLDivElement>;
 }
 
-export default ({ id, hideMenu }: INovelMenu) => {
+// 传入要开始自动滚动的容器ref，返回开始滚动的函数
+const makeAutoScrollFromRef = (
+  ref: React.RefObject<HTMLDivElement>,
+  step: number,
+) => {
+  const ele = ref.current;
+  if (!ele) return;
+  let autoScrollId: any = null;
+  const stopAutoScroll = () => {
+    if (autoScrollId) {
+      clearInterval(autoScrollId);
+      ele.removeEventListener('click', stopAutoScroll);
+      autoScrollId = null;
+    }
+  };
+  const startAutoScroll = () => {
+    // 之前已存在自动滚动则先取消
+    if (autoScrollId) {
+      stopAutoScroll();
+    }
+    // 点击任意处停止自动滚动
+    ele.addEventListener('click', stopAutoScroll);
+    // 开始自动滚动
+    autoScrollId = setInterval(() => {
+      // 跳转到了其他页面，停止滚动
+      if (!document.documentElement.contains(ele)) {
+        stopAutoScroll();
+      } else {
+        ele.scrollTop += step;
+      }
+    }, 16);
+  };
+  return startAutoScroll;
+};
+
+export default ({ id, hideMenu, containerRef }: INovelMenu) => {
+  const autoScroll = (step: number) => {
+    const startAutoScroll = makeAutoScrollFromRef(containerRef, step);
+    startAutoScroll && startAutoScroll();
+    hideMenu();
+  };
   return (
     <div className="text-base lp-bgcolor">
       <Item>
@@ -98,6 +139,13 @@ export default ({ id, hideMenu }: INovelMenu) => {
           <FontFamilyPicker fontFamily="Noto Sans SC" name="思源黑体" />
           <FontFamilyPicker fontFamily="Noto Serif SC" name="思源宋体" />
         </div>
+      </Item>
+      <Line />
+      <Item>
+        <div>自动滚动</div>
+        <div onClick={() => autoScroll(1)}>慢</div>
+        <div onClick={() => autoScroll(2)}>中</div>
+        <div onClick={() => autoScroll(3)}>快</div>
       </Item>
       <Line />
       <Item>

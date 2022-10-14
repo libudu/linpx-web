@@ -1,5 +1,5 @@
 import { Popover } from 'antd-mobile';
-import NovelMenu from './Menu';
+import NovelMenu, { INovelMenu } from './Menu';
 import { useState } from 'react';
 
 import { ContentNavbar, MenuIcon } from '@/components/Navbar';
@@ -8,9 +8,14 @@ import { INovelInfo } from '@/types';
 interface NovelNavbarProps {
   showNavbar: boolean;
   novelInfo: INovelInfo;
+  containerRef: INovelMenu['containerRef'];
 }
 
-const NovelNavbar: React.FC<NovelNavbarProps> = ({ showNavbar, novelInfo }) => {
+const NovelNavbar: React.FC<NovelNavbarProps> = ({
+  showNavbar,
+  novelInfo,
+  containerRef,
+}) => {
   // navbar是否收起
   const [showPopover, setShowPopover] = useState(false);
   if (showNavbar == false && showPopover == true) {
@@ -33,6 +38,7 @@ const NovelNavbar: React.FC<NovelNavbarProps> = ({ showNavbar, novelInfo }) => {
                   hideMenu={() => {
                     setShowPopover(false);
                   }}
+                  containerRef={containerRef}
                 />
               }
               overlayStyle={{
