@@ -69,6 +69,8 @@ export default function Layout({ children }: IRouteComponentProps) {
     </div>
   );
 
+  // 大部分情况下，滚动的都是最外层的这个ref容器
+  // 小说页面中因为需要监控onScroll事件来自动伸缩，所以内部单独实现位置记录功能
   useRecordLastScroll(ref, [children]);
 
   // 第一次访问进行安全提示，避免狗腾讯的爬虫封禁

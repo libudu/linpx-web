@@ -79,7 +79,7 @@ export default function ({ location }: IRouteComponentProps) {
   }
   const { release, title, id, text } = fileInfo;
   return (
-    <PageLayout title="编辑交互小说" rightEle={<div />}>
+    <PageLayout type="flex-grow" title="编辑交互小说" rightEle={<div />}>
       <div className="flex flex-col h-full">
         <div className="flex">
           <Input
