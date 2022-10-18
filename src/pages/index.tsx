@@ -142,7 +142,7 @@ const TransLinkContent: React.FC = () => {
   );
 };
 
-function IndexPage() {
+const IndexPage = () => {
   document.title = 'Linpx - 首页';
 
   useRDF();
@@ -159,6 +159,6 @@ function IndexPage() {
       </div>
     </>
   );
-}
+};
 
 export default IndexPage;

@@ -1,4 +1,4 @@
-import { closeInfoModal, openInfoModal } from './Modal';
+import { closeInfoModal, openInfoModal } from '../pages/components/Modal';
 import ConfuseLinpicioImg from '@/assets/linpicio/Confuse.jpg';
 
 const FirstTips: React.FC<{ onConfirm: () => any }> = ({ onConfirm }) => {

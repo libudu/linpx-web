@@ -3,8 +3,8 @@ import DrawerLayout, { getDrawerItem } from './DrawerLayout';
 import { InfoModal } from '@/pages/components/Modal';
 import { enterNewPath } from '@/utils/history';
 import { MountModal } from '@/components/LinpxModal';
-import React, { useRef, useEffect, useState, RefObject } from 'react';
-import FirstTips from '@/pages/components/FirstTips';
+import { useRef, useEffect, useState, RefObject } from 'react';
+import FirstTips from '@/layouts/FirstTips';
 
 // 记录页面滚动位置
 const posMap: Record<string, number> = {};

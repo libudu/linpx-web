@@ -1,29 +1,12 @@
 import { pixivNovelNewComment } from '@/api';
 import { closeModal, openModal } from '@/components/LinpxModal';
-import CommentModal from '@/pages/components/CommentModal';
-import { Array2Map, INovelComment } from '@/types';
+import CommentModal from '@/pages/pixiv/novel/[id]/components/NovelFooter/CommentModal';
+import { INovelComment } from '@/types';
 import { stringHash } from '@/utils/util';
 import { Toast } from 'antd-mobile';
-import { throttle } from 'lodash';
 import React, { useRef } from 'react';
 import { BORDER } from '../..';
 
-const sendComment = throttle(
-  async (id: string, text: string, onCommentSuccess: () => any) => {
-    const res = await pixivNovelNewComment(id, text);
-    if (res.error) {
-      Toast.info('评论失败', 1.0, undefined, false);
-      return false;
-    } else {
-      Toast.info('评论成功', 1.0, undefined, false);
-      onCommentSuccess();
-      closeModal();
-      return true;
-    }
-  },
-  1000,
-  { trailing: false },
-);
 // 一条评论
 const Comment: React.FC<INovelComment & { index: number }> = ({
   content,

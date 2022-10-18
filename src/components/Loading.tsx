@@ -8,6 +8,7 @@ for (let i = 1; i < 9; i++) {
 
 const logo = require('../assets/logo/app_logo.png');
 
+// 目前没有需要长时间加载的内容，所以此组件暂时废弃
 export default function Loading() {
   const imgIndex = Math.floor(1 + Math.random() * 8);
 
