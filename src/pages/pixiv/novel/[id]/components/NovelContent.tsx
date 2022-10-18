@@ -10,6 +10,7 @@ interface NovelContentProps {
   images: INovelInfo['images'] | undefined;
   isLinpxNovel?: boolean;
   containerRef?: React.RefObject<HTMLDivElement>;
+  onLoad?: () => void;
 }
 
 let novelContentImageInfo: NovelContentProps['images'];
@@ -75,18 +76,21 @@ const NovelContent: React.FC<NovelContentProps> = ({
   images,
   isLinpxNovel,
   containerRef,
+  onLoad,
 }) => {
   const imgLoaded = usePreloadImages(
     Object.values(images || []).map((img) => proxyImg(img.preview)),
   );
   if (!imgLoaded) return <div></div>;
+  // 图片加载完的回调
+  onLoad && onLoad();
   novelContentImageInfo = images;
   // 繁简转换
   const testText = text.slice(0, 50);
   if (testText !== t2s(testText)) {
     text = t2s(text);
   }
-  // 去除[newpage]
+  // 去除标签，[newpage]分页
   text = text.replaceAll('[newpage]', '');
   if (isLinpxNovel) {
     return <LinpxNovelWidget containerRef={containerRef} text={text} />;

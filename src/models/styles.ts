@@ -27,14 +27,14 @@ if (!initStyle) {
 export default function () {
   const [novelStyles, setStyle] = useState(initStyle);
 
-  const _setNovelStyles = useCallback((styleChanges: Partial<StyleType>) => {
+  const _setNovelStyles = (styleChanges: Partial<StyleType>) => {
     const newStyles = {
       ...novelStyles,
       ...styleChanges,
     };
     setStyle(newStyles);
     saveStyles(newStyles);
-  }, []);
+  };
 
   setNovelStyles = _setNovelStyles;
 

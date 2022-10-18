@@ -122,6 +122,9 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
     [],
   );
 
+  // content是否加载完成，主要用于图片预加载
+  const [contentLoaded, setContentLoaded] = useState(false);
+
   if (!novelInfo || !novelAnalyse) {
     return (
       <div className="w-full h-full overflow-y-scroll" ref={ref}>
@@ -170,8 +173,9 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
             text={content}
             images={images}
             containerRef={ref}
+            onLoad={() => setContentLoaded(true)}
           />
-          {!isLinpxNovel && (
+          {contentLoaded && !isLinpxNovel && (
             <>
               <NovelFooter
                 footerRef={footerRef}
