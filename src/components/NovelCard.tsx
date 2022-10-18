@@ -1,11 +1,9 @@
 import { INovelProfile } from '@/types';
 import { history } from 'umi';
-import {
-  LikeOutlined,
-  MessageOutlined,
-  CommentOutlined,
-} from '@ant-design/icons';
+import { LikeOutlined, MessageOutlined } from '@ant-design/icons';
 import NewPng from '@/assets/icon/new.png';
+import { checkLinpxNovel } from '@/pages/pixiv/novel/[id]/util';
+import InteractImg from '@/assets/icon/interact.png';
 
 // 最近小说页面
 // 作者详情页面
@@ -27,11 +25,13 @@ export default function NovelCard({
   const createDateObj = new Date(createDate);
   const isNew =
     (Date.now() - createDateObj.getTime()) / 1000 / 60 / 60 / 24 < 2;
+  const isLinpxNovel = checkLinpxNovel({ desc });
   return (
     <div
       className="lp-shadow my-5 flex lp-bgcolor overflow-hidden w-full"
       onClick={() => history.push(`/pixiv/novel/${id}`)}
     >
+      {/* 封面、点赞和评论数 */}
       <div className="lp-shadow w-20 bg-white m-3 overflow-hidden flex-shrink-0 flex flex-col items-center justify-center">
         <img
           className="h-24 w-full object-cover"
@@ -50,11 +50,19 @@ export default function NovelCard({
           </div>
         </div>
       </div>
+      {/* 标题、作者、字数、时间、简介 */}
       <div className="text-left flex flex-col mt-2 mr-2 flex-shrink flex-grow overflow-x-auto">
         <div className="w-full flex items-center">
           <div className="font-black u-line-1">{title}</div>
+          {/* 新小说和linpx-novel的提示 */}
           {isNew && (
-            <img className="h-4 mx-2 rounded-sm object-contain" src={NewPng} />
+            <img className="h-4 ml-2 rounded-sm object-contain" src={NewPng} />
+          )}
+          {isLinpxNovel && (
+            <img
+              className="h-4 ml-1 rounded-sm object-contain"
+              src={InteractImg}
+            />
           )}
         </div>
         <div className="text-xs">

@@ -21,6 +21,7 @@ import NovelFooter from './components/NovelFooter/Tools';
 import NovelComment from './components/NovelFooter/Comment';
 import NovelAnalyse from './components/NovelHeader/Analyse';
 import { useRecordLastScroll } from '@/layouts';
+import { checkLinpxNovel } from './util';
 
 export const BORDER = '1px solid #ccc';
 
@@ -138,10 +139,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
     Number(canLike && like) -
     Number(!canLike && !like);
 
-  // 判断是否是linpx-novel
-  const desc = novelInfo.desc.toLowerCase();
-  const isLinpxNovel =
-    desc.includes('【linpx-novel】') || desc.includes('【linpxnovel】');
+  const isLinpxNovel = checkLinpxNovel(novelInfo);
 
   return (
     <div
