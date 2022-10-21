@@ -7,11 +7,12 @@ import { IFileInfo } from '.';
 import CodeEditor from './components/editor';
 import { fileApi } from './utils/fileSystem';
 import { openModal } from '@/components/LinpxModal';
-import CopySpan from '../components/CopySpan';
 import PostModal from './components/PostModal';
 import { getLinpxNovelShareInfo } from './utils';
 import LinpxNovel from './utils/LinpxNovel';
 import ErrorModal from './components/ErrorModal';
+import { copyTextAndToast } from '@/utils/clipboard';
+import classNames from 'classnames';
 
 export const useFileInfo = (fileId: string) => {
   const [fileInfo, setFileInfo] = useState<IFileInfo>();
@@ -39,6 +40,21 @@ const checkTextNoError = (text: string) => {
     return false;
   }
   return true;
+};
+
+const ButtonItem: React.FC<{
+  onClick: () => void;
+  className?: string;
+}> = ({ children, onClick, className }) => {
+  return (
+    <div
+      className={classNames('bg-gray-400 rounded-full py-1', className)}
+      style={{ width: '30%' }}
+      onClick={onClick}
+    >
+      {children}
+    </div>
+  );
 };
 
 export default function ({ location }: IRouteComponentProps) {
@@ -81,10 +97,27 @@ export default function ({ location }: IRouteComponentProps) {
   return (
     <PageLayout type="flex-grow" title="编辑交互小说" rightEle={<div />}>
       <div className="flex flex-col h-full">
-        <div className="flex">
+        <div className="text-sm text-gray-500">
+          <div
+            className="mt-2 mb-1 bg-red-600 rounded-xl mx-5 px-4 py-2 text-white"
+            style={{ boxShadow: '0 0 4px #888' }}
+          >
+            提示：文本仅临时存储在当前网址的本地缓存中，为避免数据遗失请及时备份。
+          </div>
+          {/* {release && (
+            <div className="my-1 px-4">
+              该作品已发布，点击
+              <CopySpan text={getLinpxNovelShareInfo(id).url}>
+                复制分享链接
+              </CopySpan>
+            </div>
+          )} */}
+        </div>
+        <div className="flex z-10" style={{ boxShadow: '0 2px 4px #ccc' }}>
           <Input
             placeholder="请输入标题"
             className="cover-antd-input"
+            style={{ border: 'none', boxShadow: 'none' }}
             maxLength={100}
             defaultValue={title}
             onChange={(e) =>
@@ -98,35 +131,21 @@ export default function ({ location }: IRouteComponentProps) {
             已保存
           </div>
         </div>
-        <div
-          className="text-sm text-gray-500"
-          style={{ padding: '0 6px 0 10px' }}
-        >
-          <div className="my-1">
-            提示：文本仅临时存储在当前网址的本地缓存中，为避免数据遗失请及时备份。
-            <CopySpan text={text}>全部复制</CopySpan>
-          </div>
-          {release && (
-            <div className="my-1">
-              该作品已发布，点击
-              <CopySpan text={getLinpxNovelShareInfo(id).url}>
-                复制分享链接
-              </CopySpan>
-            </div>
-          )}
-        </div>
-        <div className="flex-grow">
+        <div className="flex-grow overflow-y-scroll">
           <CodeEditor
             initText={text || '请输入正文'}
             setText={(value) => onFileInfoChange('text', value)}
           />
         </div>
         <div
-          className="flex justify-between text-2xl text-center"
-          style={{ borderTop: '2px solid #eee' }}
+          className="flex justify-around text-xl font-bold text-center py-2 h-18"
+          style={{ borderTop: '1px solid #ddd' }}
         >
-          <div
-            className="flex-grow py-2"
+          {
+            // todo:快捷标签
+          }
+          <ButtonItem
+            className="bg-gray-400"
             onClick={() => {
               const noError = checkTextNoError(text);
               if (noError && saved) {
@@ -135,10 +154,15 @@ export default function ({ location }: IRouteComponentProps) {
             }}
           >
             预览
-          </div>
-          <div className="w-0.5 h-full bg-gray-200" />
-          <div
-            className="flex-grow py-2 bg-gray-200"
+          </ButtonItem>
+          <ButtonItem
+            className="bg-linpx-blue text-white"
+            onClick={() => copyTextAndToast(text, '复制成功！')}
+          >
+            全部复制
+          </ButtonItem>
+          <ButtonItem
+            className="bg-linpx-orange text-white"
             onClick={() => {
               const noError = checkTextNoError(text);
               if (noError) {
@@ -154,7 +178,7 @@ export default function ({ location }: IRouteComponentProps) {
             }}
           >
             发布
-          </div>
+          </ButtonItem>
         </div>
       </div>
     </PageLayout>
