@@ -42,7 +42,9 @@ export default function ({ match }: IRouteComponentProps) {
   }
   return (
     <PageLayout title={fileInfo?.title || ''} rightEle={<div></div>}>
-      {fileInfo && <LinpxNovelWidget text={fileInfo.text} />}
+      <div className="px-4 py-2">
+        {fileInfo && <LinpxNovelWidget text={fileInfo.text} />}
+      </div>
     </PageLayout>
   );
 }

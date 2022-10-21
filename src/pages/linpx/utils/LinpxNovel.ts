@@ -1,4 +1,4 @@
-import { ITextInfo } from '../components/LinpxNovelWidget';
+import { IChoiceInfo, ITextInfo } from '../components/LinpxNovelWidget';
 import { checkNodeList } from './nodeListChecker';
 import {
   ChoiceNode,
@@ -9,7 +9,9 @@ import {
   TextNode,
 } from './nodeParser';
 
-export type IShowChoice = (choiceList: string[]) => Promise<number>;
+export type IShowChoice = (
+  choiceInfo: Omit<IChoiceInfo, 'onSelect'>,
+) => Promise<number>;
 export type IShowText = (textInfo: ITextInfo) => Promise<void>;
 export type NovelSettingType = keyof LinpxNovel['settingState'];
 
@@ -53,7 +55,7 @@ export default class LinpxNovel {
       const nextNode = this.nodeList[this.nodeIndex + 1];
       if (!nextNode || nextNode.type != 'choice') {
         const choiceList = this.choiceStack.map((i) => i.text);
-        const chosenIndex = await this.showChoice(choiceList);
+        const chosenIndex = await this.showChoice({ choiceList });
         // 选择了某个选项，如果该选项有跳转则跳转到对应位置
         const { onClickNode } = this.choiceStack[chosenIndex];
         // 完成了选择，清空选项组
@@ -197,10 +199,18 @@ export default class LinpxNovel {
     // 结尾分割线和按钮
     if (this.settingState['结尾按钮']) {
       await this.showText({
-        text: '----------------------- 结 束 -----------------------',
-        style: { textAlign: 'center' },
+        text: '~THE END~',
+        style: {
+          textAlign: 'center',
+          fontWeight: 900,
+          fontSize: 24,
+          margin: '14px 0',
+        },
       });
-      await this.showChoice(['重新开始']);
+      await this.showChoice({
+        choiceList: ['重新开始'],
+        buttonStyle: { backgroundColor: 'red' },
+      });
       this.clearText();
       this.start();
     }

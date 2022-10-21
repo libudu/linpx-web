@@ -13,6 +13,35 @@ const PaddingBottom = 200;
 // 触达底部的预留判断距离，数值越大空得越多，不可超过PaddingBottom
 const ReachBottomDistance = 0;
 
+// 选项列表
+export type IChoiceInfo = {
+  choiceList: string[];
+  onSelect: (index: number) => void;
+  buttonStyle?: React.CSSProperties;
+};
+const ChoiceList: React.FC<IChoiceInfo> = ({
+  choiceList,
+  onSelect,
+  buttonStyle,
+}) => {
+  return (
+    <BottomFadeIn>
+      <div className="flex justify-around">
+        {choiceList.map((text, index) => (
+          <div
+            key={index}
+            className="bg-linpx-orange text-white font-bold rounded-full py-1 w-1/3 my-2 text-center"
+            style={buttonStyle}
+            onClick={() => onSelect(index)}
+          >
+            {text}
+          </div>
+        ))}
+      </div>
+    </BottomFadeIn>
+  );
+};
+
 // todo: 销毁时似乎存在内存泄漏？novelInstance中的内容依旧运行着，只是提供的UI回调都失效了
 export default function ({
   text,
@@ -22,7 +51,10 @@ export default function ({
   containerRef?: React.RefObject<HTMLDivElement>;
 }) {
   const [textInfoList, setTextInfoList] = useState<ITextInfo[]>([]);
-  const [choiceList, setChoiceList] = useState<string[] | null>(null);
+  const [choiceInfo, setChoiceInfo] = useState<Omit<
+    IChoiceInfo,
+    'onSelect'
+  > | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // 避免useEffect闭包陷阱
@@ -66,8 +98,8 @@ export default function ({
           setTimeout(() => resolve(null), isBlank ? 100 : 400),
         );
       },
-      showChoice: async (choiceList) => {
-        setChoiceList(choiceList);
+      showChoice: async (choiceInfo) => {
+        setChoiceInfo(choiceInfo);
         const chosenIndex = await new Promise<number>(
           (resolve) => ((ref.current as any).refChoiceResolve = resolve),
         );
@@ -76,7 +108,7 @@ export default function ({
       clearText: async () => {
         // 清空选项和文字记录
         setTextInfoList([]);
-        setChoiceList(null);
+        setChoiceInfo(null);
       },
     });
     novelInstance.start();
@@ -98,24 +130,16 @@ export default function ({
             </div>
           </BottomFadeIn>
         ))}
-        {choiceList && (
-          <BottomFadeIn>
-            <div className="flex justify-around">
-              {choiceList.map((text, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-600 text-white rounded-lg py-2 px-4 my-2"
-                  onClick={() => {
-                    const choiceResolve = ref.current?.refChoiceResolve;
-                    choiceResolve && choiceResolve(index);
-                    setChoiceList(null);
-                  }}
-                >
-                  {text}
-                </div>
-              ))}
-            </div>
-          </BottomFadeIn>
+        {choiceInfo && (
+          <ChoiceList
+            buttonStyle={choiceInfo.buttonStyle}
+            choiceList={choiceInfo.choiceList}
+            onSelect={(index) => {
+              const choiceResolve = ref.current?.refChoiceResolve;
+              choiceResolve && choiceResolve(index);
+              setChoiceInfo(null);
+            }}
+          />
         )}
       </div>
     </div>
