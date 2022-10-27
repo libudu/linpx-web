@@ -20,6 +20,9 @@ import React from 'react';
 import HomeIntro from './components/HomeIntro';
 import HomeManager from './components/HomeManager';
 
+import BlackLogoPng from '@/assets/logo/black_logo.png';
+import WordLogoPng from '@/assets/logo/word_logo.png';
+
 export type IFileInfo = {
   id: string;
   title: string;
@@ -37,27 +40,19 @@ export interface IFileDetail extends IFileInfo {
 export default function ({ history }: React.PropsWithChildren<any>) {
   return (
     <PageLayout title="交互小说" rightEle={<div />}>
-      <div className="px-4">
-        {/* <div className="font-bold text-2xl">最近作品</div>
-        {[
-          '测试1',
-          '测试2（内容一样，凑数的）',
-          '测试3（内容一样，凑数的）',
-        ].map((title, index) => (
-          <div
-            key={index}
-            className="u-line-1 bg-gray-200 my-2 rounded-lg px-2 py-1"
-            onClick={() => history.push(`/linpx/run/example`)}
-          >
-            {title}
+      <div className="px-5">
+        <div className="text-center mt-12 mb-6">
+          <div className="text-4xl font-black">欢迎使用</div>
+          <div className="text-4xl font-black my-2">
+            <img className="w-7 mb-2" src={BlackLogoPng} />
+            <img className="w-24 mb-2 mx-2" src={WordLogoPng} />
+            Novel
           </div>
-        ))} */}
+          <div className="text-base">简单快捷的互动小说格式</div>
+        </div>
 
-        <div className="font-bold text-2xl my-1">Linpx-Novel简介</div>
-        <HomeIntro />
-
-        <div className="font-bold text-2xl mt-4">我也试试</div>
         <HomeManager />
+        <HomeIntro />
 
         <div className="font-bold text-2xl mt-4">Linpx-Novel教程（待完善）</div>
         <div>

@@ -26,12 +26,12 @@ const ChoiceList: React.FC<IChoiceInfo> = ({
 }) => {
   return (
     <BottomFadeIn>
-      <div className="flex justify-around">
+      <div className="flex justify-around flex-wrap">
         {choiceList.map((text, index) => (
           <div
             key={index}
-            className="bg-linpx-orange text-white font-bold rounded-full py-1 w-1/3 my-2 text-center"
-            style={buttonStyle}
+            className="bg-linpx-orange text-white font-bold rounded-full py-1 px-4 my-2 text-center whitespace-nowrap"
+            style={{ minWidth: '25%', ...buttonStyle }}
             onClick={() => onSelect(index)}
           >
             {text}
@@ -46,9 +46,11 @@ const ChoiceList: React.FC<IChoiceInfo> = ({
 export default function ({
   text,
   containerRef: parentContainerRef,
+  style,
 }: {
   text: string;
   containerRef?: React.RefObject<HTMLDivElement>;
+  style?: React.CSSProperties;
 }) {
   const [textInfoList, setTextInfoList] = useState<ITextInfo[]>([]);
   const [choiceInfo, setChoiceInfo] = useState<Omit<
@@ -115,7 +117,7 @@ export default function ({
   }, []);
 
   return (
-    <div className="h-full overflow-y-scroll" ref={containerRef}>
+    <div className="h-full overflow-y-scroll" style={style} ref={containerRef}>
       <div
         className="text-lg whitespace-pre-wrap"
         style={{ paddingBottom: PaddingBottom }}

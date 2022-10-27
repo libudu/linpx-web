@@ -27,21 +27,31 @@ export const introLinpxNovelText = `【标签 开始】
 
 const HomeIntro: React.FC = () => {
   return (
-    <div className="text-base">
-      <div>
+    <div className="mt-8">
+      <div className="text-xl flex font-black text-center mb-1">
+        <div className="mr-6 flex-grow">范例</div>
+        <div className="flex-grow">原文</div>
+      </div>
+      <div className="flex h-60 whitespace-pre-line text-base py-1">
+        <div
+          className="w-1/2 overflow-scroll rounded-xl px-2 py-1 mr-6"
+          style={{ boxShadow: '0 0 6px #888' }}
+        >
+          <LinpxNovelWidget style={{ zoom: 0.7 }} text={introLinpxNovelText} />
+        </div>
+        <div
+          className="w-1/2 overflow-scroll rounded-xl px-2 py-1"
+          style={{ boxShadow: '0 0 6px #888' }}
+        >
+          <div style={{ zoom: 0.7 }}>{introLinpxNovelText}</div>
+        </div>
+      </div>
+      {/* <div className="text-base">
         Linpx-Novel是一个增量的，声明式的，用于为小说添加简单动效、选项分支和流程控制的文本格式。
       </div>
       <div>
         在已有的小说文本中添加一些简单的、中文的标签即可实现上述效果。整体类似于简易中文版的inky。
-      </div>
-      <div>下面是一个简单示例：</div>
-      <div className="bg-gray-300 rounded-lg px-2 py-1 h-72 overflow-scroll mt-1">
-        <LinpxNovelWidget text={introLinpxNovelText} />
-      </div>
-      <div>对应的文本：</div>
-      <div className="whitespace-pre-line bg-gray-300 rounded-lg px-2 py-1 h-72 overflow-scroll text-base">
-        {introLinpxNovelText}
-      </div>
+      </div> */}
     </div>
   );
 };

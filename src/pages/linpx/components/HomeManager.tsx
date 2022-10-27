@@ -43,9 +43,9 @@ const HomeManager: React.FC = () => {
 
   return (
     <div>
-      <div className="flex justify-around mt-2">
+      <div className="flex justify-center mb-7 font-black">
         <div
-          className="bg-linpx-orange text-xl font-bold rounded-full py-2 px-8 text-center"
+          className="bg-linpx-orange text-xl rounded-full py-2 px-4 text-center mr-8"
           onClick={() =>
             createFileAndEdit({
               title: '新建样例文件',
@@ -53,29 +53,33 @@ const HomeManager: React.FC = () => {
             })
           }
         >
-          从样例创建
+          创建新文档
         </div>
         <div
-          className="bg-linpx-orange text-xl font-bold rounded-full py-2 px-6 text-center"
-          onClick={() => createFileAndEdit({ title: '新建空白文件', text: '' })}
+          className="bg-linpx-orange-unable text-xl rounded-full py-2 px-4 text-center"
+          onClick={() => {}}
         >
-          从空文件创建
+          查看教程(todo)
         </div>
       </div>
       <div>
         {fileInfoList.map(({ title, time, id, release }) => (
-          <div key={time} className="flex px-2 py-1">
+          <div
+            key={time}
+            className="flex align-middle pl-3 pr-1 py-1 rounded-full my-2.5 text-lg"
+            style={{ boxShadow: '0 0 4px #888' }}
+          >
             <div className="flex flex-grow" onClick={() => jumpEditPage(id)}>
               <div className="u-line-1 flex-grow">
-                {release && '*'}
+                {/* {release && '*'} */}
                 {title}
               </div>
-              <span className="text-sm leading-8 text-gray-400 whitespace-nowrap">
+              <div className="w-28 mt-0.5 text-base text-gray-400 whitespace-nowrap">
                 {time.slice(2, -3)}
-              </span>
+              </div>
             </div>
             <span
-              className="w-12 text-right flex-shrink-0"
+              className="ml-2 mr-0.5 w-7 h-7 text-center flex-shrink-0 rounded-full bg-gray-400"
               onClick={() => {
                 const result = confirm(`确认删除【${title}】吗？`);
                 if (result) {
@@ -84,7 +88,12 @@ const HomeManager: React.FC = () => {
                 }
               }}
             >
-              删除
+              <div
+                className="text-2xl text-white font-black relative"
+                style={{ top: -3.5 }}
+              >
+                ×
+              </div>
             </span>
           </div>
         ))}
