@@ -7,7 +7,7 @@ import { IFileInfo } from '.';
 import CodeEditor from './components/editor';
 import { fileApi } from './utils/fileSystem';
 import { openModal } from '@/components/LinpxModal';
-import PostModal from './components/PostModal';
+import PostModal, { CopyModal } from './components/PostModal';
 import { getLinpxNovelShareInfo } from './utils';
 import LinpxNovel from './utils/LinpxNovel';
 import ErrorModal from './components/ErrorModal';
@@ -48,7 +48,7 @@ const ButtonItem: React.FC<{
 }> = ({ children, onClick, className }) => {
   return (
     <div
-      className={classNames('bg-gray-400 rounded-full pb-2 pt-1.5', className)}
+      className={classNames('bg-gray-400 rounded-full pb-1.5 pt-1', className)}
       style={{ width: '30%' }}
       onClick={onClick}
     >
@@ -157,7 +157,12 @@ export default function ({ location }: IRouteComponentProps) {
           </ButtonItem>
           <ButtonItem
             className="bg-linpx-blue text-white"
-            onClick={() => copyTextAndToast(text, '复制成功！')}
+            onClick={() => {
+              copyTextAndToast(text, '复制成功！');
+              openModal({
+                children: <CopyModal />,
+              });
+            }}
           >
             全部复制
           </ButtonItem>

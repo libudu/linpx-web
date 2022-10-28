@@ -9,6 +9,7 @@ import CopySpan from '@/pages/components/CopySpan';
 import { useFileInfo } from '../edit';
 import { linpxNovelApi } from '@/api/linpx';
 import { getLinpxNovelShareInfo } from '../utils';
+import ExampleImg from '@/assets/default/linpxnovel-pixiv-example.png';
 
 const ModalWrapper: React.FC = ({ children }) => {
   return (
@@ -31,6 +32,34 @@ const LinpxButton: React.FC<{ onClick: () => void }> = ({
     >
       {children}
     </div>
+  );
+};
+
+export const CopyModal: React.FC = () => {
+  return (
+    <ModalWrapper>
+      <div className="text-2xl font-black text-center">复制成功</div>
+      <div className="text-sm text-center py-2">
+        可以自行备份，也可以上传pixiv
+      </div>
+      <div className="px-4 mt-3">
+        <img
+          className="w-full rounded-md"
+          style={{ boxShadow: '0 0 4px #888' }}
+          src={ExampleImg}
+        />
+      </div>
+      <div className="px-2 text-sm mt-4 mb-3">
+        <div>
+          在Pixiv“说明”栏目添加【Linpx 互动小说】或【Linpx
+          Novel】即可在Linpx网站中被识别为互动小说。
+        </div>
+        <div>（不限大小写和空格）</div>
+      </div>
+      <div className="flex justify-center">
+        <LinpxButton onClick={() => closeModal()}>好捏</LinpxButton>
+      </div>
+    </ModalWrapper>
   );
 };
 
@@ -124,8 +153,6 @@ const PostModal = ({
   );
 };
 
-export default PostModal;
-
 const PostSuccessModal = ({
   fileId,
   actionType,
@@ -192,3 +219,5 @@ const PostSuccessModal = ({
     </ModalWrapper>
   );
 };
+
+export default PostModal;
