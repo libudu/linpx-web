@@ -48,7 +48,7 @@ const ButtonItem: React.FC<{
 }> = ({ children, onClick, className }) => {
   return (
     <div
-      className={classNames('bg-gray-400 rounded-full py-1', className)}
+      className={classNames('bg-gray-400 rounded-full pb-2 pt-1.5', className)}
       style={{ width: '30%' }}
       onClick={onClick}
     >
@@ -138,7 +138,7 @@ export default function ({ location }: IRouteComponentProps) {
           />
         </div>
         <div
-          className="flex justify-around text-xl font-bold text-center py-2 h-18"
+          className="flex justify-around text-xl font-bold text-center py-2"
           style={{ borderTop: '1px solid #ddd' }}
         >
           {

@@ -40,7 +40,7 @@ const HomeIntro: React.FC = () => {
           <LinpxNovelWidget style={{ zoom: 0.7 }} text={introLinpxNovelText} />
         </div>
         <div
-          className="w-1/2 overflow-scroll rounded-xl px-2 py-1"
+          className="w-1/2 overflow-scroll rounded-xl px-2 py-1 leading-4"
           style={{ boxShadow: '0 0 6px #888' }}
         >
           <div style={{ zoom: 0.7 }}>{introLinpxNovelText}</div>
