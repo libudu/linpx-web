@@ -1,5 +1,5 @@
 /** todo:
- * 读者：可游玩的作品、小说列表中交互小说的视觉提示、交互小说的单独展示
+ * 读者：可游玩的作品、小说列表互动小说的视觉提示、互动小说的单独展示
  * 作者：介绍教程、编辑器功能
  *
  * 【节点功能相关】
@@ -54,7 +54,7 @@ const HomeBanner: React.FC = () => {
 
 export default function ({ history }: React.PropsWithChildren<any>) {
   return (
-    <PageLayout title="交互小说" rightEle={<div />}>
+    <PageLayout title="互动小说" rightEle={<div />}>
       <div className="px-5">
         <HomeBanner />
         <HomeManager />

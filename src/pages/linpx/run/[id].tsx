@@ -41,7 +41,7 @@ export default function ({ match }: IRouteComponentProps) {
     };
   }
   return (
-    <PageLayout title="交互小说预览" rightEle={<div></div>}>
+    <PageLayout title="互动小说预览" rightEle={<div></div>}>
       <div className="px-4 py-2">
         {fileInfo && <LinpxNovelWidget text={fileInfo.text} />}
       </div>

@@ -95,7 +95,7 @@ export default function ({ location }: IRouteComponentProps) {
   }
   const { release, title, id, text } = fileInfo;
   return (
-    <PageLayout type="flex-grow" title="编辑交互小说" rightEle={<div />}>
+    <PageLayout type="flex-grow" title="编辑互动小说" rightEle={<div />}>
       <div className="flex flex-col h-full">
         <div className="text-sm text-gray-500">
           <div
@@ -170,6 +170,7 @@ export default function ({ location }: IRouteComponentProps) {
                   children: (
                     <PostModal
                       fileInfo={fileInfo}
+                      actionType={release ? '更新' : '发布'}
                       onClose={() => refreshFileInfo()}
                     />
                   ),
