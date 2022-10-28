@@ -15,7 +15,7 @@ export const introLinpxNovelText = `【标签 开始】
 你去公园玩，碰到了很多猫猫狗狗，很开心。
 你碰到了一只头上顶着一片叶子的神奇的橘猫，他说能让你回到今天刚开始的时候。
 你的反应是：
-【选项】好呀，让今天重新开始吧【跳转标签 重新开始】
+【选项】好，让今天重新开始【跳转标签 重新开始】
 【选项】置之不理
 你没有理橘猫，橘猫识相地走开了。
 【结束】
@@ -24,6 +24,16 @@ export const introLinpxNovelText = `【标签 开始】
 【清空】
 【跳转标签 开始】
 `;
+
+const scaleRate = 0.7;
+const scaleStyle: React.CSSProperties = {
+  transform: `scale(${scaleRate})`,
+  position: 'relative',
+  top: `-${((1 / scaleRate - 1) / 2) * 100}%`,
+  left: `-${((1 / scaleRate - 1) / 2) * 100}%`,
+  width: `${(1 / scaleRate) * 100}%`,
+  height: `${(1 / scaleRate) * 100}%`,
+};
 
 const HomeIntro: React.FC = () => {
   return (
@@ -34,16 +44,20 @@ const HomeIntro: React.FC = () => {
       </div>
       <div className="flex h-60 whitespace-pre-line text-base py-1">
         <div
-          className="w-1/2 overflow-scroll rounded-xl px-2 py-1 mr-6"
-          style={{ boxShadow: '0 0 6px #888' }}
+          className="rounded-xl px-2 py-1"
+          style={{ boxShadow: '0 0 6px #888', width: '46%' }}
         >
-          <LinpxNovelWidget style={{ zoom: 0.7 }} text={introLinpxNovelText} />
+          <LinpxNovelWidget
+            style={{ ...scaleStyle }}
+            text={introLinpxNovelText}
+          />
         </div>
+        <div style={{ width: '8%' }} />
         <div
-          className="w-1/2 overflow-scroll rounded-xl px-2 py-1 leading-4"
-          style={{ boxShadow: '0 0 6px #888' }}
+          className="flex-shrink-0 overflow-y-scroll overflow-x-hidden rounded-xl px-2 py-1 leading-5"
+          style={{ boxShadow: '0 0 6px #888', width: '46%' }}
         >
-          <div style={{ zoom: 0.7 }}>{introLinpxNovelText}</div>
+          <div style={scaleStyle}>{introLinpxNovelText}</div>
         </div>
       </div>
       {/* <div className="text-base">
