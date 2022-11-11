@@ -4,10 +4,11 @@ import { INovelInfo } from '@/types';
 import { copyTextAndToast } from '@/utils/clipboard';
 
 const linkTypeList = [
-  {
-    name: 'QQ链接',
-    link: (id: string) => `http://167.179.105.30/pn/${id}`,
-  },
+  // 该ip已被屏蔽
+  // {
+  //   name: 'QQ链接',
+  //   link: (id: string) => `http://167.179.105.30/pn/${id}`,
+  // },
   {
     name: '游览器链接1',
     link: (id: string) => `http://furrynovel.xyz/pn/${id}`,

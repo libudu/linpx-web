@@ -18,6 +18,26 @@ export default function HomeBanner() {
   return (
     <Carousel autoplay dots={false}>
       <BannerBox>
+        <div>Linpx复活了！</div>
+        <div className="text-xs opacity-30">
+          10号一觉醒来pixiv和qqbot账号都炸了
+        </div>
+        <div className="text-xs opacity-30">我太难了</div>
+      </BannerBox>
+      <BannerBox>
+        <div
+          onClick={() => {
+            window.open('https://afdian.net/@orangecat');
+          }}
+        >
+          <div>爱发电赞助作者！</div>
+          <div>点击跳转！</div>
+        </div>
+      </BannerBox>
+      <BannerBox>
+        <img className="w-full h-full object-cover" src={MidAutumnImg} />
+      </BannerBox>
+      <BannerBox>
         <img
           className="w-full h-full object-cover"
           src={DragonIsland1Img}
@@ -36,24 +56,6 @@ export default function HomeBanner() {
             open('https://afdian.net/@apoto5', '_blank');
           }}
         />
-      </BannerBox>
-      <BannerBox>
-        <img className="w-full h-full object-cover" src={MidAutumnImg} />
-      </BannerBox>
-      <BannerBox>
-        <div>新功能还没动！</div>
-        <div>开摆了两个月！</div>
-        <div className="text-xs opacity-30">接下来会继续摆（雾</div>
-      </BannerBox>
-      <BannerBox>
-        <div
-          onClick={() => {
-            window.open('https://afdian.net/@orangecat');
-          }}
-        >
-          <div>爱发电赞助作者！</div>
-          <div>点击跳转！</div>
-        </div>
       </BannerBox>
       <BannerBox>
         <div
