@@ -161,7 +161,10 @@ export default function PixivUser(props: IRouteProps) {
     <PageLayout title={isCache ? '缓存作者' : '作者详情'}>
       <UserPart {...userInfo} />
       <div className="mx-6">
-        <NovelCardList novelIdList={userInfo.novels.slice().reverse()} />
+        <NovelCardList
+          novelIdList={userInfo.novels.slice().reverse()}
+          cache={isCache}
+        />
       </div>
     </PageLayout>
   );

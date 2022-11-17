@@ -20,10 +20,10 @@ export const usePixivNovel = (id: string, cache = false) => {
   return data;
 };
 
-export const usePixivNovelProfiles = (idList: string[]) => {
+export const usePixivNovelProfiles = (idList: string[], isCache = false) => {
   const { result, left } = cache.novelProfiles.getList(idList);
   const data = useLinpxSWR<INovelProfile[]>(
-    left && `/pixiv/novels?${list2query(left)}`,
+    left && `/pixiv/novels${isCache ? '/cache' : ''}?${list2query(left)}`,
   );
   // 全部从缓存取到了
   if (!left) return idList.map((id) => result[id]).filter((data) => data);

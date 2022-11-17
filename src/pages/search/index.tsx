@@ -146,9 +146,10 @@ function FavUsers({ word }: ISearch) {
 
 // 搜索pixiv作者
 function PixivUser({ word }: ISearch) {
+  const isCache = location.pathname.endsWith('/cache');
   const MaxPreviewUser = 3;
 
-  const data = usePixivSearchUser(word);
+  const data = usePixivSearchUser(word, 1, isCache);
   if (!data) return <></>;
 
   const { total, users } = data;
@@ -156,7 +157,7 @@ function PixivUser({ word }: ISearch) {
 
   return (
     <SearchBase
-      title={`全部用户 共${total}位`}
+      title={`${isCache ? '缓存用户' : '全部用户'}  共${total}位`}
       clickMorePath={
         total && total > MaxPreviewUser
           ? `/search/pixiv?word=${word}&type=user`

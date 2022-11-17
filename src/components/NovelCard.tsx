@@ -21,6 +21,7 @@ export default function NovelCard({
   likeCount = 0,
   commentCount,
 }: INovelProfile) {
+  const isCache = location.pathname.endsWith('/cache');
   // 一天之内发布的小说判定为新小说
   const createDateObj = new Date(createDate);
   const isNew =
@@ -29,7 +30,9 @@ export default function NovelCard({
   return (
     <div
       className="lp-shadow my-5 flex lp-bgcolor overflow-hidden w-full"
-      onClick={() => history.push(`/pixiv/novel/${id}`)}
+      onClick={() =>
+        history.push(`/pixiv/novel/${id}${isCache ? '/cache' : ''}`)
+      }
     >
       {/* 封面、点赞和评论数 */}
       <div className="lp-shadow w-20 bg-white m-3 overflow-hidden flex-shrink-0 flex flex-col items-center justify-center">

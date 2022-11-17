@@ -6,11 +6,12 @@ import NovelCard from './NovelCard';
 
 interface INovelCardList {
   novelIdList: string[];
+  cache?: boolean;
 }
 
 // 有一些场景可能不想要分页器，只想要多个小说卡片
-export function RenderNovelCards({ novelIdList }: INovelCardList) {
-  const novelProfiles = usePixivNovelProfiles(novelIdList);
+export function RenderNovelCards({ novelIdList, cache }: INovelCardList) {
+  const novelProfiles = usePixivNovelProfiles(novelIdList, cache);
 
   return (
     <>
@@ -24,7 +25,7 @@ export function RenderNovelCards({ novelIdList }: INovelCardList) {
 }
 
 // 带分页器的小说卡片列表
-export default function NovelCardList({ novelIdList }: INovelCardList) {
+export default function NovelCardList({ novelIdList, cache }: INovelCardList) {
   const pageSize = 24;
 
   const [page, setPage] = useState<number>(1);
@@ -35,7 +36,7 @@ export default function NovelCardList({ novelIdList }: INovelCardList) {
     page * pageSize,
     (page + 1) * pageSize,
   );
-  usePixivNovelProfiles(preloadNovelIds);
+  usePixivNovelProfiles(preloadNovelIds, cache);
 
   return (
     <PageViewer
@@ -43,7 +44,7 @@ export default function NovelCardList({ novelIdList }: INovelCardList) {
       total={novelIdList.length}
       onPageChange={setPage}
     >
-      <RenderNovelCards novelIdList={novelIds} />
+      <RenderNovelCards novelIdList={novelIds} cache={cache} />
     </PageViewer>
   );
 }

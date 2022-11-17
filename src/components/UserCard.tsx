@@ -15,10 +15,13 @@ interface IUserCard {
 export const NovelNumber = 5;
 
 function NovelCard({ coverUrl, title, id }: INovelProfile) {
+  const isCache = location.pathname.endsWith('/cache');
   return (
     <div
       className="lp-shadow mx-2 text-sm w-20 flex-grow-0 flex-shrink-0 overflow-hidden flex flex-col"
-      onClick={() => id && history.push(`/pixiv/novel/${id}`)}
+      onClick={() =>
+        id && history.push(`/pixiv/novel/${id}${isCache ? '/cache' : ''}`)
+      }
     >
       {coverUrl ? (
         <div className="h-20 w-full overflow-hidden flex items-center">
