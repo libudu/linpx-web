@@ -13,10 +13,14 @@ interface ISearchUser {
   total: number;
 }
 
-export const usePixivSearchUser = (userName: string, page: number = 1) => {
+export const usePixivSearchUser = (
+  userName: string,
+  page: number = 1,
+  cache = false,
+) => {
   userName = encodeURIComponent(userName);
   const data = useLinpxSWR<ISearchUser>(
-    `/pixiv/search/user/${userName}?page=${page}`,
+    `/pixiv/search/user/${userName}${cache ? '/cache' : ''}?page=${page}`,
   );
   data?.users.forEach((item) => {
     item.imageUrl = proxyImg(item.imageUrl);

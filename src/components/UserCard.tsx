@@ -35,6 +35,7 @@ function NovelCard({ coverUrl, title, id }: INovelProfile) {
 }
 
 export default function UserCard({ userInfo, novelInfoList }: IUserCard) {
+  const isCache = location.pathname.endsWith('/cache');
   const { name, imageUrl, id } = userInfo;
   if (novelInfoList.length < NovelNumber) {
     novelInfoList = novelInfoList.concat(
@@ -46,7 +47,9 @@ export default function UserCard({ userInfo, novelInfoList }: IUserCard) {
     <div className="my-3 p-2 lp-shadow lp-bgcolor flex overflow-x-scroll">
       <div
         className="mt-1 flex flex-col items-center flex-grow"
-        onClick={() => history.push(`/pixiv/user/${id}`)}
+        onClick={() =>
+          history.push(`/pixiv/user/${id}${isCache ? '/cache' : ''}`)
+        }
       >
         <AfdianAvatar id={id} size={76} imageUrl={imageUrl} />
         <div

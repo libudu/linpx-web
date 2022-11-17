@@ -20,12 +20,18 @@ import LinpicioLogoImg from '@/assets/logo/author_logo.png';
 
 // 获取Drawer项目
 export function getDrawerItem() {
-  return drawerItems.find((ele) => ele.link === location.pathname);
+  return drawerItems.find(({ link }) => {
+    if (typeof link === 'string') {
+      return link === location.pathname;
+    } else {
+      return link.includes(location.pathname);
+    }
+  });
 }
 
 export let currDrawerPath = '/';
 
-export const drawerItems: IDrawerItem[] = [
+const drawerItems: IDrawerItem[] = [
   {
     icon: <HomeOutlined />,
     title: '首页',
@@ -35,7 +41,7 @@ export const drawerItems: IDrawerItem[] = [
   {
     icon: <SearchOutlined />,
     title: '搜索',
-    link: '/search',
+    link: ['/search', '/search/cache'],
   },
   {
     icon: <SmileOutlined />,
@@ -82,7 +88,7 @@ export default function DrawerLayout({ children }: { children: any }) {
         onClickLeft={() => setOpen(!open)}
       />
       <Drawer
-        key={link}
+        key={typeof link === 'string' ? link : link[0]}
         className="flex-grow"
         style={{ position: 'relative' }}
         sidebarStyle={{ backgroundColor: 'white', width: '70%' }}
@@ -102,7 +108,7 @@ interface IDrawerItem {
   icon: any;
   title: string;
   header?: any;
-  link: string;
+  link: string | string[];
 }
 
 // 抽屉的sidebar
@@ -123,7 +129,8 @@ function DrawerSidebar({ onDrawerClose }: { onDrawerClose: any }) {
           className="pl-9 flex items-center active:bg-gray-200"
           style={{ paddingTop: '0.75vh', paddingBottom: '0.75vh' }}
           onClick={() => {
-            history.push(ele.link);
+            const link = ele.link;
+            history.push(typeof link === 'string' ? link : link[0]);
             onDrawerClose();
           }}
         >

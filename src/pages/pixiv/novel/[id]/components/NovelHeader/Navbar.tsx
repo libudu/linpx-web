@@ -16,6 +16,8 @@ const NovelNavbar: React.FC<NovelNavbarProps> = ({
   novelInfo,
   containerRef,
 }) => {
+  const isCache = location.pathname.endsWith('/cache');
+
   // navbar是否收起
   const [showPopover, setShowPopover] = useState(false);
   if (showNavbar == false && showPopover == true) {
@@ -56,7 +58,7 @@ const NovelNavbar: React.FC<NovelNavbarProps> = ({
             </Popover>
           }
           backTo={`/pixiv/user/${novelInfo.userId}`}
-          children="小说详情"
+          children={isCache ? '缓存小说' : '小说详情'}
         />
       </div>
     </div>

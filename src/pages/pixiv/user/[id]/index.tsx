@@ -145,18 +145,20 @@ function UserPart({
 }
 
 export default function PixivUser(props: IRouteProps) {
+  const isCache = location.pathname.endsWith('/cache');
+
   document.title = 'Linpx - 作者详情';
 
   const id = props.match.params.id;
 
-  const userInfo = usePixivUser(id);
+  const userInfo = usePixivUser(id, isCache);
 
   if (!userInfo) {
     return <ContentNavbar backTo="/">作者详情</ContentNavbar>;
   }
 
   return (
-    <PageLayout title="作者详情">
+    <PageLayout title={isCache ? '缓存作者' : '作者详情'}>
       <UserPart {...userInfo} />
       <div className="mx-6">
         <NovelCardList novelIdList={userInfo.novels.slice().reverse()} />

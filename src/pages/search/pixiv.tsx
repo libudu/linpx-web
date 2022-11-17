@@ -29,10 +29,11 @@ function SearchPixivNovels({ word }: ISearch) {
 }
 
 function SearchPixivUsers({ word }: ISearch) {
+  const isCache = location.pathname.endsWith('/cache');
   const pageSize = 6;
 
   const [page, setPage] = useState<number>();
-  const data = usePixivSearchUser(word, page);
+  const data = usePixivSearchUser(word, page, isCache);
 
   if (!data) return <UserCardSkeleton number={pageSize} />;
 
@@ -48,6 +49,7 @@ function SearchPixivUsers({ word }: ISearch) {
 }
 
 export default function SearchPixiv() {
+  const isCache = location.pathname.endsWith('/cache');
   const { word, type }: { word: string; type: 'novel' | 'user' } = history
     .location.query as any;
 
@@ -60,7 +62,7 @@ export default function SearchPixiv() {
 
   let title = '';
   if (type === 'novel') title = `全部小说 - ${word}`;
-  if (type === 'user') title = `全部用户 - ${word}`;
+  if (type === 'user') title = `${isCache ? '缓存用户' : '全部用户'} - ${word}`;
 
   return (
     <PageLayout title={title}>

@@ -10,8 +10,10 @@ import { list2query, proxyImg } from '@/utils/util';
 import { linpxRequest } from './util/request';
 import { useLinpxSWR } from '.';
 
-export const usePixivNovel = (id: string) => {
-  const data = useLinpxSWR<INovelInfo>(`/pixiv/novel/${id}`);
+export const usePixivNovel = (id: string, cache = false) => {
+  const data = useLinpxSWR<INovelInfo>(
+    `/pixiv/novel/${id}${cache ? '/cache' : ''}`,
+  );
   if (data) {
     data.coverUrl = proxyImg(data.coverUrl);
   }

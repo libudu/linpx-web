@@ -28,11 +28,13 @@ export const BORDER = '1px solid #ccc';
 let lastScrollTop = 0;
 
 const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
+  const isCache = location.pathname.endsWith('/cache');
+
   document.title = 'Linpx - 小说详情';
   const id = match.params.id;
 
   // 基本数据
-  const novelInfo = usePixivNovel(id);
+  const novelInfo = usePixivNovel(id, isCache);
   const favUser = useFavUserById(novelInfo?.userId || '');
   const afdianUrl = favUser?.afdian;
 
