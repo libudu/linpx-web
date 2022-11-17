@@ -198,6 +198,7 @@ function PixivNovel({ word }: ISearch) {
 }
 
 export default function Search() {
+  const isCache = location.pathname.endsWith('/cache');
   const [word, setWord] = useState(String(history.location.query?.word || ''));
   const [search, setSearch] = useState(false);
 
@@ -233,7 +234,7 @@ export default function Search() {
         initWord={word}
         onSearch={(newWord) => {
           if (newWord === word) return;
-          history.replace(`/search?word=${newWord}`);
+          history.replace(`/search${isCache ? '/cache' : ''}?word=${newWord}`);
           setWord(newWord);
         }}
       />
