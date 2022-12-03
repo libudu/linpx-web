@@ -18,13 +18,6 @@ export default function HomeBanner() {
   return (
     <Carousel autoplay dots={false}>
       <BannerBox>
-        <div>Linpx复活了！</div>
-        <div className="text-xs opacity-30">
-          10号一觉醒来pixiv和qqbot账号都炸了
-        </div>
-        <div className="text-xs opacity-30">我太难了</div>
-      </BannerBox>
-      <BannerBox>
         <div
           onClick={() => {
             window.open('https://afdian.net/@orangecat');

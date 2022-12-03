@@ -4,6 +4,7 @@ import { throttle } from 'lodash';
 import { FC, useState, useEffect, useRef, useCallback } from 'react';
 
 let lastCommentText = '';
+let isCommenting = false;
 
 // 评论模态框
 interface CommentModalProps {
@@ -54,9 +55,13 @@ const CommentModal: FC<CommentModalProps> = ({
         <span
           className="bg-yellow-500 py-1 px-2 rounded-md"
           onClick={async () => {
-            const success = await onSubmitThrottle(text);
-            if (success) {
-              lastCommentText = '';
+            if (isCommenting == false) {
+              isCommenting = true;
+              const success = await onSubmitThrottle(text);
+              if (success) {
+                lastCommentText = '';
+              }
+              isCommenting = false;
             }
           }}
         >
