@@ -5,7 +5,7 @@ const isHttps = window.location.protocol === 'https:';
 export let BASE_URL = '';
 if (isHttps) {
   BASE_URL = 'https://linpxapi.linpicio.com';
-} else if (process.env.NODE_ENV == 'development') {
+} else if (process.env.NODE_ENV == 'development' && false) {
   BASE_URL = 'http://45.76.105.135:3002';
 } else {
   BASE_URL = 'http://45.76.105.135:81';
