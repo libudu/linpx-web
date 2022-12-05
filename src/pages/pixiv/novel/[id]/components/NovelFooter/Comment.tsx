@@ -4,8 +4,9 @@ import CommentModal from '@/pages/pixiv/novel/[id]/components/NovelFooter/Commen
 import { INovelComment } from '@/types';
 import { stringHash } from '@/utils/util';
 import { Toast } from 'antd-mobile';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { BORDER } from '../..';
+import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 
 // 一条评论
 const Comment: React.FC<INovelComment & { index: number }> = ({
@@ -46,6 +47,10 @@ const NovelComment: React.FC<NovelCommentProps> = ({
   showInput,
   onCommentSuccess,
 }) => {
+  const [commentReverse, setCommentReverse] = useState(true);
+  if (commentReverse) {
+    comments = [...comments].reverse();
+  }
   // 发表评论后滚动到底部
   const endRef = useRef<HTMLDivElement>(null);
   if (!comments) return <></>;
@@ -53,6 +58,17 @@ const NovelComment: React.FC<NovelCommentProps> = ({
     <div className="w-full" style={{ borderTop: BORDER }} ref={commentRef}>
       <div className="flex justify-between items-baseline px-4 py-3">
         <div className="text-3xl font-black">评论</div>
+        {commentReverse ? (
+          <div onClick={() => setCommentReverse(false)}>
+            倒序
+            <CaretUpOutlined />
+          </div>
+        ) : (
+          <div onClick={() => setCommentReverse(true)}>
+            正序
+            <CaretDownOutlined />
+          </div>
+        )}
       </div>
       <div className="w-full">
         {comments.length === 0 ? (
@@ -64,7 +80,12 @@ const NovelComment: React.FC<NovelCommentProps> = ({
           </div>
         ) : (
           comments.map((comment, index) => {
-            return <Comment {...comment} index={index + 1} />;
+            return (
+              <Comment
+                {...comment}
+                index={commentReverse ? comments.length - index : index + 1}
+              />
+            );
           })
         )}
       </div>
