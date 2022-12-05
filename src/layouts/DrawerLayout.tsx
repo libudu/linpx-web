@@ -10,7 +10,7 @@ import {
   TagOutlined,
 } from '@ant-design/icons';
 import { Drawer } from 'antd-mobile';
-import { versionNum } from '@/update';
+import { versionNum } from '@/pages/update';
 
 import Navbar, { MenuIcon } from '@/components/Navbar';
 

@@ -4,7 +4,7 @@ import DragonIslandImg from '@/assets/banner/dragonisland.webp';
 import DragonIsland1Img from '@/assets/banner/dragonisland1.webp';
 import DragonIsland2Img from '@/assets/banner/dragonisland2.webp';
 import { event } from '@/utils/event';
-import { UpdateBanner } from '@/update';
+import { UpdateBanner } from '@/pages/update';
 
 const BannerBox: React.FC<{ defaultBg?: boolean }> = ({
   children,

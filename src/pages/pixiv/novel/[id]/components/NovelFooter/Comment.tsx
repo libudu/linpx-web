@@ -34,7 +34,7 @@ const Comment: React.FC<INovelComment & { index: number }> = ({
 interface NovelCommentProps {
   id: string;
   comments: INovelComment[];
-  commentRef: React.RefObject<HTMLDivElement>;
+  commentRef?: React.RefObject<HTMLDivElement>;
   showInput: boolean;
   onCommentSuccess: () => any;
 }
