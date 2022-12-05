@@ -5,6 +5,7 @@ import DragonIsland1Img from '@/assets/banner/dragonisland1.webp';
 import DragonIsland2Img from '@/assets/banner/dragonisland2.webp';
 import { event } from '@/utils/event';
 import { UpdateBanner } from '@/pages/update';
+import { isAfterStop, openStopModal } from '../biz/stop';
 
 const BannerBox: React.FC<{ defaultBg?: boolean }> = ({
   children,
@@ -31,6 +32,18 @@ const BannerBox: React.FC<{ defaultBg?: boolean }> = ({
 export default function HomeBanner() {
   return (
     <Carousel autoplay dots={false}>
+      {!isAfterStop() && (
+        <BannerBox defaultBg>
+          <div
+            onClick={() => {
+              openStopModal();
+            }}
+          >
+            <div>12月6日维护通知</div>
+            <div>点击查看</div>
+          </div>
+        </BannerBox>
+      )}
       <BannerBox defaultBg>
         <UpdateBanner />
       </BannerBox>

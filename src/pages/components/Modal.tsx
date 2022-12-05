@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 interface InfoModalProps {
   children: any;
-  title: string;
+  title: React.ReactNode;
   footer?: { text: string; onPress: () => any }[];
 }
 

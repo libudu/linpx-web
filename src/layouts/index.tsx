@@ -5,6 +5,7 @@ import { enterNewPath } from '@/utils/history';
 import { MountModal } from '@/components/LinpxModal';
 import { useRef, useEffect, useState, RefObject } from 'react';
 import FirstTips from '@/layouts/FirstTips';
+import Stop, { checkStop } from '@/pages/biz/stop';
 
 // 记录页面滚动位置
 const posMap: Record<string, number> = {};
@@ -85,6 +86,12 @@ export default function Layout({ children }: IRouteComponentProps) {
         }}
       />
     );
+  }
+
+  // 是否停服
+  const isStop = checkStop();
+  if (isStop) {
+    wrapperChildren = <Stop />;
   }
 
   return (

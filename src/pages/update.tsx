@@ -50,7 +50,7 @@ export const updateHistory: IHistoryItem[] = [
     content: '修复了首页直接点击tag跳转路由错误的问题',
   },
   {
-    date: '2022-5-15',
+    date: '2021-5-15',
     content: '增加隐藏功能下载小说',
   },
 ];
