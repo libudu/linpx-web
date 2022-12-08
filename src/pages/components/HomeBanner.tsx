@@ -31,7 +31,7 @@ const BannerBox: React.FC<{ defaultBg?: boolean }> = ({
 // 首页轮播图
 export default function HomeBanner() {
   return (
-    <Carousel autoplay dots={false}>
+    <Carousel className="overflow-x-hidden" autoplay dots={false}>
       {!isAfterStop() && (
         <BannerBox defaultBg>
           <div
@@ -55,6 +55,9 @@ export default function HomeBanner() {
         >
           <div>爱发电赞助作者！</div>
           <div>点击跳转！</div>
+          <div className="font-normal absolute right-2 -bottom-5 text-sm text-gray-500">
+            赞助服务器，回报纪念书签
+          </div>
         </div>
       </BannerBox>
       <BannerBox>
