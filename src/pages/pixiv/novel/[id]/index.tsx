@@ -22,6 +22,7 @@ import NovelComment from './components/NovelFooter/Comment';
 import NovelAnalyse from './components/NovelHeader/Analyse';
 import { useRecordLastScroll } from '@/layouts';
 import { checkLinpxNovel } from './util';
+import { pushHistory } from '@/pages/history';
 
 export const BORDER = '1px solid #ccc';
 
@@ -58,6 +59,12 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
 
   // 初始化
   useEffect(() => {
+    // 历史记录
+    pushHistory({
+      type: 'pn',
+      id,
+      time: Date.now(),
+    });
     // 阅读数增加
     readNovel(id);
     // 获取评论

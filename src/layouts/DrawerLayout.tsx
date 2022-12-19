@@ -8,6 +8,7 @@ import {
   SearchOutlined,
   ClockCircleOutlined,
   TagOutlined,
+  HistoryOutlined,
 } from '@ant-design/icons';
 import { Drawer } from 'antd-mobile';
 import { versionNum } from '@/pages/update';
@@ -58,6 +59,11 @@ const drawerItems: IDrawerItem[] = [
     icon: <TagOutlined />,
     title: '全站tag',
     link: '/pixiv/tags',
+  },
+  {
+    icon: <HistoryOutlined />,
+    title: '阅读历史',
+    link: '/history',
   },
   {
     icon: <ShareAltOutlined />,

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { history } from 'umi';
 import NovelComment from './pixiv/novel/[id]/components/NovelFooter/Comment';
 
-export const versionNum = 235;
+export const versionNum = 241;
 
 interface IHistoryItem {
   date: string;
@@ -14,6 +14,10 @@ interface IHistoryItem {
 }
 
 export const updateHistory: IHistoryItem[] = [
+  {
+    date: '2022-12-19',
+    content: '增加了阅读历史功能，该功能位于左侧弹出工具栏中。',
+  },
   {
     date: '2022-12-5',
     content: '增加了更新历史横幅和详情页面。评论增加了倒序查看功能',
