@@ -11,6 +11,7 @@ import DefaultBgImg from '@/assets/default/default_bg.jpg';
 import AfdianImg from '@/assets/icon/afdian.png';
 import { openAfdianUrl } from '@/pages/components/Afdian';
 import { getQQGroupShareLink } from '@/utils/util';
+import { copyTextAndToast } from '@/utils/clipboard';
 
 const MaxUserComment = 50;
 
@@ -105,9 +106,10 @@ function UserPart({
               {qqgroup && (
                 <div
                   className="px-2 py-0.5 bg-black text-sm text-white rounded-lg flex items-center"
-                  onClick={() =>
-                    window.open(getQQGroupShareLink(qqgroup), '_self')
-                  }
+                  onClick={() => {
+                    copyTextAndToast(qqgroup, '已复制作者群号');
+                    window.open(getQQGroupShareLink(qqgroup), '_self');
+                  }}
                 >
                   <span>作者Q群</span>
                 </div>
