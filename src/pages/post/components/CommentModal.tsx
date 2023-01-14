@@ -28,13 +28,11 @@ const CommentModal: React.FC<ICommentModal> = ({
   const [data, setData] = useState<any>({ text: '' });
   // 是否有回复
   data.reply = replyComment?.id;
-  const ref = useRef<HTMLTextAreaElement>(null);
   // 自动聚焦输入框
+  const ref = useRef<HTMLTextAreaElement>(null);
   useEffect(() => {
-    if (ref.current) {
-      ref.current.focus();
-    }
-  }, [ref.current]);
+    ref.current?.focus();
+  }, []);
   // 提交防抖
   const submitComment = useCallback(
     throttle(
@@ -44,7 +42,7 @@ const CommentModal: React.FC<ICommentModal> = ({
           return;
         }
         if (data.text.length > MAX_COMMENT_LENGTH) {
-          Toast.info('字数过多超过10000字，提交失败！');
+          Toast.info(`字数过多超过${MAX_COMMENT_LENGTH}字，提交失败！`);
           return;
         }
         const res = await postCommentApi.postOne({

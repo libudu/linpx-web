@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { history } from 'umi';
 import NovelComment from './pixiv/novel/[id]/components/NovelFooter/Comment';
 
-export const versionNum = 241;
+export const versionNum = 246;
 
 interface IHistoryItem {
   date: string;
@@ -17,7 +17,7 @@ export const updateHistory: IHistoryItem[] = [
   {
     date: '2023-1-15',
     content:
-      '增加了阅读历史清空功能，搜索推荐作者时不再区分大小写，小说评论支持回复',
+      '增加了阅读历史清空功能，搜索推荐作者时不再区分大小写，小说评论支持回复其他评论',
   },
   {
     date: '2022-12-19',

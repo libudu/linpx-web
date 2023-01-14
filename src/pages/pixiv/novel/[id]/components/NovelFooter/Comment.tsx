@@ -4,33 +4,62 @@ import CommentModal from '@/pages/pixiv/novel/[id]/components/NovelFooter/Commen
 import { INovelComment } from '@/types';
 import { stringHash } from '@/utils/util';
 import { Toast } from 'antd-mobile';
-import React, { useRef, useState } from 'react';
+import React, { ReactElement, useRef, useState } from 'react';
 import { BORDER } from '../..';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 
-// 一条评论
-const Comment: React.FC<INovelComment & { index: number }> = ({
-  content,
-  postTime,
+const CommentHeader = ({
   index,
   ip,
-  onClick,
+  postTime,
+}: {
+  index: number;
+  ip: string;
+  postTime: number;
 }) => {
-  const date = new Date(postTime);
-  const time =
-    date.toLocaleDateString('zh').replaceAll('/', '-') +
-    ' ' +
-    date.toLocaleTimeString('zh', { hour12: false });
+  const time = new Date(postTime).toLocaleString().slice(2, -3);
+  return (
+    <div className="text-lg">
+      <span className="font-bold">{index}F</span>
+      <span className="ml-2">{stringHash(ip)}</span>
+      <span className="ml-2 text-gray-300">{time}</span>
+    </div>
+  );
+};
+
+// 一条评论
+const Comment: React.FC<
+  INovelComment & { index: number; replyEle?: ReactElement }
+> = ({ content, postTime, index, ip, replyEle, onClick }) => {
   return (
     <div className="pl-4 pr-2 py-2" style={{ borderTop: BORDER }}>
-      <div className="text-lg mb-2">
-        <span className="font-bold">{index}F</span>
-        <span className="ml-2">{stringHash(ip)}</span>
-        <span className="ml-2 text-gray-300">{time}</span>
-      </div>
-      <div onClick={onClick} className="text-base px-2">
+      <CommentHeader index={index} ip={ip} postTime={postTime} />
+      {replyEle}
+      <div onClick={onClick} className="mt-1 text-base px-2">
         {content}
       </div>
+    </div>
+  );
+};
+
+// 评论中的回复元素
+const CommentReply: React.FC<{ comments: INovelComment[]; reply: string }> = (
+  props,
+) => {
+  const { comments, reply } = props;
+  const index = comments.findIndex(({ id }) => id === reply);
+  if (!reply || index === -1) {
+    return null;
+  }
+  const comment = comments[index];
+  const { ip, postTime, content } = comment;
+  return (
+    <div
+      className="mx-4 rounded-md px-2 py-1 my-1.5 lp-bgcolor"
+      style={{ boxShadow: '0 0 4px #aaa' }}
+    >
+      <CommentHeader index={index + 1} ip={ip} postTime={postTime} />
+      <div className="text-base px-2">{content}</div>
     </div>
   );
 };
@@ -46,18 +75,26 @@ interface NovelCommentProps {
 // 打开回复框
 const openCommentModal = ({
   novelId,
-  reply,
+  replyInfo,
   onCommentSuccess,
 }: {
   novelId: string;
-  reply?: string;
+  replyInfo?: {
+    reply: string;
+    comments: INovelComment[];
+  };
   onCommentSuccess: () => any;
 }) => {
   openModal({
     children: (
       <CommentModal
+        replyEle={replyInfo ? <CommentReply {...replyInfo} /> : undefined}
         onSubmit={async (content) => {
-          const res = await pixivNovelNewComment(novelId, content, reply);
+          const res = await pixivNovelNewComment(
+            novelId,
+            content,
+            replyInfo?.reply,
+          );
           if (res.error) {
             Toast.info('评论失败', 1.0, undefined, false);
             return false;
@@ -81,12 +118,10 @@ const NovelComment: React.FC<NovelCommentProps> = ({
   onCommentSuccess,
 }) => {
   const [commentReverse, setCommentReverse] = useState(true);
-  if (commentReverse) {
-    comments = [...comments].reverse();
-  }
   // 发表评论后滚动到底部
   const endRef = useRef<HTMLDivElement>(null);
   if (!comments) return <></>;
+  const orderComments = commentReverse ? [...comments].reverse() : comments;
   return (
     <div className="w-full" style={{ borderTop: BORDER }} ref={commentRef}>
       <div className="flex justify-between items-baseline px-4 py-3">
@@ -112,18 +147,22 @@ const NovelComment: React.FC<NovelCommentProps> = ({
             快来添加第一条评论吧
           </div>
         ) : (
-          comments.map((comment, index) => {
+          orderComments.map((comment) => {
             return (
               <Comment
-                index={commentReverse ? comments.length - index : index + 1}
+                index={comments.indexOf(comment) + 1}
                 {...comment}
                 onClick={() => {
                   openCommentModal({
                     novelId: id,
-                    reply: comment.id,
+                    replyInfo: {
+                      reply: comment.id,
+                      comments,
+                    },
                     onCommentSuccess,
                   });
                 }}
+                replyEle={<CommentReply comments={comments} {...comment} />}
               />
             );
           })
