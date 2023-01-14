@@ -95,6 +95,14 @@ export const usePixivNovelComments = (
   return data?.data;
 };
 
-export const pixivNovelNewComment = (id: string, text: string) => {
-  return linpxRequest(`/pixiv/novel/${id}/comment/new?text=${text}`, false);
+export const pixivNovelNewComment = (
+  id: string,
+  text: string,
+  reply?: string,
+) => {
+  const replyStr = reply ? `&reply=${reply}` : '';
+  return linpxRequest(
+    `/pixiv/novel/${id}/comment/new?text=${text}${replyStr}`,
+    false,
+  );
 };

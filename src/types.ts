@@ -109,4 +109,5 @@ export interface INovelComment {
   reply: string;
   postTime: number;
   ip: string;
+  onClick: () => any;
 }

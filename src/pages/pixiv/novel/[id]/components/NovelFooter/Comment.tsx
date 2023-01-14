@@ -14,6 +14,7 @@ const Comment: React.FC<INovelComment & { index: number }> = ({
   postTime,
   index,
   ip,
+  onClick,
 }) => {
   const date = new Date(postTime);
   const time =
@@ -27,7 +28,9 @@ const Comment: React.FC<INovelComment & { index: number }> = ({
         <span className="ml-2">{stringHash(ip)}</span>
         <span className="ml-2 text-gray-300">{time}</span>
       </div>
-      <div className="text-base px-2">{content}</div>
+      <div onClick={onClick} className="text-base px-2">
+        {content}
+      </div>
     </div>
   );
 };
@@ -39,6 +42,36 @@ interface NovelCommentProps {
   showInput: boolean;
   onCommentSuccess: () => any;
 }
+
+// 打开回复框
+const openCommentModal = ({
+  novelId,
+  reply,
+  onCommentSuccess,
+}: {
+  novelId: string;
+  reply?: string;
+  onCommentSuccess: () => any;
+}) => {
+  openModal({
+    children: (
+      <CommentModal
+        onSubmit={async (content) => {
+          const res = await pixivNovelNewComment(novelId, content, reply);
+          if (res.error) {
+            Toast.info('评论失败', 1.0, undefined, false);
+            return false;
+          } else {
+            Toast.info('评论成功', 1.0, undefined, false);
+            await onCommentSuccess();
+            closeModal();
+            return true;
+          }
+        }}
+      />
+    ),
+  });
+};
 
 const NovelComment: React.FC<NovelCommentProps> = ({
   id,
@@ -82,8 +115,15 @@ const NovelComment: React.FC<NovelCommentProps> = ({
           comments.map((comment, index) => {
             return (
               <Comment
-                {...comment}
                 index={commentReverse ? comments.length - index : index + 1}
+                {...comment}
+                onClick={() => {
+                  openCommentModal({
+                    novelId: id,
+                    reply: comment.id,
+                    onCommentSuccess,
+                  });
+                }}
               />
             );
           })
@@ -93,27 +133,15 @@ const NovelComment: React.FC<NovelCommentProps> = ({
       <div
         className="py-3 pl-6 text-gray-400 fixed linpx-width bg-white transition-all duration-500"
         style={{ borderTop: BORDER, bottom: showInput ? 0 : -100 }}
-        onClick={() =>
-          openModal({
-            children: (
-              <CommentModal
-                onSubmit={async (content) => {
-                  const res = await pixivNovelNewComment(id, content);
-                  if (res.error) {
-                    Toast.info('评论失败', 1.0, undefined, false);
-                    return false;
-                  } else {
-                    Toast.info('评论成功', 1.0, undefined, false);
-                    await onCommentSuccess();
-                    closeModal();
-                    endRef.current?.scrollIntoView({ behavior: 'smooth' });
-                    return true;
-                  }
-                }}
-              />
-            ),
-          })
-        }
+        onClick={() => {
+          openCommentModal({
+            novelId: id,
+            onCommentSuccess: async () => {
+              await onCommentSuccess();
+              endRef.current?.scrollIntoView({ behavior: 'smooth' });
+            },
+          });
+        }}
       >
         添加评论
       </div>

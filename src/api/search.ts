@@ -48,7 +48,7 @@ export const useSearchFavUser = (word: string) => {
   const data = useLinpxSWR<IMap<IFavUser>>('/fav/user');
   if (!data) return [];
   const idList = Object.values(data)
-    .filter(({ name }) => name.includes(word))
+    .filter(({ name }) => name.toLowerCase().includes(word.toLowerCase()))
     .map(({ id }) => id);
   return idList;
 };

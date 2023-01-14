@@ -15,8 +15,13 @@ interface IHistoryItem {
 
 export const updateHistory: IHistoryItem[] = [
   {
+    date: '2023-1-15',
+    content:
+      '增加了阅读历史清空功能，搜索推荐作者时不再区分大小写，小说评论支持回复',
+  },
+  {
     date: '2022-12-19',
-    content: '增加了阅读历史功能，该功能位于左侧弹出工具栏中。',
+    content: '增加了阅读历史功能，该功能位于左侧弹出导航栏中。',
   },
   {
     date: '2022-12-5',
@@ -83,7 +88,7 @@ export const UpdateBanner: React.FC = () => {
     <div className="mx-6" onClick={() => history.push('/update')}>
       <div className="text-xl">最近更新</div>
       {updateHistory.slice(0, 2).map((item) => (
-        <UpdateItem {...item} />
+        <UpdateItem key={item.content} {...item} />
       ))}
       <div className="ml-12 text-sm font-normal my-1 flex text-left">……</div>
     </div>
