@@ -77,9 +77,14 @@ const drawerItems: IDrawerItem[] = [
   },
 ];
 
+// todo: 重构，使用组合模式而非嵌套做页面层次布局
+export let _setRightEle: any;
+
 // 抽屉的整体页面布局
 export default function DrawerLayout({ children }: { children: any }) {
   const [open, setOpen] = useState(false);
+  const [rightEle, setRightEle] = useState();
+  _setRightEle = setRightEle;
 
   const drawerItem = getDrawerItem();
   if (!drawerItem) {
@@ -91,6 +96,7 @@ export default function DrawerLayout({ children }: { children: any }) {
     <div className="h-full flex flex-col">
       <Navbar
         leftEle={<MenuIcon />}
+        rightEle={rightEle}
         children={header || title}
         onClickLeft={() => setOpen(!open)}
       />
@@ -155,7 +161,6 @@ function DrawerSidebar({ onDrawerClose }: { onDrawerClose: any }) {
         </div>
         <img src={LinpicioLogoImg} className="w-24 absolute top-4 right-4" />
       </div>
-      <div></div>
     </div>
   );
 }
