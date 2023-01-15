@@ -24,8 +24,7 @@ export default function NovelCard({
   const isCache = location.pathname.endsWith('/cache');
   // 一天之内发布的小说判定为新小说
   const createDateObj = new Date(createDate);
-  const isNew =
-    (Date.now() - createDateObj.getTime()) / 1000 / 60 / 60 / 24 < 2;
+  const isNew = Date.now() - createDateObj.getTime() < 1000 * 60 * 60 * 24 * 2;
   const isLinpxNovel = checkLinpxNovel({ desc });
   return (
     <div

@@ -4,6 +4,7 @@ import { INovelComment } from '@/types';
 import { useEffect, useState } from 'react';
 import { history } from 'umi';
 import NovelComment from './pixiv/novel/[id]/components/NovelFooter/Comment';
+import NewPng from '@/assets/icon/new.png';
 
 export const versionNum = 246;
 
@@ -84,9 +85,19 @@ const UpdateItem: React.FC<IHistoryItem> = ({
 };
 
 export const UpdateBanner: React.FC = () => {
+  const lastUpdateDate = new Date(updateHistory[0].date);
+  const isNew = Date.now() - lastUpdateDate.getTime() < 1000 * 60 * 60 * 24 * 2;
   return (
     <div className="mx-6" onClick={() => history.push('/update')}>
-      <div className="text-xl">最近更新</div>
+      <div className="flex justify-center items-center text-xl">
+        最近更新
+        {isNew && (
+          <img
+            className="mt-0.5 h-4 ml-1 rounded-sm object-contain"
+            src={NewPng}
+          />
+        )}
+      </div>
       {updateHistory.slice(0, 2).map((item) => (
         <UpdateItem key={item.content} {...item} />
       ))}

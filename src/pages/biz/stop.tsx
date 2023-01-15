@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
 import { openInfoModal } from '../components/Modal';
 
+const STOP_START_TIME = '2022-12-6 1:1:1';
+const STOP_END_TIME = '2022-12-6 11:11:11';
+
 export const isAfterStop = () => {
-  const end = new Date('2022-12-6 11:11:11');
+  const end = new Date(STOP_END_TIME);
   const now = new Date();
   if (now > end) {
     return true;
@@ -11,8 +14,8 @@ export const isAfterStop = () => {
 };
 
 export const checkStop = () => {
-  const start = new Date('2022-12-6 1:1:1');
-  const end = new Date('2022-12-6 11:11:11');
+  const start = new Date(STOP_START_TIME);
+  const end = new Date(STOP_END_TIME);
   const now = new Date();
   if (
     location.host == 'linpx.linpicio.com' ||
