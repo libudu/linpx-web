@@ -4,6 +4,7 @@ import { LikeOutlined, MessageOutlined } from '@ant-design/icons';
 import NewPng from '@/assets/icon/new.png';
 import { checkLinpxNovel } from '@/pages/pixiv/novel/[id]/util';
 import InteractImg from '@/assets/icon/interact.png';
+import { processNovelDesc } from '@/pages/pixiv/novel/[id]/components/NovelHeader/Intro';
 
 // 最近小说页面
 // 作者详情页面
@@ -84,7 +85,7 @@ export default function NovelCard({
         <div
           className="text-sm u-line-3 overflow-hidden"
           style={{ pointerEvents: 'none' }}
-          dangerouslySetInnerHTML={{ __html: desc }}
+          dangerouslySetInnerHTML={{ __html: processNovelDesc(desc) }}
         />
       </div>
     </div>

@@ -48,6 +48,7 @@ export function stringHash(str: string) {
   return result;
 }
 
+// 群分享链接
 export const getQQGroupShareLink = (id: string | number) => {
   return `mqqwpa://card/show_pslcard?src_type=internal&version=1&uin=${id}&card_type=group&source=qrcode`;
 };

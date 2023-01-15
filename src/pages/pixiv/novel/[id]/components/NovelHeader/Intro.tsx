@@ -5,6 +5,11 @@ import { history } from 'umi';
 import { checkLinpxNovel } from '@/pages/pixiv/novel/[id]/util';
 import InteractImg from '@/assets/icon/interact.png';
 
+// 处理小说简介中的desc
+export const processNovelDesc = (desc: string) => {
+  return decodeURIComponent(desc).replaceAll('/jump.php?', '');
+};
+
 const NovelIntro: React.FC<INovelInfo> = ({
   coverUrl,
   title,
@@ -49,7 +54,7 @@ const NovelIntro: React.FC<INovelInfo> = ({
       </div>
       <div
         className="px-8 mt-1 text-base"
-        dangerouslySetInnerHTML={{ __html: desc }}
+        dangerouslySetInnerHTML={{ __html: processNovelDesc(desc) }}
       />
     </div>
   );

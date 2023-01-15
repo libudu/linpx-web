@@ -16,6 +16,11 @@ interface IHistoryItem {
 
 export const updateHistory: IHistoryItem[] = [
   {
+    date: '2023-1-16',
+    content:
+      '点击作者Q群时会复制群号，修复了小说简介中存在链接时点击跳转错误的问题',
+  },
+  {
     date: '2023-1-15',
     content:
       '增加了阅读历史清空功能，搜索推荐作者时不再区分大小写，小说评论支持回复其他评论',
