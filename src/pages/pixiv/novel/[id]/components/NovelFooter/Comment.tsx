@@ -1,10 +1,10 @@
-import { pixivNovelNewComment } from '@/api';
+import { getPixivNovelComments, pixivNovelNewComment } from '@/api';
 import { closeModal, openModal } from '@/components/LinpxModal';
 import CommentModal from '@/pages/pixiv/novel/[id]/components/NovelFooter/CommentModal';
 import { INovelComment } from '@/types';
 import { stringHash } from '@/utils/util';
 import { Toast } from 'antd-mobile';
-import React, { ReactElement, useRef, useState } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { BORDER } from '../..';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 
@@ -185,6 +185,29 @@ const NovelComment: React.FC<NovelCommentProps> = ({
         添加评论
       </div>
     </div>
+  );
+};
+
+export const NovelCommentById: React.FC<{
+  id: string;
+  showInput?: boolean;
+}> = ({ id, showInput = true }) => {
+  // 加载及刷新评论数据
+  const [comments, setComments] = useState<INovelComment[]>([]);
+  const refreshComments = async () => {
+    const comments = await getPixivNovelComments(id);
+    setComments(comments);
+  };
+  useEffect(() => {
+    refreshComments();
+  }, []);
+  return (
+    <NovelComment
+      id={id}
+      showInput={showInput}
+      comments={comments}
+      onCommentSuccess={refreshComments}
+    />
   );
 };
 

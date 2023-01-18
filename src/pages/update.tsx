@@ -1,9 +1,6 @@
-import { getPixivNovelComments } from '@/api';
 import PageLayout from '@/components/PageLayout';
-import { INovelComment } from '@/types';
-import { useEffect, useState } from 'react';
 import { history } from 'umi';
-import NovelComment from './pixiv/novel/[id]/components/NovelFooter/Comment';
+import { NovelCommentById } from './pixiv/novel/[id]/components/NovelFooter/Comment';
 import NewPng from '@/assets/icon/new.png';
 
 export const versionNum = 246;
@@ -114,15 +111,6 @@ export const UpdateBanner: React.FC = () => {
 const UPDATE_HISTORY_ID = '18849730';
 
 const UpdateHistory = () => {
-  // 加载及刷新评论数据
-  const [comments, setComments] = useState<INovelComment[]>([]);
-  const refreshComments = async () => {
-    const comments = await getPixivNovelComments(UPDATE_HISTORY_ID);
-    setComments(comments);
-  };
-  useEffect(() => {
-    refreshComments();
-  }, []);
   return (
     <PageLayout title="更新历史" rightEle={<></>}>
       <div className="m-4 ml-3">
@@ -130,13 +118,7 @@ const UpdateHistory = () => {
           <UpdateItem size="normal" {...item} />
         ))}
       </div>
-      <NovelComment
-        id={UPDATE_HISTORY_ID}
-        // commentRef={commentRef}
-        showInput={true}
-        comments={comments}
-        onCommentSuccess={refreshComments}
-      />
+      <NovelCommentById id={UPDATE_HISTORY_ID} />
     </PageLayout>
   );
 };
