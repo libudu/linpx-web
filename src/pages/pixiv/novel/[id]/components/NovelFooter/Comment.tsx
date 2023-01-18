@@ -150,6 +150,7 @@ const NovelComment: React.FC<NovelCommentProps> = ({
           orderComments.map((comment) => {
             return (
               <Comment
+                key={comment.id}
                 index={comments.indexOf(comment) + 1}
                 {...comment}
                 onClick={() => {

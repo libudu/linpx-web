@@ -5,24 +5,60 @@ import DragonIsland1Img from '@/assets/banner/dragonisland1.webp';
 import DragonIsland2Img from '@/assets/banner/dragonisland2.webp';
 import { event } from '@/utils/event';
 import { UpdateBanner } from '@/pages/update';
+import { history } from 'umi';
 
-const BannerBox: React.FC<{ defaultBg?: boolean }> = ({
+const BannerBox: React.FC<{
+  defaultBg?: boolean;
+  backgoundImg?: string;
+  clickJumpUrl?: string;
+  eventInfo?: any;
+}> = ({
   children,
   defaultBg = false,
+  backgoundImg,
+  clickJumpUrl,
+  eventInfo,
 }) => {
+  const onClick = () => {
+    // google analyse打点
+    eventInfo && event(eventInfo);
+    if (!clickJumpUrl) return;
+    if (clickJumpUrl.startsWith('http')) {
+      window.open(clickJumpUrl);
+    } else {
+      history.push(clickJumpUrl);
+    }
+  };
+  // 默认背景
+  if (defaultBg) {
+    children = (
+      <>
+        <img
+          className="absolute object-cover w-full h-full opacity-20"
+          src={MidAutumnImg}
+        />
+        <div className="z-10">{children}</div>
+      </>
+    );
+  }
+  // 指定背景
+  if (backgoundImg) {
+    children = (
+      <>
+        <img
+          className="absolute object-cover w-full h-full"
+          src={backgoundImg}
+        />
+        <div className="z-10">{children}</div>
+      </>
+    );
+  }
   return (
-    <div className="lp-bgcolor h-40 flex flex-col justify-center items-center font-black text-2xl text-center relative">
-      {defaultBg ? (
-        <>
-          <img
-            className="absolute object-cover w-full h-full opacity-20"
-            src={MidAutumnImg}
-          />
-          <div className="z-10">{children}</div>
-        </>
-      ) : (
-        children
-      )}
+    <div
+      className="lp-bgcolor h-40 flex flex-col justify-center items-center font-black text-2xl text-center relative"
+      onClick={onClick}
+    >
+      {children}
     </div>
   );
 };
@@ -36,18 +72,15 @@ export default function HomeBanner() {
       autoplaySpeed={5000}
       dots={false}
     >
-      <BannerBox>
-        <img className="w-full h-full object-cover" src={MidAutumnImg} />
+      <BannerBox clickJumpUrl="/notice?id=stop167ip">
+        <div>关于本站ip访问方式停用的通知</div>
       </BannerBox>
-      <BannerBox defaultBg>
+      <BannerBox backgoundImg={MidAutumnImg} />
+      <BannerBox defaultBg clickJumpUrl="/update">
         <UpdateBanner />
       </BannerBox>
-      <BannerBox defaultBg>
-        <div
-          onClick={() => {
-            window.open('https://afdian.net/@orangecat');
-          }}
-        >
+      <BannerBox defaultBg clickJumpUrl="https://afdian.net/@orangecat">
+        <div>
           <div>爱发电赞助作者！</div>
           <div>点击跳转！</div>
           <div className="font-normal absolute right-2 -bottom-5 text-sm text-gray-500">
@@ -55,32 +88,18 @@ export default function HomeBanner() {
           </div>
         </div>
       </BannerBox>
-      <BannerBox>
-        <img
-          className="w-full h-full object-cover"
-          src={DragonIsland1Img}
-          onClick={() => {
-            event({ category: 'game', action: '0ld_steam' });
-            open('https://store.steampowered.com/app/1554470/_/', '_blank');
-          }}
-        />
-      </BannerBox>
-      <BannerBox>
-        <img
-          className="w-full h-full object-cover"
-          src={DragonIsland2Img}
-          onClick={() => {
-            event({ category: 'game', action: '0ld_afdian' });
-            open('https://afdian.net/@apoto5', '_blank');
-          }}
-        />
-      </BannerBox>
-      <BannerBox defaultBg>
-        <div
-          onClick={() => {
-            window.open('https://github.com/libudu/linpx-web');
-          }}
-        >
+      <BannerBox
+        eventInfo={{ category: 'game', action: '0ld_steam' }}
+        clickJumpUrl="https://store.steampowered.com/app/1554470/_/"
+        backgoundImg={DragonIsland1Img}
+      />
+      <BannerBox
+        eventInfo={{ category: 'game', action: '0ld_afdian' }}
+        clickJumpUrl="https://afdian.net/@apoto5"
+        backgoundImg={DragonIsland2Img}
+      />
+      <BannerBox defaultBg clickJumpUrl="https://github.com/libudu/linpx-web">
+        <div>
           <div>开源github地址！</div>
           <div>来点个star⭐吧！</div>
         </div>

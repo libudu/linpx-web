@@ -1,19 +1,11 @@
 import { useEffect } from 'react';
-import { openInfoModal } from '../components/Modal';
+import { registerAppInterceptor } from '.';
+import { openInfoModal } from '../pages/components/Modal';
 
 const STOP_START_TIME = '2022-12-6 1:1:1';
 const STOP_END_TIME = '2022-12-6 11:11:11';
 
-export const isAfterStop = () => {
-  const end = new Date(STOP_END_TIME);
-  const now = new Date();
-  if (now > end) {
-    return true;
-  }
-  return false;
-};
-
-export const checkStop = () => {
+const checkStop = () => {
   const start = new Date(STOP_START_TIME);
   const end = new Date(STOP_END_TIME);
   const now = new Date();
@@ -28,7 +20,7 @@ export const checkStop = () => {
   return false;
 };
 
-export const openStopModal = () => {
+const openStopModal = () => {
   openInfoModal({
     title: (
       <>
@@ -60,4 +52,7 @@ const Stop = () => {
   return <div />;
 };
 
-export default Stop;
+registerAppInterceptor({
+  check: checkStop,
+  render: () => <Stop />,
+});

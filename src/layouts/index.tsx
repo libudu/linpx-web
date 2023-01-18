@@ -4,20 +4,23 @@ import { InfoModal } from '@/pages/components/Modal';
 import { enterNewPath } from '@/utils/history';
 import { MountModal } from '@/components/LinpxModal';
 import { useRef, useEffect, useState, RefObject } from 'react';
-import FirstTips from '@/layouts/FirstTips';
-import Stop, { checkStop } from '@/pages/biz/stop';
+
+// 拦截器，在网页启动前执行一些拦截
+interface AppInterceptor {
+  check: () => boolean;
+  render: (refresh: () => void) => JSX.Element;
+}
+const appInterceptorList: AppInterceptor[] = [];
+export const registerAppInterceptor = (interceptor: AppInterceptor) => {
+  appInterceptorList.push(interceptor);
+};
+// 目前使用的拦截器
+require('./FirstTips');
+require('./Stop');
 
 // 记录页面滚动位置
 const posMap: Record<string, number> = {};
 (window as any).posMap = posMap;
-
-// 初次使用弹出提示框，防爬虫
-const getJumpConfirm = () => {
-  return Boolean(JSON.parse(localStorage.getItem('jumpConfirm') || 'false'));
-};
-const setJumpConfirm = (state: boolean) => {
-  localStorage.setItem('jumpConfirm', JSON.stringify(state));
-};
 
 export const useRecordLastScroll = (ref: RefObject<any>, deps: any[] = []) => {
   useEffect(() => {
@@ -74,24 +77,14 @@ export default function Layout({ children }: IRouteComponentProps) {
   // 小说页面中因为需要监控onScroll事件来自动伸缩，所以内部单独实现位置记录功能
   useRecordLastScroll(ref, [children]);
 
-  // 第一次访问进行安全提示，避免狗腾讯的爬虫封禁
-  const jumpConfirm = getJumpConfirm();
-  const [jumpConfirmState, setJumpConfirmState] = useState(jumpConfirm);
-  if (!jumpConfirmState) {
-    wrapperChildren = (
-      <FirstTips
-        onConfirm={() => {
-          setJumpConfirmState(true);
-          setJumpConfirm(true);
-        }}
-      />
-    );
-  }
-
-  // 是否停服
-  const isStop = checkStop();
-  if (isStop) {
-    wrapperChildren = <Stop />;
+  const [refreshNum, setRefreshNum] = useState(0);
+  for (let { check, render } of appInterceptorList) {
+    // 是否被拦截
+    const isIntercepted = check();
+    if (isIntercepted) {
+      wrapperChildren = render(() => setRefreshNum(refreshNum + 1));
+      break;
+    }
   }
 
   return (

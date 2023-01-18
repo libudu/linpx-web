@@ -90,7 +90,7 @@ export const UpdateBanner: React.FC = () => {
   const lastUpdateDate = new Date(updateHistory[0].date);
   const isNew = Date.now() - lastUpdateDate.getTime() < 1000 * 60 * 60 * 24 * 2;
   return (
-    <div className="mx-6" onClick={() => history.push('/update')}>
+    <div className="mx-6">
       <div className="flex justify-center items-center text-xl">
         最近更新
         {isNew && (

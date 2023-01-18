@@ -1,5 +1,6 @@
 import { closeInfoModal, openInfoModal } from '../pages/components/Modal';
 import ConfuseLinpicioImg from '@/assets/linpicio/Confuse.jpg';
+import { registerAppInterceptor } from '.';
 
 const FirstTips: React.FC<{ onConfirm: () => any }> = ({ onConfirm }) => {
   openInfoModal({
@@ -15,4 +16,25 @@ const FirstTips: React.FC<{ onConfirm: () => any }> = ({ onConfirm }) => {
   return <div />;
 };
 
-export default FirstTips;
+// 初次使用弹出提示框，防爬虫
+const hasJumpConfirm = () => {
+  return Boolean(JSON.parse(localStorage.getItem('jumpConfirm') || 'false'));
+};
+const setJumpConfirm = (state: boolean) => {
+  localStorage.setItem('jumpConfirm', JSON.stringify(state));
+};
+
+// 第一次访问进行安全提示，避免狗腾讯的爬虫封禁
+registerAppInterceptor({
+  check: () => !hasJumpConfirm(),
+  render: (refresh) => {
+    return (
+      <FirstTips
+        onConfirm={() => {
+          refresh();
+          setJumpConfirm(true);
+        }}
+      />
+    );
+  },
+});
