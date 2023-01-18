@@ -7,6 +7,7 @@ import InteractImg from '@/assets/icon/interact.png';
 
 // 处理小说简介中的desc
 export const processNovelDesc = (desc: string) => {
+  desc = desc.replaceAll('%', '%25');
   return decodeURIComponent(desc).replaceAll('/jump.php?', '');
 };
 
