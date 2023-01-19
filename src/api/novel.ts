@@ -99,10 +99,12 @@ export const pixivNovelNewComment = (
   id: string,
   text: string,
   reply?: string,
+  isEmpty?: boolean,
 ) => {
   const replyStr = reply ? `&reply=${reply}` : '';
+  const emptyStr = isEmpty ? `&type=empty` : '';
   return linpxRequest(
-    `/pixiv/novel/${id}/comment/new?text=${text}${replyStr}`,
+    `/pixiv/novel/${id}/comment/new?text=${text}${replyStr}${emptyStr}`,
     false,
   );
 };

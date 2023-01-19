@@ -13,7 +13,7 @@ const NoticeContent: Record<
 > = {
   stop167ip: {
     ele: <Stop167IpNotice />,
-    commentId: '1000000000',
+    commentId: '1000000001',
   },
 };
 
@@ -28,7 +28,7 @@ const Notice: React.FC = () => {
   return (
     <PageLayout title="通知" rightEle={<></>}>
       <div className="m-4 ml-3">{ele}</div>
-      <NovelCommentById id={commentId} />
+      <NovelCommentById isEmpty id={commentId} />
     </PageLayout>
   );
 };

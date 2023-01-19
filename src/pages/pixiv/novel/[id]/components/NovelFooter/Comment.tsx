@@ -67,6 +67,7 @@ const CommentReply: React.FC<{ comments: INovelComment[]; reply: string }> = (
 interface NovelCommentProps {
   id: string;
   comments: INovelComment[];
+  isEmpty?: boolean;
   commentRef?: React.RefObject<HTMLDivElement>;
   showInput: boolean;
   onCommentSuccess: () => any;
@@ -76,6 +77,7 @@ interface NovelCommentProps {
 const openCommentModal = ({
   novelId,
   replyInfo,
+  isEmpty,
   onCommentSuccess,
 }: {
   novelId: string;
@@ -83,6 +85,7 @@ const openCommentModal = ({
     reply: string;
     comments: INovelComment[];
   };
+  isEmpty?: boolean;
   onCommentSuccess: () => any;
 }) => {
   openModal({
@@ -94,6 +97,7 @@ const openCommentModal = ({
             novelId,
             content,
             replyInfo?.reply,
+            isEmpty,
           );
           if (res.error) {
             Toast.info('评论失败', 1.0, undefined, false);
@@ -112,6 +116,7 @@ const openCommentModal = ({
 
 const NovelComment: React.FC<NovelCommentProps> = ({
   id,
+  isEmpty,
   comments,
   commentRef,
   showInput,
@@ -156,6 +161,7 @@ const NovelComment: React.FC<NovelCommentProps> = ({
                 onClick={() => {
                   openCommentModal({
                     novelId: id,
+                    isEmpty,
                     replyInfo: {
                       reply: comment.id,
                       comments,
@@ -176,6 +182,7 @@ const NovelComment: React.FC<NovelCommentProps> = ({
         onClick={() => {
           openCommentModal({
             novelId: id,
+            isEmpty,
             onCommentSuccess: async () => {
               await onCommentSuccess();
               endRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -191,8 +198,9 @@ const NovelComment: React.FC<NovelCommentProps> = ({
 
 export const NovelCommentById: React.FC<{
   id: string;
+  isEmpty?: boolean;
   showInput?: boolean;
-}> = ({ id, showInput = true }) => {
+}> = ({ id, showInput = true, isEmpty }) => {
   // 加载及刷新评论数据
   const [comments, setComments] = useState<INovelComment[]>([]);
   const refreshComments = async () => {
@@ -205,6 +213,7 @@ export const NovelCommentById: React.FC<{
   return (
     <NovelComment
       id={id}
+      isEmpty={isEmpty}
       showInput={showInput}
       comments={comments}
       onCommentSuccess={refreshComments}
