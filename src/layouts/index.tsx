@@ -4,6 +4,7 @@ import { InfoModal } from '@/pages/components/Modal';
 import { enterNewPath } from '@/utils/history';
 import { MountModal } from '@/components/LinpxModal';
 import { useRef, useEffect, useState, RefObject } from 'react';
+import { use167IpStopModal } from '@/pages/biz/167ip';
 
 // 拦截器，在网页启动前执行一些拦截
 interface AppInterceptor {
@@ -86,6 +87,9 @@ export default function Layout({ children }: IRouteComponentProps) {
       break;
     }
   }
+
+  // 通知
+  use167IpStopModal();
 
   return (
     // 最外层框架，灰色

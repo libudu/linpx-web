@@ -73,7 +73,8 @@ export default function HomeBanner() {
       dots={false}
     >
       <BannerBox clickJumpUrl="/notice?id=stop167ip">
-        <div>关于本站ip访问方式停用的通知</div>
+        <div>通知</div>
+        <div>本站即将停用ip访问方式</div>
       </BannerBox>
       <BannerBox backgoundImg={MidAutumnImg} />
       <BannerBox defaultBg clickJumpUrl="/update">
