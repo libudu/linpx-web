@@ -10,6 +10,9 @@
 # production
 /dist
 
+# 包含服务器密码
+/deploy
+
 # misc
 .DS_Store
 
