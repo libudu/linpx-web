@@ -15,9 +15,12 @@ const appInterceptorList: AppInterceptor[] = [];
 export const registerAppInterceptor = (interceptor: AppInterceptor) => {
   appInterceptorList.push(interceptor);
 };
+
 // 目前使用的拦截器
-require('./FirstTips');
-require('./Stop');
+// 需要申请google adscene，暂时取消首屏提示
+// require('./FirstTips');
+// 已经过期了的停服通知
+// require('./Stop');
 
 // 记录页面滚动位置
 const posMap: Record<string, number> = {};
