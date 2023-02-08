@@ -37,7 +37,7 @@ const BannerBox: React.FC<{
           className="absolute object-cover w-full h-full opacity-20"
           src={MidAutumnImg}
         />
-        <div className="z-10">{children}</div>
+        <div className="z-10 w-full h-full">{children}</div>
       </>
     );
   }
@@ -49,7 +49,7 @@ const BannerBox: React.FC<{
           className="absolute object-cover w-full h-full"
           src={backgoundImg}
         />
-        <div className="z-10">{children}</div>
+        <div className="z-10 w-full h-full">{children}</div>
       </>
     );
   }
@@ -67,27 +67,23 @@ const BannerBox: React.FC<{
 export default function HomeBanner() {
   return (
     <Carousel
-      className="overflow-x-hidden"
+      className="overflow-x-hidden overflow-y-visible"
       autoplay
       autoplaySpeed={5000}
       dots={false}
     >
-      <BannerBox clickJumpUrl="/notice?id=stop167ip">
-        <div>通知</div>
-        <div>本站即将停用ip访问方式</div>
+      <BannerBox defaultBg clickJumpUrl="https://afdian.net/@orangecat">
+        <div className="w-full h-full relative flex flex-col justify-center items-center">
+          <div>爱发电赞助作者！</div>
+          <div>点击跳转！</div>
+          <div className="font-normal absolute right-1 bottom-1 text-sm text-gray-500">
+            赞助服务器，回报纪念书签
+          </div>
+        </div>
       </BannerBox>
       <BannerBox backgoundImg={MidAutumnImg} />
       <BannerBox defaultBg clickJumpUrl="/update">
         <UpdateBanner />
-      </BannerBox>
-      <BannerBox defaultBg clickJumpUrl="https://afdian.net/@orangecat">
-        <div>
-          <div>爱发电赞助作者！</div>
-          <div>点击跳转！</div>
-          <div className="font-normal absolute right-2 -bottom-5 text-sm text-gray-500">
-            赞助服务器，回报纪念书签
-          </div>
-        </div>
       </BannerBox>
       <BannerBox
         eventInfo={{ category: 'game', action: '0ld_steam' }}
@@ -100,7 +96,7 @@ export default function HomeBanner() {
         backgoundImg={DragonIsland2Img}
       />
       <BannerBox defaultBg clickJumpUrl="https://github.com/libudu/linpx-web">
-        <div>
+        <div className="h-full w-full flex flex-col justify-center items-center">
           <div>开源github地址！</div>
           <div>来点个star⭐吧！</div>
         </div>
