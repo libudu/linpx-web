@@ -8,7 +8,7 @@ import { useRef, useEffect, useState, RefObject } from 'react';
 // 拦截器，在网页启动前执行一些拦截
 interface AppInterceptor {
   check: () => boolean;
-  render: (refresh: () => void) => JSX.Element;
+  render: (refresh: () => void, children: JSX.Element) => JSX.Element;
 }
 const appInterceptorList: AppInterceptor[] = [];
 export const registerAppInterceptor = (interceptor: AppInterceptor) => {
@@ -85,7 +85,7 @@ export default function Layout({ children }: IRouteComponentProps) {
     // 是否被拦截
     const isIntercepted = check();
     if (isIntercepted) {
-      wrapperChildren = render(() => setRefreshNum(refreshNum + 1));
+      wrapperChildren = render(() => setRefreshNum(refreshNum + 1), children);
       break;
     }
   }

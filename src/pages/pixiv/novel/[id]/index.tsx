@@ -23,6 +23,7 @@ import NovelAnalyse from './components/NovelHeader/Analyse';
 import { useRecordLastScroll } from '@/layouts';
 import { checkLinpxNovel } from './util';
 import { pushHistory } from '@/pages/history';
+import { fromReadResource, getAddShelfScheme } from '@/pages/biz/readresource';
 
 export const BORDER = '1px solid #ccc';
 
@@ -164,6 +165,16 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
         novelInfo={novelInfo}
         containerRef={ref}
       />
+      {fromReadResource && (
+        <div
+          className="w-full py-2 bg-white absolute bottom-0 bg-linpx-orange text-center text-3xl font-bold"
+          onClick={() => {
+            window.open(getAddShelfScheme(id));
+          }}
+        >
+          添加到书源
+        </div>
+      )}
       {novelInfo && (
         <>
           <NovelIntro {...novelInfo} {...novelAnalyse} />
