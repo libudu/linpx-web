@@ -13,6 +13,11 @@ interface IHistoryItem {
 
 export const updateHistory: IHistoryItem[] = [
   {
+    date: '2023-2-16',
+    content:
+      '增加网站小图标；提供了对于阅读应用将小说添加到书架的支持；倒序查看评论时发表评论后，会向上滚动查看最新评论而非向下滚动。',
+  },
+  {
     date: '2023-1-16',
     content:
       '点击作者Q群时会复制群号，修复了小说简介中存在链接时点击跳转错误的问题',
@@ -81,7 +86,7 @@ const UpdateItem: React.FC<IHistoryItem> = ({
       key={content}
     >
       <div className={`font-bold flex-shrink-0 ${dateWidth}`}>{dateStr}</div>
-      <div>{content}</div>
+      <div className="u-line-2">{content}</div>
     </div>
   );
 };

@@ -8,11 +8,29 @@ export function getAppWidth() {
   return Math.min(448, document.documentElement.clientWidth);
 }
 
+// 检验元素是否在视口内
+export const isElementVisible = (el: HTMLElement) => {
+  const rect = el.getBoundingClientRect();
+  const vWidth = window.innerWidth || document.documentElement.clientWidth;
+  const vHeight = window.innerHeight || document.documentElement.clientHeight;
+  if (
+    rect.right < 0 ||
+    rect.bottom < 0 ||
+    rect.left > vWidth ||
+    rect.top > vHeight
+  ) {
+    return false;
+  }
+  return true;
+};
+
+// 以每天作为随机数种子
 const day = Math.ceil(new Date().getTime() / 1000 / 60 / 60 / 24 + 0.333333);
 export function randomByDay(seed: number) {
   return ((seed * day + 49297) % 233280) / 233280;
 }
 
+// 字符串列表变成查询参数
 export const list2query = (itemList: string[], keyName = 'ids') => {
   return itemList.map((item) => `${keyName}[]=${item}`).join('&');
 };
