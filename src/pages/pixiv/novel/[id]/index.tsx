@@ -172,7 +172,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
             window.open(getAddShelfScheme(id));
           }}
         >
-          添加到书源
+          添加到书架
         </div>
       )}
       {novelInfo && (
@@ -210,7 +210,8 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
                 commentRef={commentRef}
                 showInput={showInput}
                 comments={comments}
-                onCommentSuccess={() => refreshComments()}
+                onCommentSuccess={refreshComments}
+                onCommentDelete={refreshComments}
               />
             </>
           )}

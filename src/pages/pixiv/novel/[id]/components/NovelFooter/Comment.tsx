@@ -1,12 +1,16 @@
-import { getPixivNovelComments, pixivNovelNewComment } from '@/api';
+import {
+  deletePixivNovelComment,
+  getPixivNovelComments,
+  pixivNovelNewComment,
+} from '@/api';
 import { closeModal, openModal } from '@/components/LinpxModal';
 import CommentModal from '@/pages/pixiv/novel/[id]/components/NovelFooter/CommentModal';
 import { INovelComment } from '@/types';
-import { stringHash } from '@/utils/util';
 import { Toast } from 'antd-mobile';
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { BORDER } from '../..';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
+import { isAdmin } from '@/utils/admin';
 
 const CommentHeader = ({
   index,
@@ -21,7 +25,7 @@ const CommentHeader = ({
   return (
     <div className="text-lg">
       <span className="font-bold">{index}F</span>
-      <span className="ml-2">{stringHash(ip)}</span>
+      <span className="ml-2">{ip}</span>
       <span className="ml-2 text-gray-300">{time}</span>
     </div>
   );
@@ -29,11 +33,26 @@ const CommentHeader = ({
 
 // 一条评论
 const Comment: React.FC<
-  INovelComment & { index: number; replyEle?: ReactElement }
-> = ({ content, postTime, index, ip, replyEle, onClick }) => {
+  INovelComment & {
+    index: number;
+    replyEle?: ReactElement;
+    onDelete?: () => void;
+  }
+> = ({ content, postTime, index, ip, replyEle, onClick, onDelete }) => {
+  const showDelete = isAdmin();
   return (
     <div className="pl-4 pr-2 py-2" style={{ borderTop: BORDER }}>
-      <CommentHeader index={index} ip={ip} postTime={postTime} />
+      <div className="flex justify-between">
+        <CommentHeader index={index} ip={ip} postTime={postTime} />
+        {showDelete && (
+          <div
+            className="text-base pr-4 rounded-lg cursor-pointer"
+            onClick={onDelete}
+          >
+            删除
+          </div>
+        )}
+      </div>
       {replyEle}
       <div onClick={onClick} className="mt-1 text-base px-2">
         {content}
@@ -71,6 +90,7 @@ interface NovelCommentProps {
   commentRef?: React.RefObject<HTMLDivElement>;
   showInput: boolean;
   onCommentSuccess: () => any;
+  onCommentDelete: () => void;
 }
 
 // 打开回复框
@@ -121,6 +141,7 @@ const NovelComment: React.FC<NovelCommentProps> = ({
   commentRef,
   showInput,
   onCommentSuccess,
+  onCommentDelete,
 }) => {
   const [commentReverse, setCommentReverse] = useState(true);
   // 发表评论后滚动到底部
@@ -168,6 +189,10 @@ const NovelComment: React.FC<NovelCommentProps> = ({
                     },
                     onCommentSuccess,
                   });
+                }}
+                onDelete={async () => {
+                  await deletePixivNovelComment(comment.id);
+                  await onCommentDelete();
                 }}
                 replyEle={<CommentReply comments={comments} {...comment} />}
               />
@@ -217,6 +242,7 @@ export const NovelCommentById: React.FC<{
       showInput={showInput}
       comments={comments}
       onCommentSuccess={refreshComments}
+      onCommentDelete={refreshComments}
     />
   );
 };

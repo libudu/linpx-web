@@ -9,6 +9,7 @@ import cache from './util/cache';
 import { list2query, proxyImg } from '@/utils/util';
 import { linpxRequest } from './util/request';
 import { useLinpxSWR } from '.';
+import { getPassword } from '@/utils/admin';
 
 export const usePixivNovel = (id: string, cache = false) => {
   const data = useLinpxSWR<INovelInfo>(
@@ -106,5 +107,11 @@ export const pixivNovelNewComment = (
   return linpxRequest(
     `/pixiv/novel/${id}/comment/new?text=${text}${replyStr}${emptyStr}`,
     false,
+  );
+};
+
+export const deletePixivNovelComment = (commentId: string) => {
+  return linpxRequest(
+    `/pixiv/novel/123/comment/admin/delete?commentId=${commentId}&password=${getPassword()}`,
   );
 };
