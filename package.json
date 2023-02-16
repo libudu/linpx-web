@@ -3,7 +3,7 @@
   "scripts": {
     "start": "set PORT=81 && umi dev",
     "build": "umi build",
-    "deploy": "npx tsx ./deploy/index.ts",
+    "deploy": "umi build && npx tsx ./deploy/index.ts",
     "postinstall": "umi generate tmp",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
     "test": "umi-test",
