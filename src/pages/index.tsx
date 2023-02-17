@@ -15,6 +15,7 @@ import HomeBanner from './components/HomeBanner';
 import SearchBar from '../components/SearchBar';
 
 import { useRDF } from './biz/rdf';
+import KemonoGameIntro from './biz/kemonoGameIntro';
 
 let lastUserInfo: IUserInfo[] = Array(8).fill({
   imageUrl: '',
@@ -142,6 +143,17 @@ const TransLinkContent: React.FC = () => {
   );
 };
 
+const KemonoGameContent = () => {
+  return (
+    <>
+      <ContentTitle left="友情链接" right="" />
+      <ContentBox>
+        <KemonoGameIntro />
+      </ContentBox>
+    </>
+  );
+};
+
 const IndexPage = () => {
   document.title = 'Linpx - 首页';
 
@@ -155,7 +167,8 @@ const IndexPage = () => {
         <FavUserContent />
         <RecentNovelContent />
         <LinpxTagContent />
-        <TransLinkContent />
+        {/* <TransLinkContent /> */}
+        <KemonoGameContent />
       </div>
     </>
   );

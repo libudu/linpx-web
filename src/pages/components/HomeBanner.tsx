@@ -6,6 +6,7 @@ import DragonIsland2Img from '@/assets/banner/dragonisland2.webp';
 import { event } from '@/utils/event';
 import { UpdateBanner } from '@/pages/update';
 import { history } from 'umi';
+import { KemonoGameBannerIntro } from '../biz/kemonoGameIntro';
 
 const BannerBox: React.FC<{
   defaultBg?: boolean;
@@ -81,10 +82,13 @@ export default function HomeBanner() {
           </div>
         </div>
       </BannerBox>
-      <BannerBox backgoundImg={MidAutumnImg} />
+      <BannerBox>
+        <KemonoGameBannerIntro />
+      </BannerBox>
       <BannerBox defaultBg clickJumpUrl="/update">
         <UpdateBanner />
       </BannerBox>
+      <BannerBox backgoundImg={MidAutumnImg} />
       <BannerBox
         eventInfo={{ category: 'game', action: '0ld_steam' }}
         clickJumpUrl="https://store.steampowered.com/app/1554470/_/"

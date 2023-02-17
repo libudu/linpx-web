@@ -1,5 +1,4 @@
 import PageLayout from '@/components/PageLayout';
-import { history } from 'umi';
 import { NovelCommentById } from './pixiv/novel/[id]/components/NovelFooter/Comment';
 import NewPng from '@/assets/icon/new.png';
 
@@ -13,9 +12,13 @@ interface IHistoryItem {
 
 export const updateHistory: IHistoryItem[] = [
   {
+    date: '2023-2-17',
+    content: '新增了兽人控游戏库的宣传栏和友情链接',
+  },
+  {
     date: '2023-2-16',
     content:
-      '增加网站小图标；提供了对于阅读应用将小说添加到书架的支持；倒序查看评论时发表评论后，会向上滚动查看最新评论而非向下滚动。',
+      '增加网站小图标；提供了对于阅读应用将小说添加到书架的支持；倒序查看评论时发表评论后，会向上滚动查看最新评论而非向下滚动',
   },
   {
     date: '2023-1-16',
@@ -29,7 +32,7 @@ export const updateHistory: IHistoryItem[] = [
   },
   {
     date: '2022-12-19',
-    content: '增加了阅读历史功能，该功能位于左侧弹出导航栏中。',
+    content: '增加了阅读历史功能，该功能位于左侧弹出导航栏中',
   },
   {
     date: '2022-12-5',
