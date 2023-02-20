@@ -3,6 +3,7 @@ import MidAutumnImg from '@/assets/banner/midautumn.jpg';
 import DragonIslandImg from '@/assets/banner/dragonisland.webp';
 import DragonIsland1Img from '@/assets/banner/dragonisland1.webp';
 import DragonIsland2Img from '@/assets/banner/dragonisland2.webp';
+import LinpxBadge from '@/assets/logo/badge.png';
 import { event } from '@/utils/event';
 import { UpdateBanner } from '@/pages/update';
 import { history } from 'umi';
@@ -67,44 +68,48 @@ const BannerBox: React.FC<{
 // 首页轮播图
 export default function HomeBanner() {
   return (
-    <Carousel
-      className="overflow-x-hidden overflow-y-visible"
-      autoplay
-      autoplaySpeed={5000}
-      dots={false}
-    >
-      <BannerBox defaultBg clickJumpUrl="https://afdian.net/@orangecat">
-        <div className="w-full h-full relative flex flex-col justify-center items-center">
-          <div>爱发电赞助作者！</div>
-          <div>点击跳转！</div>
-          <div className="font-normal absolute right-1 bottom-1 text-sm text-gray-500">
-            赞助服务器，回报纪念书签
+    <div className="relative">
+      <Carousel
+        className="overflow-x-hidden overflow-y-visible"
+        autoplay
+        autoplaySpeed={5000}
+        dots={false}
+      >
+        <BannerBox defaultBg clickJumpUrl="https://afdian.net/@orangecat">
+          <div className="w-full h-full relative flex flex-col justify-center items-center">
+            <div>爱发电赞助作者！</div>
+            <div>点击跳转！</div>
           </div>
-        </div>
-      </BannerBox>
-      <BannerBox>
-        <KemonoGameBannerIntro />
-      </BannerBox>
-      <BannerBox defaultBg clickJumpUrl="/update">
-        <UpdateBanner />
-      </BannerBox>
-      <BannerBox backgoundImg={MidAutumnImg} />
-      <BannerBox
-        eventInfo={{ category: 'game', action: '0ld_steam' }}
-        clickJumpUrl="https://store.steampowered.com/app/1554470/_/"
-        backgoundImg={DragonIsland1Img}
+        </BannerBox>
+        <BannerBox>
+          <KemonoGameBannerIntro />
+        </BannerBox>
+        <BannerBox defaultBg clickJumpUrl="/update">
+          <UpdateBanner />
+        </BannerBox>
+        <BannerBox backgoundImg={MidAutumnImg} />
+        <BannerBox
+          eventInfo={{ category: 'game', action: '0ld_steam' }}
+          clickJumpUrl="https://store.steampowered.com/app/1554470/_/"
+          backgoundImg={DragonIsland1Img}
+        />
+        <BannerBox
+          eventInfo={{ category: 'game', action: '0ld_afdian' }}
+          clickJumpUrl="https://afdian.net/@apoto5"
+          backgoundImg={DragonIsland2Img}
+        />
+        <BannerBox defaultBg clickJumpUrl="https://github.com/libudu/linpx-web">
+          <div className="h-full w-full flex flex-col justify-center items-center">
+            <div>开源github地址！</div>
+            <div>来点个star⭐吧！</div>
+          </div>
+        </BannerBox>
+      </Carousel>
+      <img
+        className="w-16 h-16 absolute right-2 -bottom-4 z-10"
+        src={LinpxBadge}
+        onClick={() => window.open('https://afdian.net/@orangecat')}
       />
-      <BannerBox
-        eventInfo={{ category: 'game', action: '0ld_afdian' }}
-        clickJumpUrl="https://afdian.net/@apoto5"
-        backgoundImg={DragonIsland2Img}
-      />
-      <BannerBox defaultBg clickJumpUrl="https://github.com/libudu/linpx-web">
-        <div className="h-full w-full flex flex-col justify-center items-center">
-          <div>开源github地址！</div>
-          <div>来点个star⭐吧！</div>
-        </div>
-      </BannerBox>
-    </Carousel>
+    </div>
   );
 }
