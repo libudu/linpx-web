@@ -72,7 +72,7 @@ const drawerItems: IDrawerItem[] = [
   },
   {
     icon: <HeartOutlined />,
-    title: '赞助我们',
+    title: '赞助名单',
     link: '/support',
   },
 ];

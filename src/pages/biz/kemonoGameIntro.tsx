@@ -48,7 +48,11 @@ export const KemonoGameBannerIntro = () => {
         <div className="flex justify-center items-center">
           <KemonoGameIcon size={60} />
           <div className="ml-2">
-            <div className="font-bold text-xl leading-6">兽人控游戏库</div>
+            <div className="font-bold text-xl leading-6">
+              <a onClick={(e) => e.preventDefault()} href={KemonoGameLink}>
+                兽人控游戏库
+              </a>
+            </div>
             <div className="text-base">kemono.games</div>
           </div>
         </div>
@@ -69,7 +73,11 @@ const KemonoGameIntro = () => {
       <div className="flex justify-center items-center">
         <KemonoGameIcon size={60} />
         <div className="ml-2">
-          <div className="font-bold text-xl leading-6">兽人控游戏库</div>
+          <div className="font-bold text-xl leading-6">
+            <a onClick={(e) => e.preventDefault()} href={KemonoGameLink}>
+              兽人控游戏库
+            </a>
+          </div>
           <div className="text-base">kemono.games</div>
         </div>
       </div>
