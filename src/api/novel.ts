@@ -11,6 +11,15 @@ import { linpxRequest } from './util/request';
 import { useLinpxSWR } from '.';
 import { getPassword } from '@/utils/admin';
 
+export const requestPixivNovel = async (id: string, cache = false) => {
+  const path = `/pixiv/novel/${id}${cache ? '/cache' : ''}`;
+  const data = await linpxRequest<INovelInfo>(path);
+  if (data) {
+    data.coverUrl = proxyImg(data.coverUrl);
+  }
+  return data;
+};
+
 export const usePixivNovel = (id: string, cache = false) => {
   const data = useLinpxSWR<INovelInfo>(
     `/pixiv/novel/${id}${cache ? '/cache' : ''}`,

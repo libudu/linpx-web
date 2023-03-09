@@ -168,9 +168,9 @@ const IndexPage = () => {
         <SearchBar onSearch={(word) => history.push(`/search?word=${word}`)} />
         <FavUserContent />
         <RecentNovelContent />
+        <HavingSomething />
         <LinpxTagContent />
         {/* <TransLinkContent /> */}
-        {/* <HavingSomething /> */}
         <FriendlyLinks />
       </div>
     </>
