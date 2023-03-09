@@ -4,17 +4,19 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { openInfoModal } from './Modal';
 
 // 内容标题
-export function ContentTitle({
+export const ContentTitle = ({
   left,
-  right = '查看全部',
   clickInfo,
+  right,
+  rightText = '查看全部',
   clickRightPath,
 }: {
-  left: any;
-  right?: any;
+  left: React.ReactChild;
   clickInfo?: any;
-  clickRightPath?: any;
-}) {
+  right?: React.ReactChild;
+  rightText?: string;
+  clickRightPath?: string;
+}) => {
   return (
     <div className="mb-3 mt-6 flex items-end">
       <div className="font-black text-3xl pl-2">
@@ -32,16 +34,19 @@ export function ContentTitle({
         )}
       </div>
       <div className="text-base text-right pr-2 flex-grow">
-        <span
-          style={{ borderBottom: '1px solid black' }}
-          onClick={() => history.push(clickRightPath)}
-        >
-          {right}
-        </span>
+        {right}
+        {!right && (
+          <span
+            style={{ borderBottom: '1px solid black' }}
+            onClick={() => clickRightPath && history.push(clickRightPath)}
+          >
+            {rightText}
+          </span>
+        )}
       </div>
     </div>
   );
-}
+};
 
 export function ContentBox({
   children,

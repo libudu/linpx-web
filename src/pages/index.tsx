@@ -16,6 +16,8 @@ import SearchBar from '../components/SearchBar';
 
 import { useRDF } from './biz/rdf';
 import KemonoGameIntro from './biz/kemonoGameIntro';
+import HavingSomething from './components/HavingSomething';
+import { showSupport } from './config';
 
 let lastUserInfo: IUserInfo[] = Array(8).fill({
   imageUrl: '',
@@ -120,7 +122,7 @@ const TransLinkContent: React.FC = () => {
     <>
       <ContentTitle
         left="生成LINPX链接"
-        right=""
+        rightText=""
         clickInfo={
           <div className="text-base">
             <div>将pixiv链接转为linpx</div>
@@ -143,10 +145,10 @@ const TransLinkContent: React.FC = () => {
   );
 };
 
-const KemonoGameContent = () => {
+const FriendlyLinks = () => {
   return (
     <>
-      <ContentTitle left="友情链接" right="" />
+      <ContentTitle left="友情链接" rightText="" />
       <ContentBox>
         <KemonoGameIntro />
       </ContentBox>
@@ -168,7 +170,8 @@ const IndexPage = () => {
         <RecentNovelContent />
         <LinpxTagContent />
         {/* <TransLinkContent /> */}
-        <KemonoGameContent />
+        {/* <HavingSomething /> */}
+        <FriendlyLinks />
       </div>
     </>
   );

@@ -7,6 +7,7 @@ import { event } from '@/utils/event';
 import { isRecentlyUpdated, UpdateBanner } from '@/pages/update';
 import { history } from 'umi';
 import { KemonoGameBannerIntro } from '../biz/kemonoGameIntro';
+import { showSupport } from '../config';
 
 const BannerBox: React.FC<{
   defaultBg?: boolean;
@@ -74,12 +75,14 @@ export default function HomeBanner() {
         autoplaySpeed={5000}
         dots={false}
       >
-        <BannerBox defaultBg clickJumpUrl="https://afdian.net/@orangecat">
-          <div className="w-full h-full relative flex flex-col justify-center items-center">
-            <div>爱发电赞助作者！</div>
-            <div>点击跳转！</div>
-          </div>
-        </BannerBox>
+        {showSupport && (
+          <BannerBox defaultBg clickJumpUrl="https://afdian.net/@orangecat">
+            <div className="w-full h-full relative flex flex-col justify-center items-center">
+              <div>爱发电赞助作者！</div>
+              <div>点击跳转！</div>
+            </div>
+          </BannerBox>
+        )}
         <BannerBox>
           <KemonoGameBannerIntro />
         </BannerBox>
@@ -106,11 +109,13 @@ export default function HomeBanner() {
           </div>
         </BannerBox>
       </Carousel>
-      <img
-        className="w-16 h-16 absolute right-2 -bottom-4 z-10"
-        src={LinpxBadge}
-        onClick={() => window.open('https://afdian.net/@orangecat')}
-      />
+      {showSupport && (
+        <img
+          className="w-16 h-16 absolute right-2 -bottom-4 z-10"
+          src={LinpxBadge}
+          onClick={() => window.open('https://afdian.net/@orangecat')}
+        />
+      )}
     </div>
   );
 }

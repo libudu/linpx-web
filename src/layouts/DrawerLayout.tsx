@@ -18,6 +18,7 @@ import BlackLogoPng from '@/assets/logo/black_logo.png';
 import WordLogoPng from '@/assets/logo/word_logo.png';
 import HeaderLogoPNG from '@/assets/icon/logo.png';
 import LinpicioLogoImg from '@/assets/logo/author_logo.png';
+import { showSupport } from '@/pages/config';
 
 // 获取Drawer项目
 export function getDrawerItem() {
@@ -69,12 +70,14 @@ const drawerItems: IDrawerItem[] = [
     title: '关于LINPX',
     link: '/about',
   },
-  {
+];
+
+showSupport &&
+  drawerItems.push({
     icon: <HeartOutlined />,
     title: '赞助名单',
     link: '/support',
-  },
-];
+  });
 
 // todo: 重构，使用组合模式而非嵌套做页面层次布局
 export let _setRightEle: any;
