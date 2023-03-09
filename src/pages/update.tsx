@@ -1,4 +1,3 @@
-import PageLayout from '@/components/PageLayout';
 import { NovelCommentById } from './pixiv/novel/[id]/components/NovelFooter/Comment';
 import NewPng from '@/assets/icon/new.png';
 
@@ -94,19 +93,21 @@ const UpdateItem: React.FC<IHistoryItem> = ({
   );
 };
 
-export const UpdateBanner: React.FC = () => {
+export const isRecentlyUpdated = () => {
   const lastUpdateDate = new Date(updateHistory[0].date);
   const isNew = Date.now() - lastUpdateDate.getTime() < 1000 * 60 * 60 * 24 * 2;
+  return isNew;
+};
+
+export const UpdateBanner: React.FC = () => {
   return (
     <div className="px-6 h-full w-full flex flex-col justify-center">
       <div className="flex justify-center items-center text-xl">
         最近更新
-        {isNew && (
-          <img
-            className="mt-0.5 h-4 ml-1 rounded-sm object-contain"
-            src={NewPng}
-          />
-        )}
+        <img
+          className="mt-0.5 h-4 ml-1 rounded-sm object-contain"
+          src={NewPng}
+        />
       </div>
       {updateHistory.slice(0, 2).map((item) => (
         <UpdateItem key={item.content} {...item} />
@@ -120,14 +121,14 @@ const UPDATE_HISTORY_ID = '18849730';
 
 const UpdateHistory = () => {
   return (
-    <PageLayout title="更新历史" rightEle={<></>}>
+    <>
       <div className="m-4 ml-3">
         {updateHistory.map((item) => (
           <UpdateItem size="normal" {...item} />
         ))}
       </div>
       <NovelCommentById id={UPDATE_HISTORY_ID} />
-    </PageLayout>
+    </>
   );
 };
 

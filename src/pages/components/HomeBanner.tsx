@@ -1,11 +1,10 @@
 import { Carousel } from 'antd';
 import MidAutumnImg from '@/assets/banner/midautumn.jpg';
-import DragonIslandImg from '@/assets/banner/dragonisland.webp';
 import DragonIsland1Img from '@/assets/banner/dragonisland1.webp';
 import DragonIsland2Img from '@/assets/banner/dragonisland2.webp';
 import LinpxBadge from '@/assets/logo/badge.png';
 import { event } from '@/utils/event';
-import { UpdateBanner } from '@/pages/update';
+import { isRecentlyUpdated, UpdateBanner } from '@/pages/update';
 import { history } from 'umi';
 import { KemonoGameBannerIntro } from '../biz/kemonoGameIntro';
 
@@ -84,9 +83,11 @@ export default function HomeBanner() {
         <BannerBox>
           <KemonoGameBannerIntro />
         </BannerBox>
-        <BannerBox defaultBg clickJumpUrl="/update">
-          <UpdateBanner />
-        </BannerBox>
+        {isRecentlyUpdated() && (
+          <BannerBox defaultBg clickJumpUrl="/update">
+            <UpdateBanner />
+          </BannerBox>
+        )}
         <BannerBox backgoundImg={MidAutumnImg} />
         <BannerBox
           eventInfo={{ category: 'game', action: '0ld_steam' }}

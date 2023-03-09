@@ -5,10 +5,10 @@ import {
   HomeOutlined,
   HeartOutlined,
   ShareAltOutlined,
-  SearchOutlined,
   ClockCircleOutlined,
   TagOutlined,
   HistoryOutlined,
+  AppstoreOutlined,
 } from '@ant-design/icons';
 import { Drawer } from 'antd-mobile';
 import { versionNum } from '@/pages/update';
@@ -41,11 +41,6 @@ const drawerItems: IDrawerItem[] = [
     header: <img className="h-10 pb-1.5" src={HeaderLogoPNG} />,
   },
   {
-    icon: <SearchOutlined />,
-    title: '搜索',
-    link: ['/search', '/search/cache'],
-  },
-  {
     icon: <SmileOutlined />,
     title: '推荐作者',
     link: '/pixiv/fav/user',
@@ -64,6 +59,11 @@ const drawerItems: IDrawerItem[] = [
     icon: <HistoryOutlined />,
     title: '阅读历史',
     link: '/history',
+  },
+  {
+    icon: <AppstoreOutlined />,
+    title: '最近更新',
+    link: '/update',
   },
   {
     icon: <ShareAltOutlined />,
