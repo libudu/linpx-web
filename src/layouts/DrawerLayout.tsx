@@ -11,7 +11,6 @@ import {
   AppstoreOutlined,
 } from '@ant-design/icons';
 import { Drawer } from 'antd-mobile';
-import { versionNum } from '@/pages/update';
 
 import Navbar, { MenuIcon } from '@/components/Navbar';
 
@@ -157,7 +156,6 @@ function DrawerSidebar({ onDrawerClose }: { onDrawerClose: any }) {
           <div>设计：apoto5</div>
           <div>协助：V.C</div>
           <div>顾问：空狼</div>
-          <div>版本：{versionNum}</div>
         </div>
         <img src={LinpicioLogoImg} className="w-24 absolute top-4 right-4" />
       </div>

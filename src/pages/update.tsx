@@ -1,8 +1,6 @@
 import { NovelCommentById } from './pixiv/novel/[id]/components/NovelFooter/Comment';
 import NewPng from '@/assets/icon/new.png';
 
-export const versionNum = 246;
-
 interface IHistoryItem {
   date: string;
   content: string;
@@ -10,6 +8,10 @@ interface IHistoryItem {
 }
 
 export const updateHistory: IHistoryItem[] = [
+  {
+    date: '2023-3-9',
+    content: '修复滚动位置记录功能失效的问题，将最近更新添加到侧栏',
+  },
   {
     date: '2023-2-17',
     content: '新增了兽人控游戏库的宣传栏和友情链接',
