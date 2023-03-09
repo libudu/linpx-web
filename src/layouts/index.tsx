@@ -4,6 +4,7 @@ import { InfoModal } from '@/pages/components/Modal';
 import { enterNewPath } from '@/utils/history';
 import { MountModal } from '@/components/LinpxModal';
 import { useRef, useEffect, useState, RefObject } from 'react';
+import AiLiao from '@/pages/biz/ailiao';
 
 // 拦截器，在网页启动前执行一些拦截
 interface AppInterceptor {
@@ -62,7 +63,7 @@ export const useRecordLastScroll = (ref: RefObject<any>, deps: any[] = []) => {
   }, deps);
 };
 
-export default function Layout({ children }: IRouteComponentProps) {
+const BaseLayout = ({ children }: IRouteComponentProps) => {
   const isDrawerPage = Boolean(getDrawerItem());
   // 记录下历史路由
   const path = history.location.pathname;
@@ -110,4 +111,20 @@ export default function Layout({ children }: IRouteComponentProps) {
       </div>
     </>
   );
+};
+
+const noLayoutPageList = [
+  {
+    path: '/ailiao',
+    children: <AiLiao />,
+  },
+];
+
+export default function Layout(props: IRouteComponentProps) {
+  for (const { path, children } of noLayoutPageList) {
+    if (location.pathname.startsWith(path)) {
+      return children;
+    }
+  }
+  return <BaseLayout {...props} />;
 }
