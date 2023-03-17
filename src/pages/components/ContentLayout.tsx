@@ -7,33 +7,35 @@ import { openInfoModal } from './Modal';
 export const ContentTitle = ({
   left,
   clickInfo,
+  clickInfoTitle,
   right,
   rightText = '查看全部',
   clickRightPath,
 }: {
   left: React.ReactChild;
   clickInfo?: any;
+  clickInfoTitle?: React.ReactChild;
   right?: React.ReactChild;
   rightText?: string;
   clickRightPath?: string;
 }) => {
   return (
     <div className="mb-3 mt-6 flex items-end">
-      <div className="font-black text-3xl pl-2">
-        {left}
+      <div className="font-black text-3xl pl-2 u-line-1">{left}</div>
+      <div className="flex-grow mr-8">
         {clickInfo && (
           <InfoCircleOutlined
             className="text-xl inline-block ml-2"
             onClick={() =>
               openInfoModal({
-                title: left,
+                title: clickInfoTitle || left,
                 children: clickInfo,
               })
             }
           />
         )}
       </div>
-      <div className="text-base text-right pr-2 flex-grow">
+      <div className="text-base text-right pr-2">
         {right}
         {!right && (
           <span

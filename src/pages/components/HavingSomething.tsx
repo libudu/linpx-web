@@ -1,8 +1,9 @@
 import { requestPixivNovel, useAnalyseTag, usePixivNovel } from '@/api';
 import { TagBoxListModal } from '@/components/TagBox';
 import { IAnalyseTag, INovelInfo } from '@/types';
+import { event } from '@/utils/event';
 import { LoadingOutlined, SyncOutlined } from '@ant-design/icons';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { history } from 'umi';
 import { ContentBox, ContentTitle } from './ContentLayout';
 
@@ -97,16 +98,28 @@ const useRandomText = () => {
   };
 };
 
+// 滚动到来点什么模块的位置
+export let scrollIntoHavingSomething = () => {};
+
 const HavingSomething = () => {
   let tag = getTag();
   if (tag === 'r-18') {
     tag = '色色';
   }
+  const ref = useRef<HTMLDivElement>(null);
+  scrollIntoHavingSomething = () => {
+    console.log(ref.current);
+    ref.current?.scrollIntoView({ behavior: 'smooth' });
+  };
   const { novelFragment, refreshText, tagAnalyseData } = useRandomText();
   const { novelId, text, title } = novelFragment || {};
   const [isLoading, setIsLoading] = useState(true);
   const [showSelectModal, setShowSelectModal] = useState(false);
   const refreshTextWithLoading = async () => {
+    event({
+      category: 'feature',
+      action: 'having-something-refresh',
+    });
     setIsLoading(true);
     await refreshText();
     setIsLoading(false);
@@ -135,6 +148,15 @@ const HavingSomething = () => {
             onClick={refreshTextWithLoading}
           />
         }
+        clickInfoTitle="随便来点XX"
+        clickInfo={
+          <div>
+            <div>随机小说中的随机片段</div>
+            <div>点击可以进入小说页面</div>
+            <div>点击标签名可以更改</div>
+            <div>点击刷新按钮可以手动刷新</div>
+          </div>
+        }
       />
       <ContentBox>
         <div
@@ -142,6 +164,7 @@ const HavingSomething = () => {
           onClick={() =>
             !isLoading && novelId && history.push(`/pn/${novelId}`)
           }
+          ref={ref}
         >
           <div className=" font-bold text-xl u-line-1">{title}</div>
           {text}

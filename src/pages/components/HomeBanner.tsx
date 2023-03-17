@@ -8,29 +8,22 @@ import { isRecentlyUpdated, UpdateBanner } from '@/pages/update';
 import { history } from 'umi';
 import { KemonoGameBannerIntro } from '../biz/kemonoGameIntro';
 import { showSupport } from '../config';
+import { scrollIntoHavingSomething } from './HavingSomething';
+
+const jumpUrl = (url: string) => {
+  if (!url) return;
+  if (url.startsWith('http')) {
+    window.open(url);
+  } else {
+    history.push(url);
+  }
+};
 
 const BannerBox: React.FC<{
   defaultBg?: boolean;
   backgoundImg?: string;
-  clickJumpUrl?: string;
-  eventInfo?: any;
-}> = ({
-  children,
-  defaultBg = false,
-  backgoundImg,
-  clickJumpUrl,
-  eventInfo,
-}) => {
-  const onClick = () => {
-    // google analyse打点
-    eventInfo && event(eventInfo);
-    if (!clickJumpUrl) return;
-    if (clickJumpUrl.startsWith('http')) {
-      window.open(clickJumpUrl);
-    } else {
-      history.push(clickJumpUrl);
-    }
-  };
+  onClickBanner?: () => void;
+}> = ({ children, defaultBg = false, backgoundImg, onClickBanner }) => {
   // 默认背景
   if (defaultBg) {
     children = (
@@ -58,7 +51,7 @@ const BannerBox: React.FC<{
   return (
     <div
       className="lp-bgcolor h-40 flex flex-col justify-center items-center font-black text-2xl text-center relative"
-      onClick={onClick}
+      onClick={onClickBanner}
     >
       {children}
     </div>
@@ -75,8 +68,17 @@ export default function HomeBanner() {
         autoplaySpeed={5000}
         dots={false}
       >
+        <BannerBox defaultBg onClickBanner={() => scrollIntoHavingSomething()}>
+          <div className="w-full h-full relative flex flex-col justify-center items-center">
+            <div>“随便来点”功能上线</div>
+            <div>点击 or 下滑↓体验</div>
+          </div>
+        </BannerBox>
         {showSupport && (
-          <BannerBox defaultBg clickJumpUrl="https://afdian.net/@orangecat">
+          <BannerBox
+            defaultBg
+            onClickBanner={() => jumpUrl('https://afdian.net/@orangecat')}
+          >
             <div className="w-full h-full relative flex flex-col justify-center items-center">
               <div>爱发电赞助作者！</div>
               <div>点击跳转！</div>
@@ -87,22 +89,35 @@ export default function HomeBanner() {
           <KemonoGameBannerIntro />
         </BannerBox>
         {isRecentlyUpdated() && (
-          <BannerBox defaultBg clickJumpUrl="/update">
+          <BannerBox defaultBg onClickBanner={() => jumpUrl('/update')}>
             <UpdateBanner />
           </BannerBox>
         )}
         <BannerBox backgoundImg={MidAutumnImg} />
         <BannerBox
-          eventInfo={{ category: 'game', action: '0ld_steam' }}
-          clickJumpUrl="https://store.steampowered.com/app/1554470/_/"
+          onClickBanner={() => {
+            event({
+              category: 'game',
+              action: '0ld_steam',
+            });
+            jumpUrl('https://store.steampowered.com/app/1554470/_/');
+          }}
           backgoundImg={DragonIsland1Img}
         />
         <BannerBox
-          eventInfo={{ category: 'game', action: '0ld_afdian' }}
-          clickJumpUrl="https://afdian.net/@apoto5"
+          onClickBanner={() => {
+            event({
+              category: 'game',
+              action: '0ld_afdian',
+            });
+            jumpUrl('https://afdian.net/@apoto5');
+          }}
           backgoundImg={DragonIsland2Img}
         />
-        <BannerBox defaultBg clickJumpUrl="https://github.com/libudu/linpx-web">
+        <BannerBox
+          defaultBg
+          onClickBanner={() => jumpUrl('https://github.com/libudu/linpx-web')}
+        >
           <div className="h-full w-full flex flex-col justify-center items-center">
             <div>开源github地址！</div>
             <div>来点个star⭐吧！</div>
