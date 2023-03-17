@@ -12,6 +12,7 @@ import NovelCard from '@/components/NovelCard';
 import UserCard from '@/components/UserCard';
 import { RenderUserCards } from '@/components/UserCardList';
 import { RenderNovelCards } from '@/components/NovelCardList';
+import PageLayout from '@/components/PageLayout';
 
 export interface ISearch {
   word: string;
@@ -229,35 +230,39 @@ export default function Search() {
   }, [word]);
 
   return (
-    <div className="mx-4">
-      <SearchBar
-        initWord={word}
-        onSearch={(newWord) => {
-          if (newWord === word) return;
-          history.replace(`/search${isCache ? '/cache' : ''}?word=${newWord}`);
-          setWord(newWord);
-        }}
-      />
-      <div className="mt-2">当前搜索：{word}</div>
-      {
-        // word非空才搜索
-        search &&
-          (isId(word) ? (
-            // 纯数字，搜索id
-            <>
-              <SearchUserById word={word} />
-              <SearchNovelById word={word} />
-            </>
-          ) : (
-            // 非数字，搜索推荐tag、pixiv作者、pixiv小说
-            <>
-              <FavUsers word={word} />
-              <FavUserTagNovels word={word} />
-              <PixivUser word={word} />
-              <PixivNovel word={word} />
-            </>
-          ))
-      }
-    </div>
+    <PageLayout title="搜索" rightEle={<div></div>}>
+      <div className="mx-4">
+        <SearchBar
+          initWord={word}
+          onSearch={(newWord) => {
+            if (newWord === word) return;
+            history.replace(
+              `/search${isCache ? '/cache' : ''}?word=${newWord}`,
+            );
+            setWord(newWord);
+          }}
+        />
+        <div className="mt-2">当前搜索：{word}</div>
+        {
+          // word非空才搜索
+          search &&
+            (isId(word) ? (
+              // 纯数字，搜索id
+              <>
+                <SearchUserById word={word} />
+                <SearchNovelById word={word} />
+              </>
+            ) : (
+              // 非数字，搜索推荐tag、pixiv作者、pixiv小说
+              <>
+                <FavUsers word={word} />
+                <FavUserTagNovels word={word} />
+                <PixivUser word={word} />
+                <PixivNovel word={word} />
+              </>
+            ))
+        }
+      </div>
+    </PageLayout>
   );
 }

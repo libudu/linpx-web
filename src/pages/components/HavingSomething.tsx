@@ -131,7 +131,7 @@ const HavingSomething = () => {
     <>
       <ContentTitle
         left={
-          <div>
+          <div className="pb-1">
             随便来点
             <span
               className="underline"

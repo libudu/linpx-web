@@ -23,7 +23,7 @@ const dealPixivUserTags = (data: IUserInfo) => {
 };
 
 export const usePixivUser = (id: string, isCache = false) => {
-  const cacheData = cache.user.get(id);
+  const cacheData = isCache ? null : cache.user.get(id);
   const data = useLinpxSWR<IUserInfo>(
     cacheData ? null : `/pixiv/user/${id}${isCache ? '/cache' : ''}`,
   );
