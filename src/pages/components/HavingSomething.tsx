@@ -115,17 +115,19 @@ const HavingSomething = () => {
   const { novelId, text, title } = novelFragment || {};
   const [isLoading, setIsLoading] = useState(true);
   const [showSelectModal, setShowSelectModal] = useState(false);
-  const refreshTextWithLoading = async () => {
-    event({
-      category: 'feature',
-      action: 'having-something-refresh',
-    });
+  const refreshTextWithLoading = async (sendEvent = true) => {
+    if (sendEvent) {
+      event({
+        category: 'feature',
+        action: 'having-something-refresh',
+      });
+    }
     setIsLoading(true);
     await refreshText();
     setIsLoading(false);
   };
   useEffect(() => {
-    refreshTextWithLoading();
+    refreshTextWithLoading(false);
   }, [tagAnalyseData]);
   return (
     <>
@@ -145,7 +147,7 @@ const HavingSomething = () => {
         right={
           <SyncOutlined
             className="text-xl relative -top-1"
-            onClick={refreshTextWithLoading}
+            onClick={() => refreshTextWithLoading()}
           />
         }
         clickInfoTitle="随便来点XX"
@@ -183,8 +185,12 @@ const HavingSomething = () => {
         show={showSelectModal}
         onClose={() => setShowSelectModal(false)}
         onClickTag={(tagName) => {
+          event({
+            category: 'feature',
+            action: 'having-something-changetag',
+          });
           setTag(tagName);
-          refreshTextWithLoading();
+          refreshTextWithLoading(false);
           setShowSelectModal(false);
         }}
       />

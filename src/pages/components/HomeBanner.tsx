@@ -1,5 +1,6 @@
 import { Carousel } from 'antd';
 import MidAutumnImg from '@/assets/banner/midautumn.jpg';
+import LibraryImg from '@/assets/banner/bg_library.jpg';
 import DragonIsland1Img from '@/assets/banner/dragonisland1.webp';
 import DragonIsland2Img from '@/assets/banner/dragonisland2.webp';
 import LinpxBadge from '@/assets/logo/badge.png';
@@ -20,7 +21,7 @@ const jumpUrl = (url: string) => {
 };
 
 const BannerBox: React.FC<{
-  defaultBg?: boolean;
+  defaultBg?: boolean | 'library';
   backgoundImg?: string;
   onClickBanner?: () => void;
 }> = ({ children, defaultBg = false, backgoundImg, onClickBanner }) => {
@@ -29,8 +30,8 @@ const BannerBox: React.FC<{
     children = (
       <>
         <img
-          className="absolute object-cover w-full h-full opacity-20"
-          src={MidAutumnImg}
+          className="absolute object-cover w-full h-full opacity-30"
+          src={defaultBg === 'library' ? LibraryImg : MidAutumnImg}
         />
         <div className="z-10 w-full h-full">{children}</div>
       </>
@@ -68,7 +69,10 @@ export default function HomeBanner() {
         autoplaySpeed={5000}
         dots={false}
       >
-        <BannerBox defaultBg onClickBanner={() => scrollIntoHavingSomething()}>
+        <BannerBox
+          defaultBg="library"
+          onClickBanner={() => scrollIntoHavingSomething()}
+        >
           <div className="w-full h-full relative flex flex-col justify-center items-center">
             <div>“随便来点”功能上线</div>
             <div>点击 or 下滑↓体验</div>
@@ -93,7 +97,6 @@ export default function HomeBanner() {
             <UpdateBanner />
           </BannerBox>
         )}
-        <BannerBox backgoundImg={MidAutumnImg} />
         <BannerBox
           onClickBanner={() => {
             event({
