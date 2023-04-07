@@ -30,7 +30,7 @@ export const BORDER = '1px solid #ccc';
 let lastScrollTop = 0;
 
 const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
-  const isCache = location.pathname.endsWith('/cache');
+  const isCache = location.pathname.endsWith('cache');
 
   document.title = 'Linpx - 小说详情';
   const id = match.params.id;

@@ -147,7 +147,7 @@ function UserPart({
 }
 
 export default function PixivUser(props: IRouteProps) {
-  const isCache = location.pathname.endsWith('/cache');
+  const isCache = location.pathname.endsWith('cache');
 
   document.title = 'Linpx - 作者详情';
 
