@@ -169,7 +169,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
         <div
           className="w-full py-2 bg-white absolute bottom-0 bg-linpx-orange text-center text-3xl font-bold"
           onClick={() => {
-            window.open(getAddShelfScheme(id));
+            window.open(getAddShelfScheme(id, isCache));
           }}
         >
           添加到书架

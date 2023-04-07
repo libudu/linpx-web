@@ -9,6 +9,8 @@ export const checkFromReadResource = () => {
   }
 };
 
-export const getAddShelfScheme = (novelId: string) => {
-  return `legado://import/addToBookshelf?src=https://www.furrynovel.xyz/pixiv/novel/${novelId}`;
+export const getAddShelfScheme = (novelId: string, isCache?: boolean) => {
+  return `legado://import/addToBookshelf?src=https://www.furrynovel.xyz/pixiv/novel/${novelId}${
+    isCache ? '/cache' : ''
+  }`;
 };
