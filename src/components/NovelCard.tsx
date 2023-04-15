@@ -1,10 +1,16 @@
 import { INovelProfile } from '@/types';
 import { history } from 'umi';
-import { LikeOutlined, MessageOutlined } from '@ant-design/icons';
+import {
+  DownloadOutlined,
+  LikeOutlined,
+  MessageOutlined,
+} from '@ant-design/icons';
 import NewPng from '@/assets/icon/new.png';
 import { checkLinpxNovel } from '@/pages/pixiv/novel/[id]/util';
 import InteractImg from '@/assets/icon/interact.png';
 import { processNovelDesc } from '@/pages/pixiv/novel/[id]/components/NovelHeader/Intro';
+import { isAdmin } from '@/utils/admin';
+import { downloadNovel } from '@/api';
 
 // 最近小说页面
 // 作者详情页面
@@ -37,7 +43,7 @@ export default function NovelCard({
   const isLinpxNovel = checkLinpxNovel({ desc });
   return (
     <div
-      className="lp-shadow my-5 flex lp-bgcolor overflow-hidden w-full"
+      className="lp-shadow my-5 flex lp-bgcolor overflow-hidden w-full relative"
       onClick={() => history.push(`/pixiv/novel/${id}${cacheSuffix}`)}
     >
       {/* 封面、点赞和评论数 */}
@@ -88,6 +94,17 @@ export default function NovelCard({
             <span key={tag}>#{tag} </span>
           ))}
         </div>
+        {isAdmin() && (
+          <div
+            className="absolute top-2 left-2 rounded-full bg-white w-8 h-8 flex justify-center items-center shadow-md"
+            onClick={(e) => {
+              e.stopPropagation();
+              downloadNovel(id);
+            }}
+          >
+            <DownloadOutlined size={12} />
+          </div>
+        )}
         <div
           className="text-sm u-line-3 overflow-hidden"
           style={{ pointerEvents: 'none' }}

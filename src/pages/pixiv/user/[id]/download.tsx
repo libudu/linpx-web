@@ -1,5 +1,4 @@
-import { usePixivUser } from '@/api';
-import { BASE_URL } from '@/api/util/request';
+import { downloadNovel, usePixivUser } from '@/api';
 import { useEffect } from 'react';
 import { IRouteProps } from 'umi';
 
@@ -10,10 +9,7 @@ export default function DownloadUser({ match }: IRouteProps) {
     if (user) {
       user.novels.forEach((id, i) => {
         setTimeout(() => {
-          window.open(
-            `${BASE_URL}/pixiv/novel/${id}/download/cache`,
-            '_parent',
-          );
+          downloadNovel(id);
         }, 1000 * i);
       });
     }

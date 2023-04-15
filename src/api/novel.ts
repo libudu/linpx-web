@@ -7,9 +7,13 @@ import {
 import useSWR from 'swr';
 import cache from './util/cache';
 import { list2query, proxyImg } from '@/utils/util';
-import { linpxRequest } from './util/request';
+import { BASE_URL, linpxRequest } from './util/request';
 import { useLinpxSWR } from '.';
 import { getPassword } from '@/utils/admin';
+
+export const downloadNovel = (id: string) => {
+  window.open(`${BASE_URL}/pixiv/novel/${id}/download/cache`, '_parent');
+};
 
 export const requestPixivNovel = async (id: string, cache = false) => {
   const path = `/pixiv/novel/${id}${cache ? '/cache' : ''}`;
