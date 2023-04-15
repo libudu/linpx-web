@@ -10,6 +10,7 @@ import {
   likeNovel,
   unlikeNovel,
   getPixivNovelComments,
+  usePixivNovelProfiles,
 } from '@/api';
 import { linpxRequest } from '@/api/util/request';
 import { INovelAnalyse, INovelComment } from '@/types';
@@ -36,6 +37,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   const id = match.params.id;
 
   // 基本数据
+  const novelProfile = (usePixivNovelProfiles([id]) || [null])[0];
   const novelInfo = usePixivNovel(id, isCache);
   const favUser = useFavUserById(novelInfo?.userId || '');
   const afdianUrl = favUser?.afdian;
@@ -135,7 +137,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   // content是否加载完成，主要用于图片预加载
   const [contentLoaded, setContentLoaded] = useState(false);
 
-  if (!novelInfo || !novelAnalyse) {
+  if (!novelInfo || !novelAnalyse || !novelProfile) {
     return (
       <div className="w-full h-full overflow-y-scroll" ref={ref}>
         <ContentNavbar>小说详情</ContentNavbar>
@@ -144,7 +146,8 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   }
   const { content, images } = novelInfo;
   const { readCount, likeCount, canLike } = novelAnalyse;
-  const { pixivReadCount, pixivLikeCount } = novelInfo;
+  const { pixivReadCount } = novelInfo;
+  const { pixivLikeCount } = novelProfile;
   const totalReadCount = readCount + pixivReadCount;
   const totalLikeCount =
     likeCount +
