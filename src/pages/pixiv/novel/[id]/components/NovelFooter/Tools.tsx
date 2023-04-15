@@ -10,6 +10,7 @@ import DiscussPng from '@/assets/icon/discuss.png';
 import { BORDER } from '../..';
 import { shareNovel } from '@/utils/share';
 import { AfdianImg, openAfdianUrl } from '@/pages/components/Afdian';
+import { showAfdian } from '@/pages/config';
 
 interface LinkButtonProps {
   mainTitle: string;
@@ -198,7 +199,7 @@ const NovelFooter: React.FC<NovelFooterProps> = ({
         className="flex text-2xl font-black text-center"
         style={{ borderBottom: BORDER }}
       >
-        {afdianUrl ? (
+        {showAfdian && afdianUrl ? (
           <>
             <div className="w-1/2" style={{ borderRight: BORDER }}>
               {likeContent}

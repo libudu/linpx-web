@@ -3,6 +3,7 @@ import { openInfoModal, closeInfoModal } from '@/pages/components/Modal';
 import classnames from 'classnames';
 import { Avatar } from 'antd';
 import { useFavUserById } from '@/api';
+import { showAfdian } from '../config';
 
 export { AfdianImg };
 
@@ -53,7 +54,7 @@ export const AfdianAvatar: React.FC<AfdianAvatarProps> = ({
   return (
     <div className="relative">
       <Avatar src={imageUrl} size={size} />
-      {afdianUrl && (
+      {showAfdian && afdianUrl && (
         <AfdianIcon
           className="absolute"
           style={{ bottom: 0, right: 0, boxShadow: '2px 2px 4px #aaa' }}

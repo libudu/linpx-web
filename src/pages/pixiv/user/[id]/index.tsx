@@ -12,6 +12,7 @@ import AfdianImg from '@/assets/icon/afdian.png';
 import { openAfdianUrl } from '@/pages/components/Afdian';
 import { getQQGroupShareLink } from '@/utils/util';
 import { copyTextAndToast } from '@/utils/clipboard';
+import { showAfdian } from '@/pages/config';
 
 const MaxUserComment = 50;
 
@@ -91,7 +92,7 @@ function UserPart({
               >
                 PIXIV
               </div>
-              {afdianUrl && (
+              {showAfdian && afdianUrl && (
                 <div
                   className="mr-2 px-2 py-0.5 text-sm bg-purple-500 text-white rounded-lg flex items-center"
                   onClick={() => openAfdianUrl(name, afdianUrl)}
