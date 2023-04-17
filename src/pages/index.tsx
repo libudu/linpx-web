@@ -163,20 +163,23 @@ const FriendlyLinks = () => {
 const ContinueReading: FC = () => {
   const SHOW_SECOND = 5;
   const FADE_SECOND = 3;
+  const DELAY_SECOND = 1;
 
   const [show, setShow] = useState(true);
   const readProgress = useLastReadProgress();
-  // 渐隐、去除
+  // 渐隐
   useEffect(() => {
     setTimeout(() => {
       setShow(false);
     }, SHOW_SECOND * 1000);
   }, []);
+  // 去除
   useEffect(() => {
     if (readProgress) {
-      setTimeout(() => {
+      const timerId = setTimeout(() => {
         readProgress.clearReadProgress();
-      }, (SHOW_SECOND + FADE_SECOND) * 1000);
+      }, (SHOW_SECOND + FADE_SECOND + DELAY_SECOND) * 1000);
+      return () => clearTimeout(timerId);
     }
   }, [readProgress]);
   if (!readProgress) {
@@ -185,7 +188,7 @@ const ContinueReading: FC = () => {
   const { pos, novel, clearReadProgress } = readProgress;
   return (
     <div
-      className="bg-yellow-200 fixed bottom-0 py-2 px-4 flex justify-between items-center"
+      className="bg-yellow-200 fixed bottom-0 py-1 px-3 flex justify-between items-center"
       style={{
         width: getAppWidth(),
         opacity: show ? 1 : 0,
@@ -193,15 +196,15 @@ const ContinueReading: FC = () => {
       }}
     >
       <div
-        className="u-line-1"
+        className="u-line-1 flex-grow"
         onClick={() => history.push(readProgress.path + `?pos=${pos}`)}
       >
         <span className="font-bold">继续阅读</span> 《{filterTitle(novel.title)}
         》
       </div>
       <CloseCircleOutlined
+        className="relative ml-0.5"
         style={{
-          position: 'relative',
           top: '1px',
         }}
         onClick={(e) => {
