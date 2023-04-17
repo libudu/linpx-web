@@ -7,7 +7,6 @@ import {
 } from '@/api';
 import { IUserInfo } from '@/types';
 import { ContentTitle, ContentBox } from './components/ContentLayout';
-import TransLink from './components/TransLink';
 import { TagBoxList } from '@/components/TagBox';
 import UserPreview from './components/UserPreview';
 import NovelPreview from './components/NovelPreview';
@@ -121,34 +120,6 @@ const LinpxTagContent: React.FC = () => {
   );
 };
 
-const TransLinkContent: React.FC = () => {
-  return (
-    <>
-      <ContentTitle
-        left="生成LINPX链接"
-        rightText=""
-        clickInfo={
-          <div className="text-base">
-            <div>将pixiv链接转为linpx</div>
-            <div>从而不需要翻墙、登录，点开即阅</div>
-            <br />
-            <div>当前支持作者和小说两种格式链接</div>
-            <div className="text-left">
-              <div>作者举例：https://www.pixiv.net/users/32809296</div>
-              <div>
-                小说举例：https://www.pixiv.net/novel/show.php?id=14198407
-              </div>
-            </div>
-          </div>
-        }
-      />
-      <ContentBox>
-        <TransLink />
-      </ContentBox>
-    </>
-  );
-};
-
 const FriendlyLinks = () => {
   return (
     <>
@@ -232,7 +203,6 @@ const IndexPage = () => {
         <RecentNovelContent />
         <HavingSomething />
         <LinpxTagContent />
-        {/* <TransLinkContent /> */}
         <FriendlyLinks />
       </div>
       <ContinueReading />

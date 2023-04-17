@@ -1,7 +1,6 @@
 import { history } from 'umi';
 import SearchBar from '@/components/SearchBar';
 import { useEffect, useState } from 'react';
-import { transformLink } from '../components/TransLink';
 import {
   useSearchFavUser,
   usePixivSearchNovel,
@@ -13,6 +12,7 @@ import UserCard from '@/components/UserCard';
 import { RenderUserCards } from '@/components/UserCardList';
 import { RenderNovelCards } from '@/components/NovelCardList';
 import PageLayout from '@/components/PageLayout';
+import { transformLink } from '@/utils/util';
 
 export interface ISearch {
   word: string;

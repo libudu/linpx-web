@@ -1,9 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "start": "set PORT=81 && umi dev",
-    "build": "umi build",
-    "deploy": "umi build && npx tsx ./deploy/index.ts",
+    "start": "set NODE_OPTIONS=--openssl-legacy-provider & set PORT=81 & umi dev",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider & umi build",
+    "deploy": "set NODE_OPTIONS=--openssl-legacy-provider & umi build && npx tsx ./deploy/index.ts",
     "postinstall": "umi generate tmp",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
     "test": "umi-test",
@@ -55,12 +55,12 @@
     "@umijs/test": "^3.3.9",
     "autoprefixer": "^10.3.3",
     "lint-staged": "^10.0.7",
+    "node-ssh": "^13.0.1",
     "postcss": "^8.3.6",
     "prettier": "^2.2.0",
     "tailwindcss": "^2.2.9",
     "typescript": "^4.1.2",
     "umi-plugin-tailwindcss": "^3.0.3",
-    "node-ssh": "^13.0.1",
     "yorkie": "^2.0.0"
   }
 }
