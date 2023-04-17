@@ -16,14 +16,14 @@ export const eleScrollToPos = (ele: HTMLElement | null, pos: number) => {
     // 可能之前的页面还没渲染出来
     let totalHeight = 0;
     [...ele.children].forEach((ele) => (totalHeight += ele.clientHeight));
-    // 最多等待1000ms页面加载出来
+    // 最多等待2000ms页面加载出来
     if (totalHeight < pos && count < 20) {
       count += 1;
     } else {
       clearInterval(timer);
       ele.scrollTo({ top: pos });
     }
-  }, 50);
+  }, 100);
 };
 
 // 路由返回时自动滚动到上次记录的位置的位置

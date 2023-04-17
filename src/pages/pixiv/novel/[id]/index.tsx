@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { throttle } from 'lodash';
-import { IRouteProps } from 'umi';
+import { IRouteProps, history } from 'umi';
 
 import { ContentNavbar } from '@/components/Navbar';
 import {
@@ -48,6 +48,7 @@ const useNovelComments = (id: string) => {
 };
 
 const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
+  const location = history.location;
   const isCache = location.pathname.endsWith('cache');
 
   document.title = 'Linpx - 小说详情';
@@ -76,7 +77,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   // 初始化
   useEffect(() => {
     // 是否有初始滚动
-    const pos = Number(new URL(location.href).searchParams.get('pos'));
+    const pos = Number(location.query?.pos);
     if (pos) {
       eleScrollToPos(ref.current, pos);
     }

@@ -197,7 +197,9 @@ const ContinueReading: FC = () => {
     >
       <div
         className="u-line-1 flex-grow"
-        onClick={() => history.push(readProgress.path + `?pos=${pos}`)}
+        onClick={() =>
+          history.push(readProgress.path + `?pos=${pos.toFixed(0)}`)
+        }
       >
         <span className="font-bold">继续阅读</span> 《{filterTitle(novel.title)}
         》

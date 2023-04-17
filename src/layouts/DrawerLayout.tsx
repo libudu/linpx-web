@@ -22,6 +22,7 @@ import { showSupport } from '@/pages/config';
 
 // 获取Drawer项目
 export function getDrawerItem() {
+  const location = history.location;
   return drawerItems.find(({ link }) => {
     if (typeof link === 'string') {
       return link === location.pathname;

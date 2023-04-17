@@ -32,8 +32,8 @@ const getReadProgress = (): IReadProgress | null => {
 
 // 至少7500字，至多10000字以上才记录
 const MIN_RECORD_LENGTH = 10000 * 1.5;
-// 上下1500长度的缓冲
-const MIN_RECORD_BUFFER_LENGTH = 1500;
+// 上下1000长度的缓冲
+const MIN_RECORD_BUFFER_LENGTH = 1000;
 const checkReadProgress = () => {
   const readProgress = getReadProgress();
   if (readProgress) {
