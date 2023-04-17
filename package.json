@@ -1,8 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "start": "set NODE_OPTIONS=--openssl-legacy-provider & set PORT=81 & umi dev",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider & umi build",
+    "start": "set NODE_OPTIONS=--openssl-legacy-provider & set ANALYZE=1 & set PORT=81 & umi dev",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider & set ANALYZE=1 & umi build",
     "deploy": "set NODE_OPTIONS=--openssl-legacy-provider & umi build && npx tsx ./deploy/index.ts",
     "postinstall": "umi generate tmp",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
@@ -29,7 +29,6 @@
     "animejs": "^3.2.1",
     "antd": "^4.14.0",
     "antd-mobile": "^2.3.4",
-    "axios": "^0.21.1",
     "browserfs": "^1.4.3",
     "chinese-s2t": "^1.0.0",
     "classnames": "^2.2.6",
@@ -45,7 +44,7 @@
     "react-scroll-ondrag": "^2.1.0",
     "swr": "^0.5.6",
     "uid": "^2.0.0",
-    "umi": "3.5.20"
+    "umi": "^3.5.40"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.11",

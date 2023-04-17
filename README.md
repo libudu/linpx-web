@@ -118,7 +118,7 @@ react插件：swr、react-content-loader
 
 组件：ant design
 
-工具：axios、classnames
+工具：classnames
 
 繁简转换：chinese-s2
 

@@ -1,5 +1,5 @@
-import axios, { Method } from 'axios';
 import { IMap } from '../../types';
+import { request } from 'umi';
 
 const isHttps = window.location.protocol === 'https:';
 export let BASE_URL = '';
@@ -19,7 +19,7 @@ const requestCache: IMap<any> = {};
 export const linpxRequest = async <T = any>(
   path: string,
   useCache = true,
-  method: Method = 'GET',
+  method = 'GET',
 ): Promise<T> => {
   const cache = requestCache[path];
   if (cache && useCache) {
@@ -27,27 +27,26 @@ export const linpxRequest = async <T = any>(
     return cache;
   }
   console.log('send request:', path);
-  const res = await axios({
-    url: BASE_URL + path,
-    method: method,
+  const res = await request(BASE_URL + path, {
+    method,
   });
-  const data = res.data;
-  requestCache[path] = data;
-  return data;
+  requestCache[path] = res;
+  return res;
 };
 
 export const reqGet = (path: string) => {
-  return axios.get(BASE_URL + path).then((res) => res.data.data);
+  return request(BASE_URL + path, { method: 'get' }).then((res) => res.data);
 };
 
 export const reqPost = (path: string, body: any) => {
-  return axios({
-    url: BASE_URL + path,
-    method: 'POST',
+  return request(BASE_URL + path, {
+    method: 'post',
     data: body,
-  }).then((res) => res.data);
+  });
 };
 
 export const reqDelete = (path: string) => {
-  return axios.delete(BASE_URL + path).then((res) => res.data.data);
+  return request(BASE_URL + path, {
+    method: 'delete',
+  }).then((res) => res.data);
 };

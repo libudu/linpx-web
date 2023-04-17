@@ -70,3 +70,27 @@ export function stringHash(str: string) {
 export const getQQGroupShareLink = (id: string | number) => {
   return `mqqwpa://card/show_pslcard?src_type=internal&version=1&uin=${id}&card_type=group&source=qrcode`;
 };
+
+const linkTypeInfo = [
+  {
+    type: 'novel',
+    regex: /https?:\/\/www.pixiv.net\/novel\/show.php\?id=(\d*)/,
+    result: 'https://linpx.linpicio.com/pixiv/novel/{data}',
+  },
+  {
+    type: 'user',
+    regex: /https?:\/\/www.pixiv.net\/users\/(\d*)/,
+    result: 'https://linpx.linpicio.com/pixiv/user/{data}',
+  },
+];
+
+export function transformLink(link: string): string {
+  if (!link) return '';
+  for (let linkType of linkTypeInfo) {
+    const matchResult = link.match(linkType.regex);
+    if (matchResult && matchResult[1]) {
+      return linkType.result.replace('{data}', matchResult[1]);
+    }
+  }
+  return '';
+}
