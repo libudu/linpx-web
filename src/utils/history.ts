@@ -12,6 +12,7 @@ export function goBackOrTo(path: string) {
   }
 }
 
+// 进入新路由
 export const enterNewPath = (path: string) => {
   const len = historyRecord.length;
   // 啥都没有

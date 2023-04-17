@@ -6,6 +6,7 @@ import { MountModal } from '@/components/LinpxModal';
 import { useRef, useEffect, useState, RefObject } from 'react';
 import AiLiao from '@/pages/biz/ailiao';
 import { checkFromReadResource } from '@/pages/biz/readresource';
+import { useRecordLastScroll } from '@/utils/scrollRecord';
 
 // 拦截器，在网页启动前执行一些拦截，可能导向新的页面
 interface AppInterceptor {
@@ -22,47 +23,6 @@ export const registerAppInterceptor = (interceptor: AppInterceptor) => {
 // require('./FirstTips');
 // 已经过期了的停服通知
 // require('./Stop');
-
-// 记录页面滚动位置
-const posMap: Record<string, number> = {};
-(window as any).posMap = posMap;
-
-export const useRecordLastScroll = (ref: RefObject<any>, deps: any[] = []) => {
-  useEffect(() => {
-    const node = ref.current;
-    if (node) {
-      const path = history.location.pathname;
-      const lastPos = posMap[path];
-      // 上次位置存在则滚过去
-      if (lastPos && history.action === 'POP') {
-        // 夸克游览器上，不套setTimeout将无法滚动到位置
-        let count = 0;
-        let timer = setInterval(() => {
-          // 可能之前的页面还没渲染出来
-          let totalHeight = 0;
-          [...node.children].forEach(
-            (ele) => (totalHeight += ele.clientHeight),
-          );
-          // 最多等待500ms页面加载出来
-          if (totalHeight < lastPos && count < 10) {
-            count += 1;
-          } else {
-            clearInterval(timer);
-            node.scrollTo({ top: lastPos });
-          }
-        }, 50);
-      }
-      // 添加滚动监听
-      const handler = (e: Event) => {
-        // 上面组件里获取到的path会有延迟
-        const path = history.location.pathname;
-        posMap[path] = node.scrollTop;
-      };
-      node.addEventListener('scroll', handler);
-      return () => node.removeEventListener('scroll', handler);
-    }
-  }, deps);
-};
 
 const BaseLayout = ({ children }: IRouteComponentProps) => {
   const isDrawerPage = Boolean(getDrawerItem());

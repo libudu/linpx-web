@@ -21,7 +21,7 @@ import NovelContent from './components/NovelContent';
 import NovelFooter from './components/NovelFooter/Tools';
 import NovelComment from './components/NovelFooter/Comment';
 import NovelAnalyse from './components/NovelHeader/Analyse';
-import { useRecordLastScroll } from '@/layouts';
+import { useRecordLastScroll } from '@/utils/scrollRecord';
 import { checkLinpxNovel } from './util';
 import { pushHistory } from '@/pages/history';
 import { fromReadResource, getAddShelfScheme } from '@/pages/biz/readresource';
