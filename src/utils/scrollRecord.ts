@@ -6,7 +6,10 @@ const posMap: Record<string, number> = {};
 (window as any).posMap = posMap;
 
 // 将元素滚动到指定位置
-export const eleScrollToPos = (ele: HTMLElement, pos: number) => {
+export const eleScrollToPos = (ele: HTMLElement | null, pos: number) => {
+  if (!ele) {
+    return;
+  }
   // 夸克游览器上，不套setTimeout将无法滚动到位置
   let count = 0;
   let timer = setInterval(() => {

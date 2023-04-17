@@ -21,14 +21,31 @@ import NovelContent from './components/NovelContent';
 import NovelFooter from './components/NovelFooter/Tools';
 import NovelComment from './components/NovelFooter/Comment';
 import NovelAnalyse from './components/NovelHeader/Analyse';
-import { useRecordLastScroll } from '@/utils/scrollRecord';
+import { eleScrollToPos, useRecordLastScroll } from '@/utils/scrollRecord';
 import { checkLinpxNovel } from './util';
 import { pushHistory } from '@/pages/history';
 import { fromReadResource, getAddShelfScheme } from '@/pages/biz/readresource';
+import { recordReadProgress } from '@/utils/readProgress';
 
 export const BORDER = '1px solid #ccc';
 
 let lastScrollTop = 0;
+
+const useNovelComments = (id: string) => {
+  const [comments, setComments] = useState<INovelComment[]>([]);
+  const refreshComments = useCallback(async () => {
+    const comments = await getPixivNovelComments(id);
+    setComments(comments);
+  }, []);
+  useEffect(() => {
+    refreshComments();
+  }, []);
+  return {
+    comments,
+    setComments,
+    refreshComments,
+  };
+};
 
 const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   const isCache = location.pathname.endsWith('cache');
@@ -43,11 +60,7 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   const afdianUrl = favUser?.afdian;
 
   // 加载及刷新评论数据
-  const [comments, setComments] = useState<INovelComment[]>([]);
-  const refreshComments = async () => {
-    const comments = await getPixivNovelComments(id);
-    setComments(comments);
-  };
+  const { comments, refreshComments } = useNovelComments(id);
 
   // 统计数据
   const [like, setLike] = useState(false);
@@ -62,6 +75,11 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
 
   // 初始化
   useEffect(() => {
+    // 是否有初始滚动
+    const pos = Number(new URL(location.href).searchParams.get('pos'));
+    if (pos) {
+      eleScrollToPos(ref.current, pos);
+    }
     // 历史记录
     pushHistory({
       type: 'pn',
@@ -70,8 +88,6 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
     });
     // 阅读数增加
     readNovel(id);
-    // 获取评论
-    refreshComments();
     // 请求小说分析数据
     linpxRequest(`/pixiv/novel/${id}/analyse`, false).then(
       (data: INovelAnalyse) => {
@@ -111,6 +127,15 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
   const scrollHandler = useCallback(
     throttle((e: any) => {
       const { scrollTop, offsetHeight } = e.target;
+      // 记录游览位置
+      recordReadProgress({
+        path: location.pathname,
+        pos: scrollTop,
+        total:
+          (commentRef.current?.offsetTop || 0) -
+          document.documentElement.clientHeight,
+        id,
+      });
       const shake = 20;
       const change = scrollTop - lastScrollTop;
       // 顶部标题

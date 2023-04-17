@@ -17,7 +17,8 @@ import SearchBar from '../components/SearchBar';
 import { useRDF } from './biz/rdf';
 import KemonoGameIntro from './biz/kemonoGameIntro';
 import HavingSomething from './components/HavingSomething';
-import { showSupport } from './config';
+import { getAppWidth } from '@/utils/util';
+import { useLastReadProgress } from '@/utils/readProgress';
 
 let lastUserInfo: IUserInfo[] = Array(8).fill({
   imageUrl: '',
@@ -161,8 +162,10 @@ const IndexPage = () => {
 
   useRDF();
 
+  const readProgress = useLastReadProgress();
+
   return (
-    <>
+    <div className="relative">
       <HomeBanner />
       <div className="px-6 pb-6">
         <SearchBar onSearch={(word) => history.push(`/search?word=${word}`)} />
@@ -173,7 +176,18 @@ const IndexPage = () => {
         {/* <TransLinkContent /> */}
         <FriendlyLinks />
       </div>
-    </>
+      {readProgress && (
+        <div
+          className="bg-white fixed bottom-0"
+          style={{ width: getAppWidth() }}
+          onClick={() =>
+            history.push(readProgress.path + `?pos=${readProgress.pos}`)
+          }
+        >
+          继续阅读 {readProgress.novel.title}
+        </div>
+      )}
+    </div>
   );
 };
 
