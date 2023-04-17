@@ -14,3 +14,10 @@ export const checkLinpxNovel = ({ desc }: { desc: string }) => {
     desc.includes('【linpx交互小说】');
   return isLinpxNovel;
 };
+
+export const filterTitle = (title: string) => {
+  if (title.startsWith('《') && title.endsWith('》')) {
+    return title.slice(1, -1);
+  }
+  return title;
+};

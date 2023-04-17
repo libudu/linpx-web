@@ -13,12 +13,15 @@ import UserPreview from './components/UserPreview';
 import NovelPreview from './components/NovelPreview';
 import HomeBanner from './components/HomeBanner';
 import SearchBar from '../components/SearchBar';
+import { CloseCircleOutlined } from '@ant-design/icons';
 
 import { useRDF } from './biz/rdf';
 import KemonoGameIntro from './biz/kemonoGameIntro';
 import HavingSomething from './components/HavingSomething';
 import { getAppWidth } from '@/utils/util';
 import { useLastReadProgress } from '@/utils/readProgress';
+import { FC, useEffect, useState } from 'react';
+import { filterTitle } from './pixiv/novel/[id]/util';
 
 let lastUserInfo: IUserInfo[] = Array(8).fill({
   imageUrl: '',
@@ -157,12 +160,63 @@ const FriendlyLinks = () => {
   );
 };
 
+const ContinueReading: FC = () => {
+  const SHOW_SECOND = 5;
+  const FADE_SECOND = 3;
+
+  const [show, setShow] = useState(true);
+  const readProgress = useLastReadProgress();
+  // 渐隐、去除
+  useEffect(() => {
+    setTimeout(() => {
+      setShow(false);
+    }, SHOW_SECOND * 1000);
+  }, []);
+  useEffect(() => {
+    if (readProgress) {
+      setTimeout(() => {
+        readProgress.clearReadProgress();
+      }, (SHOW_SECOND + FADE_SECOND) * 1000);
+    }
+  }, [readProgress]);
+  if (!readProgress) {
+    return <></>;
+  }
+  const { pos, novel, clearReadProgress } = readProgress;
+  return (
+    <div
+      className="bg-yellow-200 fixed bottom-0 py-2 px-4 flex justify-between items-center"
+      style={{
+        width: getAppWidth(),
+        opacity: show ? 1 : 0,
+        transition: `all ${FADE_SECOND}s`,
+      }}
+    >
+      <div
+        className="u-line-1"
+        onClick={() => history.push(readProgress.path + `?pos=${pos}`)}
+      >
+        <span className="font-bold">继续阅读</span> 《{filterTitle(novel.title)}
+        》
+      </div>
+      <CloseCircleOutlined
+        style={{
+          position: 'relative',
+          top: '1px',
+        }}
+        onClick={(e) => {
+          e.stopPropagation();
+          clearReadProgress();
+        }}
+      />
+    </div>
+  );
+};
+
 const IndexPage = () => {
   document.title = 'Linpx - 首页';
 
   useRDF();
-
-  const readProgress = useLastReadProgress();
 
   return (
     <div className="relative">
@@ -176,17 +230,7 @@ const IndexPage = () => {
         {/* <TransLinkContent /> */}
         <FriendlyLinks />
       </div>
-      {readProgress && (
-        <div
-          className="bg-white fixed bottom-0"
-          style={{ width: getAppWidth() }}
-          onClick={() =>
-            history.push(readProgress.path + `?pos=${readProgress.pos}`)
-          }
-        >
-          继续阅读 {readProgress.novel.title}
-        </div>
-      )}
+      <ContinueReading />
     </div>
   );
 };

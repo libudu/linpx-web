@@ -6,6 +6,7 @@ import { LoadingOutlined, SyncOutlined } from '@ant-design/icons';
 import { useEffect, useRef, useState } from 'react';
 import { history } from 'umi';
 import { ContentBox, ContentTitle } from './ContentLayout';
+import { filterTitle } from '../pixiv/novel/[id]/util';
 
 interface INovelFragment {
   novelId: string;
@@ -22,13 +23,6 @@ const getTag = () => {
 
 const setTag = (tagName: string) => {
   localStorage.setItem(STORAGE_KEY, tagName);
-};
-
-const filterTitle = (title: string) => {
-  if (title.startsWith('《') && title.endsWith('》')) {
-    return title.slice(1, -1);
-  }
-  return title;
 };
 
 // 随机选取某个标签下某个小说

@@ -63,5 +63,9 @@ export const useLastReadProgress = () => {
   return {
     ...readProgress,
     novel: novelProfile,
+    clearReadProgress: () => {
+      localStorage.removeItem(READ_PROGRESS_KEY);
+      setReadProgress(undefined);
+    },
   };
 };
