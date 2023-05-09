@@ -1,8 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "start": "set NODE_OPTIONS=--openssl-legacy-provider & set ANALYZE=1 & set PORT=81 & umi dev",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider & set ANALYZE=1 & umi build",
+    "start": "set NODE_OPTIONS=--openssl-legacy-provider & set PORT=81 & umi dev",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider & umi build",
     "deploy": "set NODE_OPTIONS=--openssl-legacy-provider & umi build && npx tsx ./deploy/index.ts",
     "postinstall": "umi generate tmp",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'",
@@ -35,7 +35,6 @@
     "codemirror": "^5.65.1",
     "global": "^4.4.0",
     "lodash": "^4.17.21",
-    "nativeshare": "^2.1.5",
     "react": "17.x",
     "react-codemirror2": "^7.2.1",
     "react-content-loader": "^6.0.3",

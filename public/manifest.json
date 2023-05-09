@@ -1,0 +1,16 @@
+{
+  "name": "Linpx小说阅读器",
+  "short_name": "Linpx",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#fff",
+  "theme_color": "#fff",
+  "description": "Linpx小说阅读器",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ]
+}

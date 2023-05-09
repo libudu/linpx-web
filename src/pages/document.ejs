@@ -1,14 +1,17 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
   <title>LINPX - Linpx Is Not PiXiv</title>
 
   <link rel="Shortcut Icon" type="image/x-icon" media="screen" href="/favicon.ico">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@600&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json" />
 </head>
 
 <!-- <script src="https://cdn.bootcss.com/vConsole/3.3.0/vconsole.min.js"></script>
@@ -16,7 +19,34 @@
     var vConsole = new VConsole();
 </script> -->
 
+<script type="text/javascript">
+  function initPlus(plus) {
+    plus.nativeUI.toast("background #ff0000")
+    plus.navigator.setStatusBarBackground('#f99d58');
+    let first = null;
+    plus.key.addEventListener('backbutton', function () {
+      if (history.length > 1) {
+        history.back();
+        return;
+      }
+      //首次按键，提示‘再按一次退出应用’  
+      if (!first) {
+        first = new Date().getTime();
+        plus.nativeUI.toast('再按一次退出应用');
+        setTimeout(function () {
+          first = null;
+        }, 1000);
+      } else {
+        if (new Date().getTime() - first < 1000) {
+          plus.runtime.quit();
+        }
+      }
+    }, false);
+  }
+</script>
+
 <body>
   <div id="root"></div>
 </body>
+
 </html>
