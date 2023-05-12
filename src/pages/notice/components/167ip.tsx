@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { history } from 'umi';
-import { closeInfoModal, openInfoModal } from '../components/Modal';
+import { closeInfoModal, openInfoModal } from '../../components/Modal';
 
 const Stop167IpNotice: React.FC = () => {
   return (

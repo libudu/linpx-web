@@ -1,15 +1,16 @@
 import { Carousel } from 'antd';
-import MidAutumnImg from '@/assets/banner/midautumn.jpg';
-import LibraryImg from '@/assets/banner/bg_library.jpg';
-import DragonIsland1Img from '@/assets/banner/dragonisland1.webp';
-import DragonIsland2Img from '@/assets/banner/dragonisland2.webp';
 import LinpxBadge from '@/assets/logo/badge.png';
 import { event } from '@/utils/event';
 import { isRecentlyUpdated, UpdateBanner } from '@/pages/update';
 import { history } from 'umi';
-import { KemonoGameBannerIntro } from '../biz/kemonoGameIntro';
 import { showSupport } from '../config';
 import { scrollIntoHavingSomething } from './HavingSomething';
+
+import AppLogoImg from '@/assets/logo/app_logo.png';
+import MidAutumnImg from '@/assets/banner/midautumn.jpg';
+import LibraryImg from '@/assets/banner/bg_library.jpg';
+import DragonIsland1Img from '@/assets/banner/dragonisland1.webp';
+import DragonIsland2Img from '@/assets/banner/dragonisland2.webp';
 
 const jumpUrl = (url: string) => {
   if (!url) return;
@@ -71,11 +72,14 @@ export default function HomeBanner() {
       >
         <BannerBox
           defaultBg="library"
-          onClickBanner={() => scrollIntoHavingSomething()}
+          onClickBanner={() => jumpUrl('/notice?id=linpxApp')}
         >
-          <div className="w-full h-full relative flex flex-col justify-center items-center">
-            <div>“随便来点”功能上线</div>
-            <div>点击 or 下滑↓体验</div>
+          <div className="w-full h-full flex justify-center items-center mr-8">
+            <img className="w-16 h-16 mr-4" src={AppLogoImg} />
+            <div>
+              <div>轻量安卓端 app 上线！</div>
+              <div>点击查看详情！</div>
+            </div>
           </div>
         </BannerBox>
         {showSupport && (
@@ -89,9 +93,6 @@ export default function HomeBanner() {
             </div>
           </BannerBox>
         )}
-        <BannerBox>
-          <KemonoGameBannerIntro />
-        </BannerBox>
         {isRecentlyUpdated() && (
           <BannerBox defaultBg onClickBanner={() => jumpUrl('/update')}>
             <UpdateBanner />

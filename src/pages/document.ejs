@@ -21,8 +21,9 @@
 
 <script type="text/javascript">
   function initPlus(plus) {
-    plus.nativeUI.toast("background #ff0000")
+    // 状态栏颜色
     plus.navigator.setStatusBarBackground('#f99d58');
+    // 后退按钮
     let first = null;
     plus.key.addEventListener('backbutton', function () {
       if (history.length > 1) {

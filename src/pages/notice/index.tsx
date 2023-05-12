@@ -1,19 +1,25 @@
 import PageLayout from '@/components/PageLayout';
 import React from 'react';
 import { history } from 'umi';
-import Stop167IpNotice from './biz/167ip';
-import { NovelCommentById } from './pixiv/novel/[id]/components/NovelFooter/Comment';
+import Stop167IpNotice from './components/167ip';
+import { NovelCommentById } from '../pixiv/novel/[id]/components/NovelFooter/Comment';
+import { LinpxAppNotice } from './components/linpxApp';
 
 const NoticeContent: Record<
   string,
   {
     ele: React.ReactElement;
-    commentId: string;
+    title?: string;
+    commentId?: string;
   }
 > = {
   stop167ip: {
     ele: <Stop167IpNotice />,
     commentId: '1000000001',
+  },
+  linpxApp: {
+    title: 'Linpx轻量app',
+    ele: <LinpxAppNotice />,
   },
 };
 
@@ -24,11 +30,11 @@ const Notice: React.FC = () => {
     history.push('/404');
     return null;
   }
-  const { ele, commentId } = notice;
+  const { ele, commentId, title } = notice;
   return (
-    <PageLayout title="通知" rightEle={<></>}>
+    <PageLayout title={title || '通知'} rightEle={<></>}>
       <div className="m-4 ml-3">{ele}</div>
-      <NovelCommentById isEmpty id={commentId} />
+      {commentId && <NovelCommentById isEmpty id={commentId} />}
     </PageLayout>
   );
 };
