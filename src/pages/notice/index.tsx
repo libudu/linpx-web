@@ -20,6 +20,7 @@ const NoticeContent: Record<
   linpxApp: {
     title: 'Linpx轻量app',
     ele: <LinpxAppNotice />,
+    commentId: '1000000002',
   },
 };
 
