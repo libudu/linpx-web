@@ -5,11 +5,11 @@ import { copyTextAndToast } from '@/utils/clipboard';
 
 const linkTypeList = [
   {
-    name: '游览器链接1',
+    name: '浏览器链接1',
     link: (id: string) => `http://furrynovel.xyz/pn/${id}`,
   },
   {
-    name: '游览器链接2',
+    name: '浏览器链接2',
     link: (id: string) => `https://linpx.linpicio.com/pn/${id}`,
   },
   {

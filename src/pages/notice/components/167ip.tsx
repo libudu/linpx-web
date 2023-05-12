@@ -23,7 +23,7 @@ const Stop167IpNotice: React.FC = () => {
           1、一直以来，linpx有furrynovel.xyz、linpx.linpicio.com两个主要域名。
         </div>
         <div>
-          2、由于在QQ中发送linpx链接会提示危险网站，无法直接点开，必须要复制到游览器才能打开。之前希望可以通过不断更换ip的方法避开这种屏蔽，在QQ中直接点开游览linpx。
+          2、由于在QQ中发送linpx链接会提示危险网站，无法直接点开，必须要复制到浏览器才能打开。之前希望可以通过不断更换ip的方法避开这种屏蔽，在QQ中直接点开游览linpx。
         </div>
         <div>
           3、但是所有使用过的ip还是逐个被封了，加上vultr服务商提供的ip并非随机而是固定的，难以申请到没被封禁的ip。所以以后linpx不打算通过这种方式绕过QQ的屏蔽，ip访问也就失去了意义。

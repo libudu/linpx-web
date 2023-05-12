@@ -10,7 +10,7 @@ export const eleScrollToPos = (ele: HTMLElement | null, pos: number) => {
   if (!ele) {
     return;
   }
-  // 夸克游览器上，不套setTimeout将无法滚动到位置
+  // 夸克浏览器上，不套setTimeout将无法滚动到位置
   let count = 0;
   let timer = setInterval(() => {
     // 可能之前的页面还没渲染出来
