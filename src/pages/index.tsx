@@ -21,6 +21,8 @@ import { getAppWidth } from '@/utils/util';
 import { useLastReadProgress } from '@/utils/readProgress';
 import { FC, useEffect, useState } from 'react';
 import { filterTitle } from './pixiv/novel/[id]/util';
+import { isSafeMode } from '@/utils/env';
+import TransLink from './components/TransLink';
 
 let lastUserInfo: IUserInfo[] = Array(8).fill({
   imageUrl: '',
@@ -188,6 +190,33 @@ const ContinueReading: FC = () => {
     </div>
   );
 };
+const TransLinkContent: React.FC = () => {
+  return (
+    <>
+      <ContentTitle
+        left="生成LINPX链接"
+        rightText=""
+        clickInfo={
+          <div className="text-base">
+            <div>将pixiv链接转为linpx</div>
+            <div>从而不需要翻墙、登录，点开即阅</div>
+            <br />
+            <div>当前支持作者和小说两种格式链接</div>
+            <div className="text-left">
+              <div>作者举例：https://www.pixiv.net/users/32809296</div>
+              <div>
+                小说举例：https://www.pixiv.net/novel/show.php?id=14198407
+              </div>
+            </div>
+          </div>
+        }
+      />
+      <ContentBox>
+        <TransLink />
+      </ContentBox>
+    </>
+  );
+};
 
 const IndexPage = () => {
   document.title = 'Linpx - 首页';
@@ -201,8 +230,14 @@ const IndexPage = () => {
         <SearchBar onSearch={(word) => history.push(`/search?word=${word}`)} />
         <FavUserContent />
         <RecentNovelContent />
-        <HavingSomething />
-        <LinpxTagContent />
+        {isSafeMode ? (
+          <TransLinkContent />
+        ) : (
+          <>
+            <HavingSomething />
+            <LinpxTagContent />
+          </>
+        )}
         <FriendlyLinks />
       </div>
       <ContinueReading />
