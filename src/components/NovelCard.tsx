@@ -9,7 +9,7 @@ import NewPng from '@/assets/icon/new.png';
 import { checkLinpxNovel } from '@/pages/pixiv/novel/[id]/util';
 import InteractImg from '@/assets/icon/interact.png';
 import { processNovelDesc } from '@/pages/pixiv/novel/[id]/components/NovelHeader/Intro';
-import { isAdmin } from '@/utils/admin';
+import { isAdmin } from '@/utils/env';
 import { downloadNovel } from '@/api';
 
 // 最近小说页面

@@ -9,7 +9,7 @@ import cache from './util/cache';
 import { list2query, proxyImg } from '@/utils/util';
 import { BASE_URL, linpxRequest } from './util/request';
 import { useLinpxSWR } from '.';
-import { getPassword } from '@/utils/admin';
+import { getPassword } from '@/utils/env';
 
 export const downloadNovel = (id: string) => {
   window.open(`${BASE_URL}/pixiv/novel/${id}/download/cache`, '_parent');

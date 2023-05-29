@@ -1,14 +1,19 @@
+import { isSafeMode } from '@/utils/env';
 import { IMap } from '../../types';
 import { request } from 'umi';
 
 const isHttps = window.location.protocol === 'https:';
 export let BASE_URL = '';
-if (isHttps) {
-  BASE_URL = 'https://linpxapi.linpicio.com';
-} else if (process.env.NODE_ENV == 'development' && false) {
-  BASE_URL = 'http://45.76.105.135:3002';
+if (isSafeMode) {
+  BASE_URL = 'https://slinpxapi.linpicio.com';
 } else {
-  BASE_URL = 'http://45.76.105.135:81';
+  if (isHttps) {
+    BASE_URL = 'https://linpxapi.linpicio.com';
+  } else if (process.env.NODE_ENV == 'development' && false) {
+    BASE_URL = 'http://45.76.105.135:3002';
+  } else {
+    BASE_URL = 'http://45.76.105.135:81';
+  }
 }
 //export const BASE_URL = 'http://localhost:3001';
 

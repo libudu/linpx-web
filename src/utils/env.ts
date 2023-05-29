@@ -7,3 +7,5 @@ export const isAdmin = () => {
 export const getPassword = () => {
   return password;
 };
+
+export const isSafeMode = location.hostname === 'slinpx.linpicio.com';

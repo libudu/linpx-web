@@ -10,7 +10,7 @@ import { Toast } from 'antd-mobile';
 import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import { BORDER } from '../..';
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
-import { isAdmin } from '@/utils/admin';
+import { isAdmin } from '@/utils/env';
 import { isElementVisible } from '@/utils/util';
 
 const CommentHeader = ({
