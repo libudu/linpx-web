@@ -104,7 +104,7 @@ function UserPart({
                   <span>支持</span>
                 </div>
               )}
-              {qqgroup && (
+              {showAfdian && qqgroup && (
                 <div
                   className="px-2 py-0.5 bg-black text-sm text-white rounded-lg flex items-center"
                   onClick={() => {

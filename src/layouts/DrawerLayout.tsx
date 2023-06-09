@@ -19,6 +19,7 @@ import WordLogoPng from '@/assets/logo/word_logo.png';
 import HeaderLogoPNG from '@/assets/icon/logo.png';
 import LinpicioLogoImg from '@/assets/logo/author_logo.png';
 import { showSupport } from '@/pages/config';
+import { isSafeMode } from '@/utils/env';
 
 // 获取Drawer项目
 export function getDrawerItem() {
@@ -51,11 +52,15 @@ const drawerItems: IDrawerItem[] = [
     title: '最近小说',
     link: '/pixiv/recent/novels',
   },
-  {
-    icon: <TagOutlined />,
-    title: '全站tag',
-    link: '/pixiv/tags',
-  },
+  ...(!isSafeMode
+    ? [
+        {
+          icon: <TagOutlined />,
+          title: '全站tag',
+          link: '/pixiv/tags',
+        },
+      ]
+    : []),
   {
     icon: <HistoryOutlined />,
     title: '阅读历史',
@@ -154,7 +159,7 @@ function DrawerSidebar({ onDrawerClose }: { onDrawerClose: any }) {
           <div className="text-xl">{ele.title}</div>
         </div>
       ))}
-      <div className="my-8 ml-4 text-base relative">
+      {/* <div className="my-8 ml-4 text-base relative">
         <div className="opacity-50">
           <div>站长：林彼丢</div>
           <div>设计：apoto5</div>
@@ -162,7 +167,7 @@ function DrawerSidebar({ onDrawerClose }: { onDrawerClose: any }) {
           <div>顾问：空狼</div>
         </div>
         <img src={LinpicioLogoImg} className="w-24 absolute top-4 right-4" />
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -46,7 +46,6 @@ const FavUserContent: React.FC = () => {
             <div>主要是兽文作者</div>
             <div>排序每天0点随机刷新一次</div>
             <div>欢迎举荐或自荐作者</div>
-            <div>加群反馈：576268549</div>
           </div>
         }
       />
