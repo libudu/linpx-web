@@ -26,6 +26,7 @@ import { checkLinpxNovel } from './util';
 import { pushHistory } from '@/pages/history';
 import { fromReadResource, getAddShelfScheme } from '@/pages/biz/readresource';
 import { recordReadProgress } from '@/utils/readProgress';
+import { isBlockUser } from '@/config/cache';
 
 export const BORDER = '1px solid #ccc';
 
@@ -162,6 +163,10 @@ const PixivNovel: React.FC<{ match: IRouteProps }> = ({ match }) => {
 
   // content是否加载完成，主要用于图片预加载
   const [contentLoaded, setContentLoaded] = useState(false);
+
+  if (!novelInfo || isBlockUser(novelInfo?.userId)) {
+    return <div></div>;
+  }
 
   if (!novelInfo || !novelAnalyse || !novelProfile) {
     return (

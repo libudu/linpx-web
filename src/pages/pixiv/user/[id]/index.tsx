@@ -13,6 +13,7 @@ import { openAfdianUrl } from '@/pages/components/Afdian';
 import { getQQGroupShareLink } from '@/utils/util';
 import { copyTextAndToast } from '@/utils/clipboard';
 import { showAfdian } from '@/pages/config';
+import { isBlockUser } from '@/config/cache';
 
 const MaxUserComment = 50;
 
@@ -158,6 +159,10 @@ export default function PixivUser(props: IRouteProps) {
 
   if (!userInfo) {
     return <ContentNavbar backTo="/">作者详情</ContentNavbar>;
+  }
+
+  if (isBlockUser(userInfo.id)) {
+    return <div></div>;
   }
 
   return (

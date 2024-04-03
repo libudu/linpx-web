@@ -1,7 +1,7 @@
 {
   "name": "Linpx小说阅读器",
   "short_name": "Linpx",
-  "start_url": "/index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#fff",
   "theme_color": "#fff",
