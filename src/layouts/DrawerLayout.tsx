@@ -17,7 +17,6 @@ import Navbar, { MenuIcon } from '@/components/Navbar';
 import BlackLogoPng from '@/assets/logo/black_logo.png';
 import WordLogoPng from '@/assets/logo/word_logo.png';
 import HeaderLogoPNG from '@/assets/icon/logo.png';
-import LinpicioLogoImg from '@/assets/logo/author_logo.png';
 import { showSupport } from '@/pages/config';
 import { isSafeMode } from '@/utils/env';
 

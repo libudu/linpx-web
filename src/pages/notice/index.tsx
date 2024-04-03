@@ -83,6 +83,9 @@ export const CloseNotice = () => {
           </div>
           <div className="mt-2">【我还想看小说怎么办】</div>
           <div>
+            app 端由于缓存暂时还能用，暂时不太好停，不过应该过几天就会过期失效。
+          </div>
+          <div>
             Linpx 中的所有推荐作者的名称和对应的 pixiv id，目前可以通过
             <a
               className="text-blue-500 hover:text-blue-500"
