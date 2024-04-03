@@ -7,6 +7,8 @@ import { useRef, useEffect, useState, RefObject } from 'react';
 import AiLiao from '@/pages/biz/ailiao';
 import { checkFromReadResource } from '@/pages/biz/readresource';
 import { useRecordLastScroll } from '@/utils/scrollRecord';
+import { CloseNotice } from '@/pages/notice';
+import Navbar, { MenuIcon } from '@/components/Navbar';
 
 // 拦截器，在网页启动前执行一些拦截，可能导向新的页面
 interface AppInterceptor {
@@ -59,6 +61,8 @@ const BaseLayout = ({ children }: IRouteComponentProps) => {
     }
   }
 
+  const isClose = !location.host.startsWith('45');
+
   return (
     // 最外层框架，灰色
     // 内层居中的手机，白色
@@ -68,11 +72,18 @@ const BaseLayout = ({ children }: IRouteComponentProps) => {
       <div className="h-screen w-screen bg-gray-100 text-xl">
         <div className="h-screen linpx-width bg-white relative">
           <div className="h-screen w-full overflow-y-scroll overflow-x-hidden">
-            {isDrawerPage ? (
-              <DrawerLayout children={wrapperChildren} />
-            ) : (
-              wrapperChildren
+            {isClose && (
+              <>
+                <Navbar rightEle={null} children={'Linpx 关站通知'} />
+                <CloseNotice />
+              </>
             )}
+            {!isClose &&
+              (isDrawerPage ? (
+                <DrawerLayout children={wrapperChildren} />
+              ) : (
+                wrapperChildren
+              ))}
           </div>
           <MountModal />
         </div>

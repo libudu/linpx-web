@@ -23,6 +23,7 @@ import { FC, useEffect, useState } from 'react';
 import { filterTitle } from './pixiv/novel/[id]/util';
 import { isSafeMode } from '@/utils/env';
 import TransLink from './components/TransLink';
+import { CloseNotice } from './notice';
 
 let lastUserInfo: IUserInfo[] = Array(8).fill({
   imageUrl: '',
