@@ -45,6 +45,31 @@ export const CloseNotice = () => {
   return (
     <>
       <div className="m-4 ml-3">
+        <div className="bg-yellow-200 rounded-lg shadow-sm p-2">
+          <div>喜报：</div>
+          <div>
+            NURUPO Studio 通过
+            <a
+              className="text-blue-500 hover:text-blue-500"
+              href="https://github.com/libudu/linpx-web"
+              target="_blank"
+            >
+              开源项目
+            </a>
+            自己部署了一个
+            Linpx，该网站目前还处于起步阶段可能暂时不太稳定，以后不再由原站长丢维护也与丢无关。此处仅帮其宣传。
+          </div>
+          <div>
+            可以通过链接访问：
+            <a
+              className="text-blue-500 hover:text-blue-500"
+              href="https://furrynovel.ink"
+              target="_blank"
+            >
+              https://furrynovel.ink
+            </a>
+          </div>
+        </div>
         <div className="p-2">
           <div>大家好我是站长丢，很遗憾地告诉大家，Linpx 决定关站了。</div>
           <div className="mt-2">【为什么】</div>
